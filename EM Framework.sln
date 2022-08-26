@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EM Framework", "EM Framework\EM Framework.csproj", "{70B55BCA-49F2-48A5-8347-D40772D89698}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eco.EM.Framework", "Eco.EM.Framework\Eco.EM.Framework.csproj", "{EBEAA47C-F562-4D24-BDDE-8A57080CDE5E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +11,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{70B55BCA-49F2-48A5-8347-D40772D89698}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{70B55BCA-49F2-48A5-8347-D40772D89698}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{70B55BCA-49F2-48A5-8347-D40772D89698}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{70B55BCA-49F2-48A5-8347-D40772D89698}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EBEAA47C-F562-4D24-BDDE-8A57080CDE5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBEAA47C-F562-4D24-BDDE-8A57080CDE5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBEAA47C-F562-4D24-BDDE-8A57080CDE5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBEAA47C-F562-4D24-BDDE-8A57080CDE5E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
