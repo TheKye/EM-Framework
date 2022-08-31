@@ -27,11 +27,11 @@ namespace Eco.EM.Framework.Resolvers
             // check if config override
             if (loaded)
             {
-                return model.ShelfLife;
+                return (int)TimeUtil.HoursToSeconds(model.ShelfLife);
             }
 
             // return default
-            return dModel.ShelfLife;
+            return (int)TimeUtil.HoursToSeconds(dModel.ShelfLife);
         }
 
         public static void AddDefaults(FoodItemModel defaults)

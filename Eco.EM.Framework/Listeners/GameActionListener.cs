@@ -1,5 +1,7 @@
 ﻿using Eco.Core.Utils;
+using Eco.Gameplay.Aliases;
 using Eco.Gameplay.GameActions;
+using Eco.Gameplay.Property;
 using Eco.Stats;
 using System;
 using System.Collections.Generic;
@@ -46,6 +48,11 @@ namespace Eco.EM.Framework.Listeners
         public static void UnsubscribeFirstLogin(Action<FirstLogin> uMethod)
         {
             FirstLoginEvent -= uMethod;
+        }
+
+        public LazyResult ShouldOverrideAuth(IAlias alias, IOwned property, GameAction action)
+        {
+            return LazyResult.FailedNoMessage;
         }
         #endregion Subscribers
     }

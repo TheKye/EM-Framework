@@ -8,6 +8,7 @@ namespace Eco.EM.Framework
         [LocDescription("Whether or not to check EM pack versions and display them.")]
         public bool VersionDisplayEnabled { get; set; } = true;
 
+        [LocDescription("Used to Auto Skip Tutorial For all Players (Not Recommended for new player Friendly servers)")]
         public bool AutoSkipTutorial { get; set; } = false;
 
         [LocDisplayName("Wipe Groups Data file on New World")]

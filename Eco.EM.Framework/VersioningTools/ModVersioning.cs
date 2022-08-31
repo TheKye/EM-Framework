@@ -57,7 +57,7 @@ namespace Eco.EM.Framework.VersioningTools
             }
         }
 
-        private static void ModVersion(string modId, string modApi, string ModIdentity, string displayName, ConsoleColor mainColor, string appName, ConsoleColor textColor = ConsoleColor.Yellow, bool sendChat = false, bool overrideCheck = false)
+        private static void ModVersion(string modId, string modApi, string ModIdentity, string displayName, ConsoleColor mainColor, string appName, ConsoleColor textColor, bool sendChat, bool overrideCheck)
         {
             var packs = GetModInstalledInfo(ModIdentity);
             var check = GetModMasterInfo(modId, modApi);
@@ -188,7 +188,7 @@ namespace Eco.EM.Framework.VersioningTools
 
         public static void GetModInit(string modId, string modApi, string ModIdentity, string displayName, ConsoleColor mainColor, string appName, ConsoleColor textColor = ConsoleColor.Yellow, bool sendChat = false, bool overrideCheck = false)
         {
-            ModVersion(modId, modApi, ModIdentity, displayName, mainColor, appName, textColor, sendChat);
+            ModVersion(modId, modApi, ModIdentity, displayName, mainColor, appName, textColor, sendChat, overrideCheck);
         }
     }
 }
