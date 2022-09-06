@@ -121,7 +121,7 @@ namespace Eco.EM.Framework.VersioningTools
                 System.Console.ForegroundColor = textColor;
                 System.Console.Write(Localizer.DoStr(string.Format(": Latest Version ({0}) \n", mVers)));
                 EMVersioning.modVersion += "\n\nOther Mods Installed\n\n";
-                EMVersioning.modVersion += "Mod Has an Update Available";
+                EMVersioning.modVersion += "Mod Has an Update Available\n";
                 EMVersioning.modVersion += "1." + name + " Installed Version: " + iVers + " Latest Version: " + mVers + "\n";
             }
             System.Console.ResetColor();

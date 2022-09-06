@@ -12,7 +12,7 @@ namespace Eco.EM.Framework.Logging
 {
     public class LoggingUtils
     {
-        private static string Logger = "EMDefaultDebugging";
+        private static string Logger = "EM-Framework";
 
         private static NLogWriter Logging = NLogManager.GetLogWriter(Logger);
 

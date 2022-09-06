@@ -32,7 +32,6 @@ namespace Eco.EM.Framework.Plugins
         public IPluginConfig PluginConfig => this.config;
         public BaseConfig Config => this.config.Config;
         public ThreadSafeAction<object, string> ParamChanged { get; set; } = new ThreadSafeAction<object, string>();
-        public NLogWriter logger = LoggingUtils.RegisterNewLogger("EMFramework");
 
         public object GetEditObject() => this.config.Config;
         public void OnEditObjectChanged(object o, string param) => this.SaveConfig();
@@ -61,10 +60,10 @@ namespace Eco.EM.Framework.Plugins
         {
             if (string.IsNullOrWhiteSpace(Obj.Config.DiscordWebhookURL))
             {
-                Obj.logger.WriteError("Can't Post Update Information without a webhook url.");
+                LoggingUtils.Error("Can't Post Update Information without a webhook url.");
                 return;
             }
-            Obj.logger.Write("Checking For Updates");
+            LoggingUtils.Write("Checking For Updates");
             EMVersioning.CheckUpdate();
         }
         public override string ToString()

@@ -1,5 +1,6 @@
 ﻿using Eco.Core.Utils.Logging;
 using Eco.EM.Framework.ChatBase;
+using Eco.EM.Framework.Logging;
 using Eco.EM.Framework.Networking;
 using Eco.EM.Framework.Plugins;
 using Eco.EM.Framework.VersioningTools;
@@ -273,7 +274,7 @@ namespace Eco.EM.Framework
         {
             EMVersion(true, out string _);
             WebHook.PostToWebhook();
-            BasePlugin.Obj.logger.Write(modVersion);
+            LoggingUtils.Write(modVersion);
         }
 
         public static void CheckUpdate()
@@ -281,9 +282,9 @@ namespace Eco.EM.Framework
             needsUpdate = string.Empty;
             modVersion = string.Empty;
             CheckEMVersion();
-            if (BasePlugin.Obj.Config.PostToDiscord)
+            if (BasePlugin.Obj.Config.PostToDiscord && !string.IsNullOrWhiteSpace(needsUpdate))
                 WebHook.PostToWebhook();
-            BasePlugin.Obj.logger.Write(needsUpdate);
+            LoggingUtils.Write(needsUpdate);
         }
 
         public static string GetChat()
