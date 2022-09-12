@@ -32,6 +32,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Ecopedia\Documentation.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Eco.ReferenceAssemblies" Version="0.9.6.1-beta-release-337" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="NLog" Version="4.7.13" />

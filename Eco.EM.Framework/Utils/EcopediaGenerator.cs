@@ -5,7 +5,12 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Eco.Core.Ecopedia;
+using Eco.Core.Items;
 using Eco.EM.Framework.FileManager;
+using Eco.Gameplay.EcopediaRoot;
+using Eco.Shared.Localization;
+using Eco.Shared.Utils;
 
 namespace Eco.EM.Framework.Utils
 {
@@ -14,7 +19,9 @@ namespace Eco.EM.Framework.Utils
     /// </summary>
     public static class EcopediaGenerator
     {
-        internal const string SavePath = "Mods/UserCode/Ecopedia/";
+        internal static Dictionary<string, string> subPages = new();
+        internal static Dictionary<string, Dictionary<string, string>> pages = new();
+        internal const string SavePath = "Mods/UserCode/Ecopedia/Mods";
         /// <summary>
         /// This method will autogenerate a File in a folder Called Ecopedia inside the usercode folder, the folder it will make will be the modName param
         /// This will present as: Mods/Usercode/Ecopedia/modName/
@@ -25,16 +32,28 @@ namespace Eco.EM.Framework.Utils
         /// <param name="categoryName"></param>
         /// <param name="pageName"></param>
         /// <param name="modName"></param>
-        public static bool GenerateEcopediaPage(string information, string categoryName, string pageName, string modName)
+        public static bool GenerateEcopediaPage(string information, string categoryName, string pageName, string modName, bool isSubPage = false, string mainPageName = "")
         {
-            var fileName = categoryName + ";" + pageName;
-            if(!File.Exists(SavePath + modName + "/" + fileName + ".xml"))
-            {
-                FileManager.FileManager.WriteToFile(information, SavePath + modName, fileName, ".xml");
-                Logging.LoggingUtils.Debug($"Added new Ecopedia file at {SavePath}{modName}");
-                return true;
-            }
-            return false;
+            string fileName;
+            if (isSubPage)
+                fileName = categoryName + ";" + mainPageName + ";" + pageName;
+            else
+                fileName = categoryName + ";" + pageName;
+
+            StringBuilder sb = new();
+
+            sb.Append($"<ecopedia icon=\"gear\">\n");
+            sb.Append($"<section type=\"header\">{pageName}</section>\n");
+            sb.Append($"{information}\n");
+            sb.Append($"</section>\n");
+            sb.Append($"</ecopedia>");
+
+            Dictionary<string, string> details = new();
+            details.Add(fileName, sb.ToString());
+            pages.Add(modName, details);
+
+            Logging.LoggingUtils.Debug($"Added new Ecopedia file at {SavePath}{modName}");
+            return true;
         }
 
         /// <summary>
@@ -50,12 +69,12 @@ namespace Eco.EM.Framework.Utils
         /// <param name="fileName"></param>
         /// <param name="modNamespace"></param>
         /// <returns></returns>
-        public static bool GenerateEcopediaPageFromFile(string fileName, string modNamespace, string modName)
+        public static bool GenerateEcopediaPageFromFile(string fileName, string modNamespace, string modName, bool isSubPage = false)
         {
             var assembly = Assembly.GetCallingAssembly();
             var resourceName = modNamespace + "." + fileName;
-
             string resource = null;
+            var cleanName = fileName.Split(".")[0];
             try
             {
                 using (Stream stream = assembly.GetManifestResourceStream(resourceName))
@@ -65,22 +84,58 @@ namespace Eco.EM.Framework.Utils
                         resource = reader.ReadToEnd();
                     }
                 }
-                if (!File.Exists(SavePath + modName + "/" + fileName.Split(".")[0] + ".xml"))
-                {
-                    FileManager.FileManager.WriteToFile(resource, SavePath + modName, fileName.Split(".")[0], ".xml");
-                    Logging.LoggingUtils.Debug($"Added new Ecopedia file at {SavePath}{modName}");
-
-                    return true;
-                }
-
-                return false;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 //debugging
-                Logging.LoggingUtils.Warning($"{assembly}");
                 Logging.LoggingUtils.Error($"There was an error adding the ecopedia file for this mod: {modName}, Error was: \n{e}\n\nIf the error was about a null reference for the stream, then your path to your file is not Correct. Please Check the path: {resourceName}");
+                Log.WriteErrorLineLoc($"There was an error adding an ecopedia file for this mod: {modName}.");
                 return false;
+            }
+
+            Dictionary<string, string> details = new();
+            details.Add(cleanName, resource);
+            pages.Add(modName, details);
+            if (isSubPage)
+                subPages.Add(cleanName.Split(";")[1], cleanName.Split(";")[2]);
+
+            Logging.LoggingUtils.Debug($"Added new Ecopedia file at {SavePath}{modName}");
+            return true;
+        }
+
+        internal static void ClearOld()
+        {
+            if (Directory.Exists(SavePath))
+                Directory.Delete(SavePath);
+        }
+
+        internal static void BuildPages()
+        {
+            foreach (var mod in pages)
+            {
+                foreach (var p in mod.Value)
+                {
+                    if (!File.Exists(SavePath + mod.Key + "/" + p.Key + ".xml"))
+                    {
+                        FileManager.FileManager.WriteToFile(p.Value, SavePath + mod.Key, p.Key, ".xml");
+
+                        Logging.LoggingUtils.Debug($"Added new Ecopedia file");
+                    }
+                }
+
+            }
+        }
+
+        internal static void BuildSubPages()
+        {
+            foreach (var p in subPages)
+            {
+                var parentPage = Ecopedia.Obj.GetPage(p.Key);
+                var page = Ecopedia.Obj.GetPage(p.Value);
+
+                parentPage.SubPages.Add(p.Value, page);
+
+                Logging.LoggingUtils.Debug($"Added new Ecopedia sub page");
             }
         }
     }

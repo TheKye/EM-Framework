@@ -3,9 +3,12 @@ using Eco.Core.Plugins.Interfaces;
 using Eco.Core.Utils;
 using Eco.Core.Utils.Logging;
 using Eco.EM.Framework.Logging;
+using Eco.EM.Framework.Utils;
+using Eco.Gameplay.EcopediaRoot;
 using Eco.Gameplay.GameActions;
 using Eco.Gameplay.Players;
 using Eco.Gameplay.Tutorial;
+using Eco.ModKit;
 using Eco.Shared.Localization;
 using Eco.Shared.Utils;
 using System;
@@ -39,6 +42,7 @@ namespace Eco.EM.Framework.Plugins
 
         public void Initialize(TimedTask timer)
         {
+            EcopediaGenerator.ClearOld();
             this.SaveConfig();
             if (Config.VersionDisplayEnabled)
                 EMVersioning.GetInit();
@@ -52,8 +56,18 @@ namespace Eco.EM.Framework.Plugins
                     TutorialTasks.SkipAllTutorials(x);
                 });
             }
+            EcopediaGenerator.GenerateEcopediaPageFromFile("Documentation.xml", "Eco.EM.Framework.Ecopedia", "Elixr Mods");
 
             ActionUtil.AddListener(new Listeners.GameActionListener());
+
+        }
+
+        public void PostInitalize()
+        {
+            EcopediaGenerator.BuildPages();
+            EcopediaGenerator.BuildSubPages();
+
+            EcopediaManager.Build(ModKitPlugin.ModDirectory);
         }
 
         static void Timer_tick(object state)
