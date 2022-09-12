@@ -68,14 +68,14 @@ namespace Eco.EM.Framework.Resolvers
                     case false:
                         if (mss != null && orThis)
                             mss.GetType().GetProperty("MaxStackSize", BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic).SetValue(mss, element.StackSize);
-                        if (mss != null && !orThis && bmss != null && bforced)
+                        else if (mss != null && bmss != null && bforced)
                             mss.GetType().GetProperty("MaxStackSize", BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic).SetValue(mss, EMConfigurePlugin.Config.CarriedItemsAmount);
                         break;
 
                     case true:
                         if (mss != null)
                             mss.GetType().GetProperty("MaxStackSize", BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic).SetValue(mss, EMConfigurePlugin.Config.ForcedSameStackAmount);
-                         break;
+                        break;
                 }
             }
         }
