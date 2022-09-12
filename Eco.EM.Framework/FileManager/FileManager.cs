@@ -6,7 +6,7 @@ using System.IO;
 
 namespace Eco.EM.Framework.FileManager
 {
-using System;
+    using System;
     public static class FileManager<T> where T : class, new()
     {
         public static bool WriteToFile(T input, string SavePath, string FileName)
@@ -108,7 +108,7 @@ using System;
         public static T ReadTypeHandledFromFile(string SavePath, string FileName)
         {
             T content = new T();
-            
+
             var stringContent = FileManager.ReadFromFile(SavePath, FileName);
 
             if (string.IsNullOrWhiteSpace(stringContent))
@@ -148,7 +148,7 @@ using System;
         }
     }
 
-    public class FileManager
+    public static class FileManager
     {
         const string format = ".json";
         const string ecoFormat = ".eco";

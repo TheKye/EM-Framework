@@ -1,15 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
-using Eco.Core.Ecopedia;
-using Eco.Core.Items;
-using Eco.EM.Framework.FileManager;
 using Eco.Gameplay.EcopediaRoot;
-using Eco.Shared.Localization;
 using Eco.Shared.Utils;
 
 namespace Eco.EM.Framework.Utils
@@ -48,9 +42,15 @@ namespace Eco.EM.Framework.Utils
             sb.Append($"</section>\n");
             sb.Append($"</ecopedia>");
 
-            Dictionary<string, string> details = new();
-            details.Add(fileName, sb.ToString());
-            pages.Add(modName, details);
+            Random rnd = new();
+            Dictionary<string, string> details = new()
+            {
+                { modName, sb.ToString() }
+            };
+            if (pages.ContainsKey(fileName))
+                pages.Add(fileName + "-" + modName + rnd.ToString(), details);
+            else
+                pages.Add(fileName, details);
 
             Logging.LoggingUtils.Debug($"Added new Ecopedia file at {SavePath}{modName}");
             return true;
@@ -77,13 +77,9 @@ namespace Eco.EM.Framework.Utils
             var cleanName = fileName.Split(".")[0];
             try
             {
-                using (Stream stream = assembly.GetManifestResourceStream(resourceName))
-                {
-                    using (StreamReader reader = new StreamReader(stream))
-                    {
-                        resource = reader.ReadToEnd();
-                    }
-                }
+                using Stream stream = assembly.GetManifestResourceStream(resourceName);
+                using StreamReader reader = new(stream);
+                resource = reader.ReadToEnd();
             }
             catch (Exception e)
             {
@@ -92,10 +88,16 @@ namespace Eco.EM.Framework.Utils
                 Log.WriteErrorLineLoc($"There was an error adding an ecopedia file for this mod: {modName}.");
                 return false;
             }
+            Random rnd = new();
+            Dictionary<string, string> details = new()
+            {
+                { modName, resource }
+            };
 
-            Dictionary<string, string> details = new();
-            details.Add(cleanName, resource);
-            pages.Add(modName, details);
+            if (pages.ContainsKey(cleanName))
+                pages.Add(cleanName + "-" + modName + rnd.ToString(), details);
+            else
+                pages.Add(cleanName, details);
             if (isSubPage)
                 subPages.Add(cleanName.Split(";")[1], cleanName.Split(";")[2]);
 
@@ -115,9 +117,10 @@ namespace Eco.EM.Framework.Utils
             {
                 foreach (var p in mod.Value)
                 {
-                    if (!File.Exists(SavePath + mod.Key + "/" + p.Key + ".xml"))
+                    var fileName = mod.Key.Split("-")[0];
+                    if (!File.Exists(SavePath + p.Key + "/" + fileName + ".xml"))
                     {
-                        FileManager.FileManager.WriteToFile(p.Value, SavePath + mod.Key, p.Key, ".xml");
+                        FileManager.FileManager.WriteToFile(p.Value, SavePath + p.Key, fileName, ".xml");
 
                         Logging.LoggingUtils.Debug($"Added new Ecopedia file");
                     }
