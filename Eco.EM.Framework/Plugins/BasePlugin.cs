@@ -21,7 +21,7 @@ using System.Threading.Tasks;
 namespace Eco.EM.Framework.Plugins
 {
     [LocDisplayName("EM Base Plugin")]
-    public class BasePlugin : Singleton<BasePlugin>, IInitializablePlugin, IModKitPlugin, IConfigurablePlugin
+    public class BasePlugin : Singleton<BasePlugin>, IInitializablePlugin, IModKitPlugin, IConfigurablePlugin, IShutdownablePlugin
     {
         public EMVersioning Versions = new();
         public Timer Timer;
@@ -42,7 +42,6 @@ namespace Eco.EM.Framework.Plugins
 
         public void Initialize(TimedTask timer)
         {
-            EcopediaGenerator.ClearOld();
             this.SaveConfig();
             if (Config.VersionDisplayEnabled)
                 EMVersioning.GetInit();
@@ -59,15 +58,8 @@ namespace Eco.EM.Framework.Plugins
             EcopediaGenerator.GenerateEcopediaPageFromFile("Documentation.xml", "Eco.EM.Framework.Ecopedia", "Elixr Mods");
 
             ActionUtil.AddListener(new Listeners.GameActionListener());
-
-        }
-
-        public void PostInitalize()
-        {
             EcopediaGenerator.BuildPages();
-            EcopediaGenerator.BuildSubPages();
-
-            EcopediaManager.Build(ModKitPlugin.ModDirectory);
+            
         }
 
         static void Timer_tick(object state)
@@ -86,5 +78,7 @@ namespace Eco.EM.Framework.Plugins
         }
 
         public string GetCategory() => "Elixr Mods";
+
+        public Task ShutdownAsync() => EcopediaGenerator.ShutDown();
     }
 }
