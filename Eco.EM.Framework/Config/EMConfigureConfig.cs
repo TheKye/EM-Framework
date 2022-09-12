@@ -17,6 +17,14 @@ namespace Eco.EM.Framework.Resolvers
         [LocDescription("Set the stack size amount")]
         public int ForcedSameStackAmount { get; set; } = 100;
 
+        [LocDisplayName("Change Carried Items Stack Size Amount")]
+        [LocDescription("Enable the setting of Carried Items Stack Sizes only")]
+        public bool CarriedItemsOverride { get; set; } = false;
+
+        [LocDisplayName("Forced Stack Size Amount for carried items")]
+        [LocDescription("Carried Items Stack size amount, Forced Same Stack amount will override this value")]
+        public int CarriedItemsAmount { get; set; } = 20;
+
         [LocDisplayName("Use Config Overrides")]
         [LocDescription("Enable the Use of Config overrides for Recipes, only enable this if you wish to configure the recipes yourself")]
         public bool useConfigOverrides { get; set; } = false;

@@ -55,15 +55,20 @@ namespace Eco.EM.Framework.Resolvers
                 if (element == null) continue;
                 var orThis = element.OverrideThis;
                 var forced = EMConfigurePlugin.Config.ForceSameStackSizes;
+                var bforced = EMConfigurePlugin.Config.CarriedItemsOverride;
                 // Get the stacksize attribute and override it.
                 var mss = ItemAttribute.Get<MaxStackSizeAttribute>(i.Type);
+                var bmss = ItemAttribute.Get<CarriedAttribute>(i.Type);
 
                 // currently we only change items that have a MaxStackSizeAttribute
-                if (mss != null && orThis)
+                if (mss != null && orThis && !bforced)
                     mss.GetType().GetProperty("MaxStackSize", BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic).SetValue(mss, element.StackSize);
 
                 if (mss != null && forced)
                     mss.GetType().GetProperty("MaxStackSize", BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic).SetValue(mss, EMConfigurePlugin.Config.ForcedSameStackAmount);
+
+                else if(bmss != null && bforced && !forced)
+                    bmss.GetType().GetProperty("MaxStackSize", BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic).SetValue(bmss, EMConfigurePlugin.Config.CarriedItemsAmount);
             }
         }
     }
