@@ -58,17 +58,25 @@ namespace Eco.EM.Framework.Resolvers
                 var bforced = EMConfigurePlugin.Config.CarriedItemsOverride;
                 // Get the stacksize attribute and override it.
                 var mss = ItemAttribute.Get<MaxStackSizeAttribute>(i.Type);
+
+                // If using Carried Items Override get the attribute
                 var bmss = ItemAttribute.Get<CarriedAttribute>(i.Type);
 
                 // currently we only change items that have a MaxStackSizeAttribute
-                if (mss != null && orThis && !bforced)
-                    mss.GetType().GetProperty("MaxStackSize", BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic).SetValue(mss, element.StackSize);
+                switch (forced)
+                {
+                    case false:
+                        if (mss != null && orThis)
+                            mss.GetType().GetProperty("MaxStackSize", BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic).SetValue(mss, element.StackSize);
+                        if (mss != null && bmss != null && bforced)
+                            mss.GetType().GetProperty("MaxStackSize", BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic).SetValue(mss, EMConfigurePlugin.Config.CarriedItemsAmount);
+                        break;
 
-                if (mss != null && forced)
-                    mss.GetType().GetProperty("MaxStackSize", BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic).SetValue(mss, EMConfigurePlugin.Config.ForcedSameStackAmount);
-
-                else if(bmss != null && bforced && !forced)
-                    bmss.GetType().GetProperty("MaxStackSize", BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic).SetValue(bmss, EMConfigurePlugin.Config.CarriedItemsAmount);
+                    case true:
+                        if (mss != null)
+                            mss.GetType().GetProperty("MaxStackSize", BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic).SetValue(mss, EMConfigurePlugin.Config.ForcedSameStackAmount);
+                         break;
+                }
             }
         }
     }
