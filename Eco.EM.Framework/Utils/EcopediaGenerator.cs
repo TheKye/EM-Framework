@@ -17,6 +17,7 @@ namespace Eco.EM.Framework.Utils
         internal static Dictionary<string, string> subPages = new();
         internal static Dictionary<string, Dictionary<string, string>> pages = new();
         internal const string SavePath = "Mods/UserCode/Ecopedia/";
+
         /// <summary>
         /// This method will autogenerate a File in a folder Called Ecopedia inside the usercode folder, the folder it will make will be the modName param
         /// This will present as: Mods/Usercode/Ecopedia/modName/
@@ -27,8 +28,13 @@ namespace Eco.EM.Framework.Utils
         /// <param name="categoryName"></param>
         /// <param name="pageName"></param>
         /// <param name="modName"></param>
-        public static bool GenerateEcopediaPage(string information, string categoryName, string pageName, string modName, bool isSubPage = false, string mainPageName = "")
+        public static bool GenerateEcopediaPage(string information, string pageName, string modName, bool isSubPage = false, string categoryName = "", string mainPageName = "", string icon = "")
         {
+            if (string.IsNullOrWhiteSpace(categoryName))
+                categoryName = "Documentation";
+            if (string.IsNullOrWhiteSpace(icon))
+                icon = "GearboxItem";
+
             string fileName;
             if (isSubPage)
                 fileName = categoryName + ";" + mainPageName + ";" + pageName;
@@ -37,7 +43,7 @@ namespace Eco.EM.Framework.Utils
 
             StringBuilder sb = new();
 
-            sb.Append($"<ecopedia icon=\"gear\">\n");
+            sb.Append($"<ecopedia icon=\"{icon}\">\n");
             sb.Append($"<section type=\"header\">{pageName}</section>\n");
             sb.Append($"{information}\n");
             sb.Append($"</section>\n");
@@ -48,10 +54,8 @@ namespace Eco.EM.Framework.Utils
             {
                 { modName, sb.ToString() }
             };
-            if (pages.ContainsKey(fileName))
-                pages.Add(fileName + "-" + modName + rnd.ToString(), details);
-            else
-                pages.Add(fileName, details);
+
+            pages.Add(fileName + "-" + modName + rnd.ToString(), details);
 
             Logging.LoggingUtils.Debug($"Added new Ecopedia file at {SavePath}{modName}");
             return true;
@@ -95,10 +99,7 @@ namespace Eco.EM.Framework.Utils
                 { modName, resource }
             };
 
-            if (pages.ContainsKey(cleanName))
-                pages.Add(cleanName + "-" + modName + rnd.ToString(), details);
-            else
-                pages.Add(cleanName, details);
+            pages.Add(cleanName + "-" + modName + rnd.ToString(), details);
 
             if (isSubPage)
                 subPages.Add(cleanName.Split(";")[1], cleanName.Split(";")[2]);
