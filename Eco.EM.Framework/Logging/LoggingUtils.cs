@@ -18,7 +18,7 @@ namespace Eco.EM.Framework.Logging
         private static NLogWriter Logging = NLogManager.GetLogWriter(emLogger);
         private static Dictionary<string, NLogWriter> loged = new();
 
-        public static NLogWriter Logger => logger();
+        public static NLogWriter Logger => GetLogger();
 
         public static void RegisterNewLogger(string log) {
             NLogWriter logger = NLogManager.GetLogWriter(log);
@@ -26,7 +26,7 @@ namespace Eco.EM.Framework.Logging
             loged.Add(assembly.FullName, logger);
         }
 
-        private static NLogWriter logger()
+        private static NLogWriter GetLogger()
         {
             var assembly = Assembly.GetCallingAssembly();
             foreach(var l in loged)
