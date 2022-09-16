@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>Eco.EM.Framework</RootNamespace>
-    <Version>3.3.1-beta2</Version>
+    <Version>3.3.1</Version>
     <PackageId>ElixrMods.Framework</PackageId>
     <Authors>Elixr Solutions</Authors>
     <Product>EM Framework</Product>
@@ -37,6 +37,7 @@
 
   <ItemGroup>
     <PackageReference Include="Eco.ReferenceAssemblies" Version="0.9.6.1-beta-release-337" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="NLog" Version="4.7.13" />
   </ItemGroup>

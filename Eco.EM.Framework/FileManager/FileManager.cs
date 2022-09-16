@@ -105,7 +105,7 @@ namespace Eco.EM.Framework.FileManager
 
         public static T ReadTypeHandledFromFile(string SavePath, string FileName)
         {
-            T content = new T();
+            T content;
 
             var stringContent = FileManager.ReadFromFile(SavePath, FileName);
 
@@ -119,7 +119,7 @@ namespace Eco.EM.Framework.FileManager
 
         public static T ReadTypeHandledFromFile(string SavePath, string FileName, string extension)
         {
-            T content = new T();
+            T content;
 
             var stringContent = FileManager.ReadFromFile(SavePath, FileName, extension);
 

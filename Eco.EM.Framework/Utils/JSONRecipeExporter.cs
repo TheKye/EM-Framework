@@ -1,4 +1,5 @@
 ﻿using Eco.Core.Plugins.Interfaces;
+using Eco.Core.Serialization;
 using Eco.EM.Framework;
 using Eco.EM.Framework.FileManager;
 using Eco.Gameplay.Components;
@@ -7,6 +8,7 @@ using Eco.Gameplay.Items;
 using Eco.Gameplay.Skills;
 using Eco.Shared.Localization;
 using Eco.Shared.Utils;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -18,7 +20,7 @@ namespace Eco.EM.Framework.Utils
     [LocDisplayName("EM Vanilla Recipe Export")]
     public class JSONRecipeExporter : IModKitPlugin, ICommandablePlugin
     {
-        class RecipeData
+        internal class RecipeData
         {
             public List<string> CraftStation { get; set; } = new List<string>();
             public List<SkillData> SkillsNeeded { get; set; } = new List<SkillData>();
@@ -30,13 +32,13 @@ namespace Eco.EM.Framework.Utils
             public List<ProductData> Products { get; set; } = new List<ProductData>();
         }
 
-        class SkillData
+        internal class SkillData
         {
             public string Skill = "nil";
             public string Level = "nil";
         }
 
-        class IngredientData
+        internal class IngredientData
         {
             public string Type = "nil";
             public string DisplayName = "nil";
@@ -44,7 +46,7 @@ namespace Eco.EM.Framework.Utils
             public string isStatic = "nil";
         }
 
-        class ProductData
+        internal class ProductData
         {
             public string DisplayName = "nil";
             public string Quantity = "nil";
@@ -52,12 +54,13 @@ namespace Eco.EM.Framework.Utils
 
         private const string _exportFile = "VanillaRecipes.json";
         private const string _subPath = "/EM/RecipeExport/";
-        readonly List<Recipe> VanillaRecipes = new();
-        readonly Dictionary<string, RecipeData> ExportData = new();
+        readonly static List<Recipe> VanillaRecipes = new();
+        readonly static Dictionary<string, RecipeData> ExportData = new();
+        internal static string ExportedData = BuildExportData();
 
         // error tracking
-        string CurrentRecipe { get; set; }
-        string CurrentProperty { get; set; }
+        static string CurrentRecipe { get; set; }
+        static string CurrentProperty { get; set; }
 
         public string GetStatus() => Localizer.DoStr($"EM Recipe Exporter");
 
@@ -68,7 +71,7 @@ namespace Eco.EM.Framework.Utils
             nameToFunction.Add(Localizer.DoStr("Export Recipes"), () => ExportRecipes());
         }
 
-        public void ExportRecipes()
+        public static void ExportRecipes()
         {
             try
             {
@@ -85,12 +88,30 @@ namespace Eco.EM.Framework.Utils
             }
         }
 
-        private void ExportJSON()
+        private static void ExportJSON()
         {
             FileManager<Dictionary<string,RecipeData>>.WriteTypeHandledToFile(ExportData,Defaults.SaveLocation + _subPath, _exportFile);
         }
 
-        private void BuildData()
+        public static string BuildExportData()
+        {
+            try
+            {
+                BuildRecipeList();
+                CheckPaths();
+                BuildData();
+
+                return JsonConvert.SerializeObject(ExportData);
+            }
+            catch
+            {
+                if (CurrentRecipe != null && CurrentProperty != null)
+                    return $"Internal Server Error 500";
+            }
+            return "Internal Server Error 500";
+        }
+
+        private static void BuildData()
         {
             foreach (Recipe r in VanillaRecipes)
             {
@@ -173,13 +194,13 @@ namespace Eco.EM.Framework.Utils
             }
         }
 
-        private void UpdateErrorPosition(LocString recipe, string property)
+        private static void UpdateErrorPosition(LocString recipe, string property)
         {
             if (CurrentRecipe != recipe) CurrentRecipe = recipe;
             CurrentProperty = property;
         }
 
-        private void BuildRecipeList()
+        private static void BuildRecipeList()
         {
             var all = RecipeFamily.AllRecipes;
             foreach (var family in all)
