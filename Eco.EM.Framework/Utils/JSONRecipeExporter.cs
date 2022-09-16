@@ -56,7 +56,6 @@ namespace Eco.EM.Framework.Utils
         private const string _subPath = "/EM/RecipeExport/";
         readonly static List<Recipe> VanillaRecipes = new();
         readonly static Dictionary<string, RecipeData> ExportData = new();
-        internal static string ExportedData = BuildExportData();
 
         // error tracking
         static string CurrentRecipe { get; set; }
@@ -93,7 +92,7 @@ namespace Eco.EM.Framework.Utils
             FileManager<Dictionary<string,RecipeData>>.WriteTypeHandledToFile(ExportData,Defaults.SaveLocation + _subPath, _exportFile);
         }
 
-        public static string BuildExportData()
+        internal static Dictionary<string, RecipeData> BuildExportData()
         {
             try
             {
@@ -101,14 +100,12 @@ namespace Eco.EM.Framework.Utils
                 CheckPaths();
                 BuildData();
 
-                return JsonConvert.SerializeObject(ExportData);
+                return ExportData;
             }
             catch
             {
-                if (CurrentRecipe != null && CurrentProperty != null)
-                    return $"Internal Server Error 500";
+                return null;
             }
-            return "Internal Server Error 500";
         }
 
         private static void BuildData()

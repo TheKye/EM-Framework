@@ -110,14 +110,13 @@ namespace Eco.EM.Framework.Utils
             return message;
         }
 
-        public static string GetAllItems(bool includeOutOfStock = false)
+        public static List<OfferedItem> GetAllItems(bool includeOutOfStock = false)
         {
             try
             {
                 var sellOffers = new List<OfferedItem>();
                 var buyOffers = new List<OfferedItem>();
-                ShopItems Items = new();
-                string message = "";
+                List<OfferedItem> Items = new();
                 foreach (var item in Item.AllItems)
                 {
 
@@ -125,30 +124,36 @@ namespace Eco.EM.Framework.Utils
                     buyOffers = Informatics.GetBuyingByItemType(item);
                     if (sellOffers.Count > 0)
                     {
-                        message += $"{item} can be bought from:\n";
                         sellOffers.OrderBy(o => o.Price).ForEach(o =>
                         {
-                            if (!includeOutOfStock)
-                                Items.ForSale.Add(new OfferedItem
-                                {
-                                    Quantity = o.Quantity,
-                                    Price = o.Price,
-                                    Currency = o.Currency,
-                                    StoreName = o.StoreName,
-                                    StoreOwner = o.StoreOwner,
-                                    tagItemName = ""
-                                });
-
-                            else
-                                Items.ForSale.Add(new OfferedItem
-                                {
-                                    Quantity = o.Quantity,
-                                    Price = o.Price,
-                                    Currency = o.Currency,
-                                    StoreName = o.StoreName,
-                                    StoreOwner = o.StoreOwner,
-                                    tagItemName = ""
-                                });
+                            switch (o.Quantity)
+                            {
+                                case > 0:
+                                    Items.Add(new OfferedItem
+                                    {
+                                        tagItemName = o.tagItemName,
+                                        Quantity = o.Quantity,
+                                        Price = o.Price,
+                                        Currency = o.Currency,
+                                        StoreName = o.StoreName,
+                                        StoreOwner = o.StoreOwner,
+                                        ForSale = true
+                                    });
+                                    break;
+                                case < 1:
+                                    if (includeOutOfStock)
+                                        Items.Add(new OfferedItem
+                                        {
+                                            tagItemName = o.tagItemName,
+                                            Quantity = o.Quantity,
+                                            Price = o.Price,
+                                            Currency = o.Currency,
+                                            StoreName = o.StoreName,
+                                            StoreOwner = o.StoreOwner,
+                                            ForSale = true
+                                        });
+                                    break;
+                            }
                         });
                     }
 
@@ -156,23 +161,45 @@ namespace Eco.EM.Framework.Utils
                     {
                         buyOffers.OrderBy(o => o.Price).ForEach(o =>
                         {
-                            Items.ToBuy.Add(new OfferedItem
+                            switch (o.Quantity)
                             {
-                                Quantity = o.Quantity,
-                                Price = o.Price,
-                                Currency = o.Currency,
-                                StoreName = o.StoreName,
-                                StoreOwner = o.StoreOwner,
-                                tagItemName = ""
-                            });
+                                case > 0:
+                                    Items.Add(new OfferedItem
+                                    {
+                                        tagItemName = o.tagItemName,
+                                        Quantity = o.Quantity,
+                                        Price = o.Price,
+                                        Currency = o.Currency,
+                                        StoreName = o.StoreName,
+                                        StoreOwner = o.StoreOwner,
+                                        ForSale = true
+                                    });
+                                    break;
+                                case < 1:
+                                    if (includeOutOfStock)
+                                        Items.Add(new OfferedItem
+                                        {
+                                            tagItemName = o.tagItemName,
+                                            Quantity = o.Quantity,
+                                            Price = o.Price,
+                                            Currency = o.Currency,
+                                            StoreName = o.StoreName,
+                                            StoreOwner = o.StoreOwner,
+                                            ForSale = true
+                                        });
+                                    break;
+                            }
                         });
                     }
                 }
-                return JsonConvert.SerializeObject(Items);
+                if (Items.Count > 0)
+                    return Items;
+                else
+                    return null;
             }
             catch
             {
-                return "Internal Server Error: 500";
+                return null;
             }
         }
     }

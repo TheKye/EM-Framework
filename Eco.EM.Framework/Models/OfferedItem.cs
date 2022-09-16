@@ -6,13 +6,6 @@ using System.Threading.Tasks;
 
 namespace Eco.EM.Framework.Models
 {
-    public class ShopItems
-    {
-        public List<OfferedItem> ForSale { get; set; }
-        public List<OfferedItem> ToBuy { get; set; }
-
-    }
-
     public struct OfferedItem
     {
         public int Quantity;
@@ -21,5 +14,6 @@ namespace Eco.EM.Framework.Models
         public string Currency;
         public string StoreName;
         public string StoreOwner;
+        public bool ForSale;
     }
 }

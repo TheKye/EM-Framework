@@ -17,13 +17,14 @@ namespace Eco.EM.Framework.API
     {
         [AllowAnonymous, HttpGet("get-recipes")]
         [Produces("application/json")]
+        [ResponseCache(VaryByHeader = "User-Agent", Duration = 1800)]
         public IActionResult GetRecipes()
         {
             if (BasePlugin.Obj.Config.EnableWebAPI)
             {
                 var result = JSONRecipeExporter.BuildExportData();
 
-                if (result.Contains("Internal Server Error: 500"))
+                if (result is null)
                     return StatusCode(500);
                 else
                     return Ok(result);
@@ -32,14 +33,15 @@ namespace Eco.EM.Framework.API
                 return BadRequest(403);
         }
 
-        [AllowAnonymous, HttpGet("get-prices")]
+        [AllowAnonymous, HttpGet("get-prices/{includeOutOfStock:bool?}")]
         [Produces("application/json")]
-        public IActionResult GetPrices(bool includeOutOfStock)
+        [ResponseCache(VaryByHeader = "User-Agent", Duration = 300)]
+        public IActionResult GetPrices(bool includeOutOfStock = false)
         {
             if (BasePlugin.Obj.Config.EnableWebAPI)
             {
                 var result = ShopUtils.GetAllItems(includeOutOfStock);
-                if (result.Contains("Internal Server Error: 500"))
+                if (result is null)
                     return StatusCode(500);
                 else
                 return Ok(result);
