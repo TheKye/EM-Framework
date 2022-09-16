@@ -45,28 +45,26 @@ namespace Eco.EM.Framework.FileManager
 
         public static T ReadFromFile(string SavePath, string FileName)
         {
-            T content = new T();
-
             var stringContent = FileManager.ReadFromFile(SavePath, FileName);
-
+            T content;
             if (string.IsNullOrWhiteSpace(stringContent))
                 return new T();
             else
-                content = Eco.Core.Serialization.SerializationUtils.DeserializeJson<T>(stringContent);
+                content = SerializationUtils.DeserializeJson<T>(stringContent);
 
             return content;
         }
 
         public static T ReadFromFile(string SavePath, string FileName, string extension)
         {
-            T content = new T();
+            T content;
 
             var stringContent = FileManager.ReadFromFile(SavePath, FileName, extension);
 
             if (string.IsNullOrWhiteSpace(stringContent))
                 return new T();
             else
-                content = Eco.Core.Serialization.SerializationUtils.DeserializeJson<T>(stringContent);
+                content = SerializationUtils.DeserializeJson<T>(stringContent);
 
             return content;
         }

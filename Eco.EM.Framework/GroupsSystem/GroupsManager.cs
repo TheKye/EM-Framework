@@ -10,26 +10,55 @@ using Eco.EM.Framework.Utils;
 using System.Threading;
 using Eco.WorldGenerator;
 using Eco.EM.Framework.Plugins;
+using System;
+using System.Threading.Tasks;
 
 namespace Eco.EM.Framework.Groups
 {
-    public class GroupsManager : Singleton<GroupsManager>, IModKitPlugin, IInitializablePlugin
+    public class GroupsManager : Singleton<GroupsManager>, IModKitPlugin, IInitializablePlugin, IShutdownablePlugin
     {
         internal const string _dataFile = "ElixrMods-GroupsData.json";
+        internal const string _dataBackupFile = "ElixrMods-GroupsData-Bakup.json";
         internal const string _subPath = "/EM/Groups";
         public Timer Timer;
 
         public static GroupsData Data { get; internal set; }
+        public static GroupsData DataBackup { get; internal set; }
 
         public static GroupsAPI API { get; private set; }
 
         public GroupsManager()
         {
-            Data = LoadData();
+            Data = ValidateDataFile();
             API = new GroupsAPI();
 
             if (!File.Exists(Defaults.SaveLocation + _subPath + _dataFile))
                 SaveData();
+        }
+
+        private GroupsData ValidateDataFile()
+        {
+            try
+            {
+                return LoadData();
+            }
+            catch
+            {
+                ConsoleColors.PrintConsoleMultiColored(Defaults.appNameCon, ConsoleColor.Magenta, "The Groups file for the permissions system was found to be corrupted, Attempting to restore from backup.", ConsoleColor.White);
+                try
+                {
+                    Data = LoadBackupData();
+                    SaveData();
+                    return Data;
+                }
+                catch
+                {
+                    ConsoleColors.PrintConsoleMultiColored(Defaults.appNameCon, ConsoleColor.Magenta, "There was an issue loading from the backup file. generating new files.", ConsoleColor.White);
+                    Data = new();
+                    SaveData();
+                    return LoadData();
+                }
+            }
         }
 
         public void Initialize(TimedTask timer)
@@ -128,12 +157,25 @@ namespace Eco.EM.Framework.Groups
             return FileManager<GroupsData>.ReadTypeHandledFromFile(Defaults.SaveLocation + _subPath, _dataFile);
         }
 
+        private static GroupsData LoadBackupData()
+        {
+            return FileManager<GroupsData>.ReadTypeHandledFromFile(Defaults.SaveLocation + _subPath, _dataBackupFile, ".bak");
+        }
+
         internal static void SaveData()
         {
             FileManager<GroupsData>.WriteTypeHandledToFile(Data, Defaults.SaveLocation + _subPath, _dataFile);
+            Task.Delay(2000);
+            FileManager<GroupsData>.WriteTypeHandledToFile(Data, Defaults.SaveLocation + _subPath, _dataBackupFile, ".bak");
         }
 
         public string GetCategory() => "Elixr Mods";
+
+        public Task ShutdownAsync()
+        {
+            SaveData();
+            return Task.CompletedTask;
+        }
     }
 
     [Priority(PriorityAttribute.High)]
@@ -155,6 +197,8 @@ namespace Eco.EM.Framework.Groups
             ConsoleColors.PrintConsoleMultiColored(Defaults.appNameCon, System.ConsoleColor.Magenta, "New World Detected - Deleting Old Groups Data", System.ConsoleColor.White);
             if (File.Exists(Defaults.SaveLocation + GroupsManager._subPath + GroupsManager._dataFile))
                 File.Delete(Defaults.SaveLocation + GroupsManager._subPath + GroupsManager._dataFile);
+            if (File.Exists(Defaults.SaveLocation + GroupsManager._subPath + GroupsManager._dataBackupFile))
+                File.Delete(Defaults.SaveLocation + GroupsManager._subPath + GroupsManager._dataBackupFile);
             GroupsManager.Data = new();
             GroupsManager.SaveData();
         }
