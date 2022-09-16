@@ -59,6 +59,10 @@ namespace Eco.EM.Framework.Plugins
 
             ActionUtil.AddListener(new Listeners.GameActionListener());
             EcopediaGenerator.BuildPages();
+
+            //By Default Disable Web API for official Servers
+            if (Eco.Plugins.Networking.NetworkManager.Config.Description.Contains("[SLG]"))
+                Config.EnableWebAPI = false;
             
         }
 

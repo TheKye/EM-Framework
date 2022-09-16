@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Eco.EM.Framework.Plugins;
 
 namespace Eco.EM.Framework.API
 {
@@ -18,26 +19,44 @@ namespace Eco.EM.Framework.API
         [Produces("application/json")]
         public IActionResult GetRecipes()
         {
-            var result = JSONRecipeExporter.BuildExportData();
+            if (BasePlugin.Obj.Config.EnableWebAPI)
+            {
+                var result = JSONRecipeExporter.BuildExportData();
 
-            if (result.Contains("Internal Server Error: 500"))
-                return StatusCode(500);
+                if (result.Contains("Internal Server Error: 500"))
+                    return StatusCode(500);
+                else
+                    return Ok(result);
+            }
             else
-                return Ok(result);
+                return BadRequest(403);
         }
 
-        [AllowAnonymous, HttpGet("")]
-        public string GetPrices()
+        [AllowAnonymous, HttpGet("get-prices")]
+        [Produces("application/json")]
+        public IActionResult GetPrices(bool includeOutOfStock)
         {
-            return "";
+            if (BasePlugin.Obj.Config.EnableWebAPI)
+            {
+                var result = ShopUtils.GetAllItems(includeOutOfStock);
+                if (result.Contains("Internal Server Error: 500"))
+                    return StatusCode(500);
+                else
+                return Ok(result);
+            }
+            else
+                return BadRequest(403);
         }
 
         [AllowAnonymous, HttpGet("api-check")]
-        public string Test()
+        public IActionResult Test()
         {
-            return "We are working cheif!";
+            if (BasePlugin.Obj.Config.EnableWebAPI)
+            {
+                return Ok("We Are Working Chief! API System is enabled");
+            }
+            else
+                return BadRequest(403);
         }
-
-
     }
 }

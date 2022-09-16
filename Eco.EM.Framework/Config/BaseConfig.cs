@@ -15,6 +15,10 @@ namespace Eco.EM.Framework
         [LocDescription("Determine if the Groups File should be wiped on each world reset or not (You will lose all groups and assigned commands in those groups)")]
         public bool WipeGroupsFileOnFreshWorld { get; set; } = false;
 
+        [LocDisplayName("Enabel or disable the Web API Extenstions for your server")]
+        [LocDescription("By enabling this, members can use your servers connection info to access the Web API methods added by the framework (Which are rate limited) to get information from your server for 3rd party tools like cost calculators etc.")]
+        public bool EnableWebAPI { get; set; } = true;
+
         [LocDescription("Check for updates will send a query every so often to check if mods that use the versioning system, need an update")]
         public bool CheckForUpdates { get; set; } = false;
 
