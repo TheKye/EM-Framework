@@ -20,3 +20,43 @@ Version x - Staging Builds for the next Eco Version
 Please do not redistribue code found in the EM Framework
 
 Nuget Packages are manually added by me but can be found here: https://www.nuget.org/packages/ElixrMods.Framework/
+
+# License
+
+EM Framework is now open source, but has a limites use license
+
+You may,
+
+Created and Privately use modified works of this project
+
+Fork the repository for making pull requests and personal additions
+
+Self Assign to bug reports
+
+share bug reports, pull requests and web addresses to the code in this project
+
+You may Not
+
+Redistribute the project, project code or mod publicly
+
+Re-Release this mod without explicit approval
+
+remove or change the readme or alter the credits section
+
+Speak or act on behalf of the Elixr Mods team
+
+Breaching of these terms may result in this project being closed off to the public
+
+we don't tolerate claimed works when you did not do the work.
+
+all credit is given where credit is due, you help out, you will be noted in the patch notes for your contribution and added to the credits sectiom
+
+# Credits
+
+Kye
+
+NID
+
+Monzun
+
+TheTestGame
