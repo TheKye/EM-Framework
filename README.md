@@ -11,12 +11,12 @@ All PRs should come from your own fork and be PR'd in
 
 Main Repo will contain these Branches:
 
-Main - Main Branch - Should not be working in this branch
-Staging - All Prs should go to this branch
-user-x - Branch should be based on staging and then pr from this branch into staging
-Release - Release state
-Rework - Refactoring/Rework branch
-Version x - Staging Builds for the next Eco Version
+- Main - Main Branch - Should not be working in this branch
+- Staging - All Prs should go to this branch
+- user-x - Branch should be based on staging and then pr from this branch into staging
+- Release - Release state
+- Rework - Refactoring/Rework branch
+- Version x - Staging Builds for the next Eco Version
 
 
 # License
