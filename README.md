@@ -9,9 +9,12 @@ EM Framework is also a great util for server owners and modders as it contains a
 
 All PRs should come from your own fork and be PR'd in
 
-Main Repo will contain up to 3 Branches:
+Main Repo will contain these Branches:
 
-Main - Main Working Branch
+Main - Main Branch - Should not be working in this branch
+Staging - All Prs should go to this branch
+user-x - Branch should be based on staging and then pr from this branch into staging
+Release - Release state
 Rework - Refactoring/Rework branch
 Version x - Staging Builds for the next Eco Version
 
