@@ -15,17 +15,12 @@ Main - Main Working Branch
 Rework - Refactoring/Rework branch
 Version x - Staging Builds for the next Eco Version
 
-# Notes
-
-Please do not redistribue code found in the EM Framework
-
-Nuget Packages are manually added by me but can be found here: https://www.nuget.org/packages/ElixrMods.Framework/
 
 # License
 
 EM Framework is now open source, but has a limites use license
 
-You may,
+## You may,
 
 Created and Privately use modified works of this project
 
@@ -35,9 +30,9 @@ Self Assign to bug reports
 
 share bug reports, pull requests and web addresses to the code in this project
 
-You may Not
+## You may Not
 
-Redistribute the project, project code or mod publicly
+Redistribute a modified version of the project, project code or mod publicly - Private use only.
 
 Re-Release this mod without explicit approval
 
@@ -47,16 +42,24 @@ Speak or act on behalf of the Elixr Mods team
 
 Breaching of these terms may result in this project being closed off to the public
 
-we don't tolerate claimed works when you did not do the work.
+We don't tolerate Plagiarism, everyone who comitted to this project deserves their work and to be recognized.
 
-all credit is given where credit is due, you help out, you will be noted in the patch notes for your contribution and added to the credits sectiom
+All credit is given where credit is due, you help out, you will be noted in the patch notes for your contribution and added to the credits sectiom.
 
-# Credits
 
-Kye
+# Notes
 
-NID
+Please do not code rip or redistribue code found in the EM Framework
 
-Monzun
+Nuget Packages are manually added by me but can be found here: https://www.nuget.org/packages/ElixrMods.Framework/
 
-TheTestGame
+We also understand its easy to recreate systems in your own ways, there are some parts of code in the framework that have been absorbed from other mods with permission from those creators
+
+# Contribution Credits
+
+- Kye
+- ClayC
+- Fyre
+- NID
+- Monzun
+- TheTestGame
