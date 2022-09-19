@@ -1,0 +1,25 @@
+**Public Release Notes:**
+
+
+**Additional Internal Details:**
+
+
+**Screenshots and videos**
+
+
+**Related Issues:**
+
+**Teamwork**
+Names of anyone who helped significantly with this PR:
+
+**Checklist:**
+- [ ] All touched code has comments matching our standard: https://github.com/StrangeLoopGames/Eco/wiki/Code-and-Comment-Guide
+
+When fixing a regression, these are required:
+- Link URL of the PR that broke it:
+- [ ] Regression report (explain how and why it happened):
+- [ ] Describe over fix applied (required for regressions, see [here](https://github.com/StrangeLoopGames/Eco/wiki/Strange-Loop-Coding-Principles)):
+
+
+
+*Code review guide: https://github.com/StrangeLoopGames/Eco/wiki/Code-Review-Guide*
