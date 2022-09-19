@@ -53,26 +53,28 @@ namespace Eco.EM.Framework.Logging
         public static void LogTypeSelect(string message, LogType logType)
         {
             message = Localizer.DoStr(message);
-            if (logType == LogType.Info)
+
+            switch (logType)
             {
-                Logger.Write(message);
-            }
-            if (logType == LogType.Error)
-            {
-                Logger.WriteError(message);
-            }
-            if (logType == LogType.Warn)
-            {
-                Logger.WriteWarning(message);
-            }
-            if (logType == LogType.Debug)
-            {
-                Logger.Debug(message);
-            }
-            if (logType == LogType.Important)
-            {
-                Logger.WriteError(message);
-                Log.WriteError(Localizer.DoStr(message));
+                case LogType.Info:
+                    Logger.Write(message);
+                    return;
+                case LogType.Error:
+                    Logger.WriteError(message);
+                    return;
+                case LogType.Warn:
+                    Logger.WriteWarning(message);
+                    return;
+                case LogType.Debug:
+                    Logger.Debug(message);
+                    return;
+                case LogType.Important:
+                    Logger.WriteError(message);
+                    Log.WriteError(Localizer.DoStr(message));
+                    return;
+                default:
+                    Logger.Write(message);
+                    return;
             }
         }
 
