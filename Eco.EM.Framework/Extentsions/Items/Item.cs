@@ -9,8 +9,6 @@ namespace Eco.EM.Framework.Extentsions.Items
 {
     public static partial class @Item
     {
-#nullable enable
-        public static bool ItemsEqual(this Gameplay.Items.Item x, Gameplay.Items.Item y) => x.DisplayName.NotTranslated.Equals(y.DisplayName.NotTranslated);
-#nullable disable
+        public static bool ItemsEqual(this Gameplay.Items.Item x, Gameplay.Items.Item y) => x.TypeID.Equals(y.TypeID);
     }
 }
