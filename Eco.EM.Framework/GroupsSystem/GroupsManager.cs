@@ -78,7 +78,7 @@ namespace Eco.EM.Framework.Groups
             {
                 lock (Data.AllUsers)
                 {
-                    if (!Data.AllUsers.Any(entry => entry.Name == usr.Name || entry.SteamID == usr.SteamId || entry.SlgID == usr.SlgId))
+                    if (!Data.AllUsers.Any(entry => entry.Name == usr.Name && (entry.SlgID == usr.SlgId || entry.SteamID == usr.SteamId)))
                     {
                         Data.AllUsers.Add(new SimpleGroupUser(usr.Name, usr.SlgId ?? "", usr.SteamId ?? ""));
                         SaveData();
@@ -92,7 +92,7 @@ namespace Eco.EM.Framework.Groups
                     else
                         group = Data.GetorAddGroup("default");
 
-                    if (!group.GroupUsers.Any(entry => entry.Name == usr.Name || entry.SteamID == usr.SteamId || entry.SlgID == usr.SlgId))
+                    if (!group.GroupUsers.Any(entry => entry.Name == usr.Name && (entry.SlgID == usr.SlgId || entry.SteamID == usr.SteamId)))
                     {
                         group.AddUser(usr);
                         SaveData();
@@ -104,7 +104,7 @@ namespace Eco.EM.Framework.Groups
             {
                 lock (Data.AllUsers)
                 {
-                    if (!Data.AllUsers.Any(entry => entry.Name == u.Name || entry.SteamID == u.SteamId || entry.SlgID == u.SlgId))
+                    if (!Data.AllUsers.Any(entry => entry.Name == u.Name && (entry.SlgID == u.SlgId || entry.SteamID == u.SteamId)))
                     {
                         Data.AllUsers.Add(new SimpleGroupUser(u.Name, u.SlgId ?? "", u.SteamId ?? ""));
                         SaveData();
@@ -118,7 +118,7 @@ namespace Eco.EM.Framework.Groups
                     else
                         group = Data.GetorAddGroup("default");
 
-                    if (!group.GroupUsers.Any(entry => entry.Name == u.Name && entry.SteamID == u.SteamId || entry.SlgID == u.SlgId))
+                    if (!group.GroupUsers.Any(entry => entry.Name == u.Name && (entry.SlgID == u.SlgId || entry.SteamID == u.SteamId)))
                     {
                         group.AddUser(u);
                         SaveData();
@@ -139,13 +139,13 @@ namespace Eco.EM.Framework.Groups
                 {
                     var agroup = Data.GetorAddGroup("admin");
 
-                    if (!u.IsAdmin && agroup.GroupUsers.Any(entry => entry.Name == u.Name && entry.SteamID == u.SteamId || entry.SlgID == u.SlgId))
+                    if (!u.IsAdmin && agroup.GroupUsers.Any(entry => entry.Name == u.Name && (entry.SlgID == u.SlgId || entry.SteamID == u.SteamId)))
                     {
                         agroup.RemoveUser(u);
                         SaveData();
                     }
 
-                    if (u.IsAdmin && !agroup.GroupUsers.Any(entry => entry.Name == u.Name && entry.SteamID == u.SteamId || entry.SlgID == u.SlgId))
+                    if (u.IsAdmin && !agroup.GroupUsers.Any(entry => entry.Name == u.Name && (entry.SlgID == u.SlgId || entry.SteamID == u.SteamId)))
                     {
                         agroup.AddUser(u);
                         SaveData();
