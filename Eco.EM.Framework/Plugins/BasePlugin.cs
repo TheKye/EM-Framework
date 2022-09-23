@@ -55,7 +55,7 @@ namespace Eco.EM.Framework.Plugins
                     TutorialTasks.SkipAllTutorials(x);
                 });
             }
-            EcopediaGenerator.GenerateEcopediaPageFromFile("Documentation.xml", "Eco.EM.Framework.Ecopedia", "Elixr Mods");
+            EcopediaGenerator.GenerateEcopediaPageFromFile("ModDocumentation.xml", "Eco.EM.Framework.Ecopedia", "Elixr Mods");
 
             ActionUtil.AddListener(new Listeners.GameActionListener());
             EcopediaGenerator.BuildPages();
