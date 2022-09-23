@@ -89,6 +89,7 @@ namespace Eco.EM.Framework.Models
         public static OfferedItem ToOfferedItem(TradeOffer tradeOffer, StoreObject store)
             => new()
             {
+                StoreID = store.ObjectID,
                 Quantity = tradeOffer.Stack.Quantity,
                 Price = tradeOffer.Price,
                 tagItemName = tradeOffer.Stack.Item.DisplayName,
