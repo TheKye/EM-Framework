@@ -53,10 +53,9 @@ namespace Eco.EM.Framework.Groups
             return Groups.Remove(group);
         }
 
-        public SimpleGroupUser GetGroupUser(User user)
-        {
-            return AllUsers.FirstOrDefault(entry => entry.Name == user.Name || entry.SlgID == user.SlgId || entry.SteamID == user.SteamId);
-        }
+        public SimpleGroupUser GetGroupUser(User user) =>
+
+            AllUsers.FirstOrDefault(entry => entry.Name == user.Name && (entry.SlgID == user.SlgId || entry.SteamID == user.SteamId));
 
         public SimpleGroupUser GetGroupUser(IChatClient chatClient)
         {

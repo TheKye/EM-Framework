@@ -12,6 +12,7 @@ using Eco.WorldGenerator;
 using Eco.EM.Framework.Plugins;
 using System;
 using System.Threading.Tasks;
+using Eco.EM.Framework.Helpers;
 
 namespace Eco.EM.Framework.Groups
 {
@@ -20,7 +21,11 @@ namespace Eco.EM.Framework.Groups
         internal const string _dataFile = "ElixrMods-GroupsData.json";
         internal const string _dataBackupFile = "ElixrMods-GroupsData-Bakup.json";
         internal const string _subPath = "/EM/Groups";
-        public Timer Timer;
+
+        //Declaring the background task to periodically check for new admins added since server has been started.
+        //Proposing the naming pattern for ids: ActionName_BackgroundTask and for actions to do methods: ActionName_BackgroundTaskRoutine
+        //Lowering the time to 5 seconds from previously existing 10 seconds.
+        public BackgroundTask AdminChecker_BackgroundTask = new(TimeSpan.FromMilliseconds(5000));
 
         public static GroupsData Data { get; internal set; }
         public static GroupsData DataBackup { get; internal set; }
@@ -75,7 +80,7 @@ namespace Eco.EM.Framework.Groups
             {
                 lock (Data.AllUsers)
                 {
-                    if (!Data.AllUsers.Any(entry => entry.Name == usr.Name || entry.SteamID == usr.SteamId || entry.SlgID == usr.SlgId))
+                    if (!Data.AllUsers.Any(entry => entry.Name == usr.Name && (entry.SlgID == usr.SlgId || entry.SteamID == usr.SteamId)))
                     {
                         Data.AllUsers.Add(new SimpleGroupUser(usr.Name, usr.SlgId ?? "", usr.SteamId ?? ""));
                         SaveData();
@@ -89,7 +94,7 @@ namespace Eco.EM.Framework.Groups
                     else
                         group = Data.GetorAddGroup("default");
 
-                    if (!group.GroupUsers.Any(entry => entry.Name == usr.Name || entry.SteamID == usr.SteamId || entry.SlgID == usr.SlgId))
+                    if (!group.GroupUsers.Any(entry => entry.Name == usr.Name && (entry.SlgID == usr.SlgId || entry.SteamID == usr.SteamId)))
                     {
                         group.AddUser(usr);
                         SaveData();
@@ -101,7 +106,7 @@ namespace Eco.EM.Framework.Groups
             {
                 lock (Data.AllUsers)
                 {
-                    if (!Data.AllUsers.Any(entry => entry.Name == u.Name || entry.SteamID == u.SteamId || entry.SlgID == u.SlgId))
+                    if (!Data.AllUsers.Any(entry => entry.Name == u.Name && (entry.SlgID == u.SlgId || entry.SteamID == u.SteamId)))
                     {
                         Data.AllUsers.Add(new SimpleGroupUser(u.Name, u.SlgId ?? "", u.SteamId ?? ""));
                         SaveData();
@@ -115,7 +120,7 @@ namespace Eco.EM.Framework.Groups
                     else
                         group = Data.GetorAddGroup("default");
 
-                    if (!group.GroupUsers.Any(entry => entry.Name == u.Name && entry.SteamID == u.SteamId || entry.SlgID == u.SlgId))
+                    if (!group.GroupUsers.Any(entry => entry.Name == u.Name && (entry.SlgID == u.SlgId || entry.SteamID == u.SteamId)))
                     {
                         group.AddUser(u);
                         SaveData();
@@ -123,10 +128,11 @@ namespace Eco.EM.Framework.Groups
                 }
             });
 
-            Timer = new(Timer_tick, null, 10000, 10000);
+            //Starting the background task and passing the method with the backgound task routine.
+            AdminChecker_BackgroundTask.Start(AdminChecker_BackgroundTaskRoutine);
         }
 
-        static void Timer_tick(object state)
+        void AdminChecker_BackgroundTaskRoutine()
         {
             var users = PlayerUtils.Users;
             lock (Data.AllUsers)
@@ -135,13 +141,13 @@ namespace Eco.EM.Framework.Groups
                 {
                     var agroup = Data.GetorAddGroup("admin");
 
-                    if (!u.IsAdmin && agroup.GroupUsers.Any(entry => entry.Name == u.Name && entry.SteamID == u.SteamId || entry.SlgID == u.SlgId))
+                    if (!u.IsAdmin && agroup.GroupUsers.Any(entry => entry.Name == u.Name && (entry.SlgID == u.SlgId || entry.SteamID == u.SteamId)))
                     {
                         agroup.RemoveUser(u);
                         SaveData();
                     }
 
-                    if (u.IsAdmin && !agroup.GroupUsers.Any(entry => entry.Name == u.Name && entry.SteamID == u.SteamId || entry.SlgID == u.SlgId))
+                    if (u.IsAdmin && !agroup.GroupUsers.Any(entry => entry.Name == u.Name && (entry.SlgID == u.SlgId || entry.SteamID == u.SteamId)))
                     {
                         agroup.AddUser(u);
                         SaveData();
@@ -173,10 +179,13 @@ namespace Eco.EM.Framework.Groups
 
         public string GetCategory() => "Elixr Mods";
 
-        public Task ShutdownAsync()
+        //We can add backgorund task here to ensure they are cancelled and disposed of on shutdown.
+        //Not required on simple tasks, but if some more complex routine is present it is always safer.
+        public async Task ShutdownAsync()
         {
             SaveData();
-            return Task.CompletedTask;
+            await AdminChecker_BackgroundTask.StopAsync();
+            await Task.CompletedTask;
         }
     }
 

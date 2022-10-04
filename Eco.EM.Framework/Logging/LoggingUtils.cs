@@ -16,63 +16,65 @@ namespace Eco.EM.Framework.Logging
         private static string emLogger = "EM-Framework";
 
         private static NLogWriter Logging = NLogManager.GetLogWriter(emLogger);
-        private static Dictionary<string, NLogWriter> loged = new();
+        private static Dictionary<string, string> loged = new();
 
-        public static NLogWriter Logger => GetLogger();
+        public static NLogWriter Logger => GetLogger(Assembly.GetCallingAssembly());
 
-        public static void RegisterNewLogger(string log) {
-            NLogWriter logger = NLogManager.GetLogWriter(log);
-            var assembly = Assembly.GetCallingAssembly();
-            if (loged.ContainsKey(assembly.FullName))
+        public static void RegisterNewLogger(string log)
+        {
+            var assembly = Assembly.GetCallingAssembly().GetName().Name;
+            if (loged.ContainsKey(assembly))
             {
-                Log.WriteErrorLineLocStr("Duplicate Key Entry: This Assembly has already registered a logger please use that logger instead.");
+                Log.WriteWarningLineLoc($"[EM Framework]: Mod Error: Duplicate Key Entry: Logger Already Registered: Loggers can only be registered once per assembly, please use the logger you already register (This can be ignored)");
                 return;
             }
-            loged.Add(assembly.FullName, logger);
+            loged.Add(assembly, log);
         }
 
-        private static NLogWriter GetLogger()
+        private static NLogWriter GetLogger(Assembly assembly)
         {
-            var assembly = Assembly.GetCallingAssembly();
-            foreach(var l in loged)
+            var assem = assembly.GetName().Name;
+            foreach (var l in loged)
             {
-                if (l.Key == assembly.FullName)
-                    return l.Value;
+                if (assem == l.Key)
+                    return NLogManager.GetLogWriter(l.Value);
             }
             return Logging;
         }
 
-        public static void Write(string s) => Logger.Write(s);
+        public static void Write(string s) => Logger.Write($"[{DateTime.Now:hh:mm:ss}] " + s);
 
-        public static void Debug(string s) => Logger.Debug(s);
+        public static void Debug(string s) => Logger.Debug($"[{DateTime.Now:hh:mm:ss}] " + s);
 
-        public static void Warning(string s) => Logger.WriteWarning(s);
+        public static void Warning(string s) => Logger.WriteWarning($"[{DateTime.Now:hh:mm:ss}] " + s);
 
-        public static void Error(string s) => Logger.WriteError(s);
+        public static void Error(string s) => Logger.WriteError($"[{DateTime.Now:hh:mm:ss}] " + s);
 
         public static void LogTypeSelect(string message, LogType logType)
         {
             message = Localizer.DoStr(message);
-            if (logType == LogType.Info)
+
+            switch (logType)
             {
-                Logger.Write(message);
-            }
-            if (logType == LogType.Error)
-            {
-                Logger.WriteError(message);
-            }
-            if (logType == LogType.Warn)
-            {
-                Logger.WriteWarning(message);
-            }
-            if (logType == LogType.Debug)
-            {
-                Logger.Debug(message);
-            }
-            if (logType == LogType.Important)
-            {
-                Logger.WriteError(message);
-                Log.WriteError(Localizer.DoStr(message));
+                case LogType.Info:
+                    Logger.Write($"[{DateTime.Now:hh:mm:ss}] " + message);
+                    return;
+                case LogType.Error:
+                    Logger.WriteError($"[{DateTime.Now:hh:mm:ss}] " + message);
+                    return;
+                case LogType.Warn:
+                    Logger.WriteWarning($"[{DateTime.Now:hh:mm:ss}] " + message);
+                    return;
+                case LogType.Debug:
+                    Logger.Debug($"[{DateTime.Now:hh:mm:ss}] " + message);
+                    return;
+                case LogType.Important:
+                    Logger.WriteError($"[{DateTime.Now:hh:mm:ss}] " + message);
+                    Log.WriteError(Localizer.DoStr(message));
+                    return;
+                default:
+                    Logger.Write($"[{DateTime.Now:hh:mm:ss}] " + message);
+                    return;
             }
         }
 
