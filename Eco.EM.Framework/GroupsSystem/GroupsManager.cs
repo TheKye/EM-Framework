@@ -38,25 +38,27 @@ namespace Eco.EM.Framework.Groups
 
         private GroupsData ValidateDataFile()
         {
-            try
+
+            Data = LoadData();
+
+            if (Data != null)
             {
-                return LoadData();
+                return Data;
             }
-            catch
+
+            else
             {
-                ConsoleColors.PrintConsoleMultiColored(Defaults.appNameCon, ConsoleColor.Magenta, "The Groups file for the permissions system was found to be corrupted, Attempting to restore from backup.", ConsoleColor.White);
-                try
-                {
-                    Data = LoadBackupData();
-                    SaveData();
+                ConsoleColors.PrintConsoleMultiColored(Defaults.appNameCon, ConsoleColor.Magenta, "The Main Groups file was found to be corrupted, Loading from backup", ConsoleColor.Red);
+                Data = LoadBackupData();
+                SaveData();
+                if (Data != null)
                     return Data;
-                }
-                catch
+                else
                 {
-                    ConsoleColors.PrintConsoleMultiColored(Defaults.appNameCon, ConsoleColor.Magenta, "There was an issue loading from the backup file. generating new files.", ConsoleColor.White);
+                    ConsoleColors.PrintConsoleMultiColored(Defaults.appNameCon, ConsoleColor.Magenta, "There was an issue loading from the backup file. generating new files.", ConsoleColor.Red);
                     Data = new();
                     SaveData();
-                    return LoadData();
+                    return Data;
                 }
             }
         }

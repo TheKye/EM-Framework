@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>Eco.EM.Framework</RootNamespace>
-    <Version>3.3.1</Version>
+    <Version>3.3.2</Version>
     <PackageId>ElixrMods.Framework</PackageId>
     <Authors>Elixr Solutions</Authors>
     <Product>EM Framework</Product>
@@ -32,7 +32,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Ecopedia\Mod Documentation.xml" />
+    <EmbeddedResource Include="Ecopedia\EcopediaStrings.csv" />
+    <EmbeddedResource Include="Ecopedia\ModDocumentation.xml" />
   </ItemGroup>
 
   <ItemGroup>

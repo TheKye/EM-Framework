@@ -25,7 +25,7 @@ namespace Eco.EM.Framework.Logging
             var assembly = Assembly.GetCallingAssembly();
             if (loged.ContainsKey(assembly.FullName))
             {
-                Log.WriteError(Localizer.DoStr("Duplicate Key Entry: This Assembly has already registered a logger please use that logger instead."));
+                Log.WriteErrorLineLocStr("Duplicate Key Entry: This Assembly has already registered a logger please use that logger instead.");
                 return;
             }
             loged.Add(assembly.FullName, logger);
