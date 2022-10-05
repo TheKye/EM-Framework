@@ -10,10 +10,13 @@ using Eco.Gameplay.Players;
 using Eco.Gameplay.Tutorial;
 using Eco.ModKit;
 using Eco.Shared.Localization;
+using Eco.Shared.Properties;
 using Eco.Shared.Utils;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -29,7 +32,9 @@ namespace Eco.EM.Framework.Plugins
         private readonly PluginConfig<BaseConfig> config;
         public BasePlugin()
         {
+            EcopediaGenerator.GenerateEcopediaPageFromFile("ModDocumentation.xml", "Eco.EM.Framework.Ecopedia", "Elixr Mods");
             this.config = new PluginConfig<BaseConfig>("EMBase");
+            HandleEcopediaProblems();
         }
 
         public IPluginConfig PluginConfig => this.config;
@@ -45,6 +50,7 @@ namespace Eco.EM.Framework.Plugins
             this.SaveConfig();
             if (Config.VersionDisplayEnabled)
                 EMVersioning.GetInit();
+
             if (Config.CheckForUpdates)
                 Timer = new(Timer_tick, null, 900000, 900000);
 
@@ -55,15 +61,21 @@ namespace Eco.EM.Framework.Plugins
                     TutorialTasks.SkipAllTutorials(x);
                 });
             }
-            EcopediaGenerator.GenerateEcopediaPageFromFile("Documentation.xml", "Eco.EM.Framework.Ecopedia", "Elixr Mods");
 
             ActionUtil.AddListener(new Listeners.GameActionListener());
-            EcopediaGenerator.BuildPages();
 
             //By Default Disable Web API for official Servers
             if (Eco.Plugins.Networking.NetworkManager.Config.Description.Contains("[SLG]"))
                 Config.EnableWebAPI = false;
-            
+            HandleServerCrash();
+
+            EcopediaGenerator.BuildPages();
+        }
+
+        private void HandleServerCrash()
+        {
+            if (File.Exists("Mods/UserCode/Ecopedia/Elixr Mods/ModDocumentation.xml"))
+                File.Delete("Mods/UserCode/Ecopedia/Elixr Mods/ModDocumentation.xml");
         }
 
         static void Timer_tick(object state)
@@ -84,5 +96,16 @@ namespace Eco.EM.Framework.Plugins
         public string GetCategory() => "Elixr Mods";
 
         public Task ShutdownAsync() => EcopediaGenerator.ShutDown();
+
+        private static void HandleEcopediaProblems()
+        {
+            var input = Assembly.GetCallingAssembly();
+            using Stream stream = input.GetManifestResourceStream("Eco.EM.Framework.Ecopedia.EcopediaStrings.csv");
+            using StreamReader reader = new(stream);
+            var resource = reader.ReadToEnd();
+            if (File.Exists("Mods/UserCode/Ecopedia/LocalizedStrings/en/EcopediaStrings.csv"))
+                File.Delete("Mods/UserCode/Ecopedia/LocalizedStrings/en/EcopediaStrings.csv");
+            FileManager.FileManager.WriteToFile(resource, $"Mods/UserCode/Ecopedia/LocalizedStrings/en", "EcopediaStrings", ".csv");
+        }
     }
 }

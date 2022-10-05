@@ -32,7 +32,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Ecopedia\Documentation.xml" />
+    <EmbeddedResource Include="Ecopedia\EcopediaStrings.csv" />
+    <EmbeddedResource Include="Ecopedia\ModDocumentation.xml" />
   </ItemGroup>
 
   <ItemGroup>
