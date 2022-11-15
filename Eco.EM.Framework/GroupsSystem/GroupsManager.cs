@@ -1,18 +1,16 @@
 ﻿using Eco.Core.Plugins.Interfaces;
 using Eco.Core.Utils;
+using Eco.EM.Framework.FileManager;
+using Eco.EM.Framework.Plugins;
+using Eco.EM.Framework.Utils;
 using Eco.Gameplay.Players;
+using Eco.Shared.Localization;
 using Eco.Shared.Utils;
+using Eco.WorldGenerator;
+using System;
 using System.IO;
 using System.Linq;
-using Eco.EM.Framework.FileManager;
-using Eco.Shared.Localization;
-using Eco.EM.Framework.Utils;
-using System.Threading;
-using Eco.WorldGenerator;
-using Eco.EM.Framework.Plugins;
-using System;
 using System.Threading.Tasks;
-using Eco.EM.Framework.Helpers;
 
 namespace Eco.EM.Framework.Groups
 {
@@ -21,11 +19,6 @@ namespace Eco.EM.Framework.Groups
         internal const string _dataFile = "ElixrMods-GroupsData.json";
         internal const string _dataBackupFile = "ElixrMods-GroupsData-Bakup.json";
         internal const string _subPath = "/EM/Groups";
-
-        //Declaring the background task to periodically check for new admins added since server has been started.
-        //Proposing the naming pattern for ids: ActionName_BackgroundTask and for actions to do methods: ActionName_BackgroundTaskRoutine
-        //Lowering the time to 5 seconds from previously existing 10 seconds.
-        public BackgroundTask AdminChecker_BackgroundTask = new(TimeSpan.FromMilliseconds(5000));
 
         public static GroupsData Data { get; internal set; }
         public static GroupsData DataBackup { get; internal set; }
@@ -128,33 +121,60 @@ namespace Eco.EM.Framework.Groups
                 }
             });
 
-            //Starting the background task and passing the method with the backgound task routine.
-            AdminChecker_BackgroundTask.Start(AdminChecker_BackgroundTaskRoutine);
+            //Subscribe to Admins' list added and removed events.
+            UserManager.Config.UserPermission.Admins.UserIDAddedEvent.Add(userId =>
+            {
+                AdminsChanged(true, userId);
+            });
+
+            UserManager.Config.UserPermission.Admins.UserIDRemovedEvent.Add(userId =>
+            {
+                AdminsChanged(false, userId);
+            });
         }
 
-        void AdminChecker_BackgroundTaskRoutine()
+        static void AdminsChanged(bool added, string adminId)
         {
-            var users = PlayerUtils.Users;
-            lock (Data.AllUsers)
+            //Should adminId be empty string or null, or user of specific adminId does not exist on the server, leave.
+            //Protects against errors on Eco side, where the adminId that event passes is incorrect.
+            if (string.IsNullOrEmpty(adminId) || UserManager.FindUser(adminId) is null)
             {
-                foreach (var u in users)
-                {
-                    var agroup = Data.GetorAddGroup("admin");
+                return;
+            }
 
-                    if (!u.IsAdmin && agroup.GroupUsers.Any(entry => entry.Name == u.Name && (entry.SlgID == u.SlgId || entry.SteamID == u.SteamId)))
+            var agroup = Data.GetorAddGroup("admin");
+
+            //We have to use FindUser as the adminId passed by the event can be any Id, including user's name.
+            //No null check required here as it is already verified above.
+            var u = UserManager.FindUser(adminId);
+
+            switch (added)
+            {
+                //When adding, ensure that user does not already exist among admins on EM side.
+                case true when !agroup.GroupUsers.Any(entry => entry.Name == u.Name && (entry.SlgID == u.SlgId || entry.SteamID == u.SteamId)):
+                {
+                    lock (Data.AllUsers)
+                    {
+                        agroup.AddUser(u);
+                        SaveData();
+                    }
+
+                    break;
+                }
+                //When removing, ensure that user actually exists in the admin group on EM side.
+                case false when agroup.GroupUsers.Any(entry => entry.Name == u.Name && (entry.SlgID == u.SlgId || entry.SteamID == u.SteamId)):
+                {
+                    lock (Data.AllUsers)
                     {
                         agroup.RemoveUser(u);
                         SaveData();
                     }
 
-                    if (u.IsAdmin && !agroup.GroupUsers.Any(entry => entry.Name == u.Name && (entry.SlgID == u.SlgId || entry.SteamID == u.SteamId)))
-                    {
-                        agroup.AddUser(u);
-                        SaveData();
-                    }
+                    break;
                 }
             }
         }
+
 
         public string GetStatus() => "Groups System Active";
 
@@ -179,12 +199,9 @@ namespace Eco.EM.Framework.Groups
 
         public string GetCategory() => "Elixr Mods";
 
-        //We can add backgorund task here to ensure they are cancelled and disposed of on shutdown.
-        //Not required on simple tasks, but if some more complex routine is present it is always safer.
         public async Task ShutdownAsync()
         {
             SaveData();
-            await AdminChecker_BackgroundTask.StopAsync();
             await Task.CompletedTask;
         }
     }
