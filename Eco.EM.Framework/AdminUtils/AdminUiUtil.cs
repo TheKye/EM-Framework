@@ -284,7 +284,7 @@ namespace Eco.EM.Framework.AdminUtils
 
             //Other info
             sb.Append($"Food Skill Rate: {SelectedUser.Stomach.NutrientSkillRate()}\n");
-            sb.Append($"House Skill Rate: {SelectedUser.HomePropertyValue?.TotalSkillPoints ?? 0}\n");
+            sb.Append($"House Skill Rate: {SelectedUser.ResidencyPropertyValue?.Value ?? 0}\n");
             sb.Append($"Total Skill Rate: {SelectedUser.UserXP.SkillRate}\n\n");
             sb.Append($"---------------------\n");
             sb.Append($"Skills Taken:\n");

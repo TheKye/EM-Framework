@@ -43,7 +43,7 @@ namespace Eco.EM.Framework.Resolvers
             var HomeValue = new HomeFurnishingValue()
             {
                 Category = model.RoomType,     
-                SkillValue = model.SkillValue,
+                HouseValue = model.SkillValue,
                 TypeForRoomLimit = Localizer.DoStr(model.TypeForRoomLimit),
                 DiminishingReturnPercent = model.DiminishingReturn
             };
@@ -56,7 +56,7 @@ namespace Eco.EM.Framework.Resolvers
             var HomeValue = new HomeFurnishingValue()
             {
                 Category = def.RoomType,
-                SkillValue = def.SkillValue,
+                HouseValue = def.SkillValue,
                 TypeForRoomLimit = Localizer.DoStr(def.TypeForRoomLimit),
                 DiminishingReturnPercent = def.DiminishingReturn
             };
