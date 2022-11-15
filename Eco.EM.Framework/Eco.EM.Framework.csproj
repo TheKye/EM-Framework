@@ -1,50 +1,105 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <RootNamespace>Eco.EM.Framework</RootNamespace>
-    <Version>3.3.2</Version>
-    <PackageId>ElixrMods.Framework</PackageId>
-    <Authors>Elixr Solutions</Authors>
-    <Product>EM Framework</Product>
-    <Copyright>Elixr Solutions 2020</Copyright>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://elixrmods.com/</PackageProjectUrl>
-    <RepositoryUrl>https://git.elixr-solutions.com/elixrmods/elixr-mods</RepositoryUrl>
-    <RepositoryType>Private Gitlab</RepositoryType>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <AssemblyName>Eco.EM.Framework</AssemblyName>
+	<TargetFramework>net6.0</TargetFramework>
+	<RootNamespace>Eco.EM.Framework</RootNamespace>
+	<Version>3.4.0-Beta-Release-1</Version>
+	<PackageId>ElixrMods.Framework</PackageId>
+	<Authors>Elixr Solutions</Authors>
+	<Product>EM Framework</Product>
+	<Copyright>Elixr Solutions 2020</Copyright>
+	<PackageLicenseExpression>MIT</PackageLicenseExpression>
+	<PackageProjectUrl>https://elixrmods.com/</PackageProjectUrl>
+	<RepositoryUrl>https://git.elixr-solutions.com/elixrmods/elixr-mods</RepositoryUrl>
+	<RepositoryType>Private Gitlab</RepositoryType>
+	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+	<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+	<AssemblyName>Eco.EM.Framework</AssemblyName>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>..\bin\9.6\Framework\</OutputPath>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	<OutputPath>..\bin\9.6\Framework\</OutputPath>
   </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<OutputPath>..\bin\9.7\Framework\</OutputPath>
+	</PropertyGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(OS)' == 'Windows_NT'">
-    <Exec Command="cd $(TargetDir)&#xD;&#xA;del *.config&#xD;&#xA;del *.json&#xD;&#xA;del A*&#xD;&#xA;del B*&#xD;&#xA;del C*&#xD;&#xA;del D*&#xD;&#xA;del F*&#xD;&#xA;del G*&#xD;&#xA;del H*&#xD;&#xA;del I*&#xD;&#xA;del J*&#xD;&#xA;del K*&#xD;&#xA;del L*&#xD;&#xA;del M*&#xD;&#xA;del N*&#xD;&#xA;del O*&#xD;&#xA;del P*&#xD;&#xA;del Q*&#xD;&#xA;del R*&#xD;&#xA;del S*&#xD;&#xA;del T*&#xD;&#xA;del U*&#xD;&#xA;del V*&#xD;&#xA;del W*&#xD;&#xA;del X*&#xD;&#xA;del Y*&#xD;&#xA;del Z*&#xD;&#xA;del Eco.Core.dll&#xD;&#xA;del Eco.Gameplay.dll&#xD;&#xA;del Eco.Modkit.dll&#xD;&#xA;del Eco.Mods.dll&#xD;&#xA;del Eco.Networking.ENet.dll&#xD;&#xA;del Eco.Plugins.dll&#xD;&#xA;del Eco.Shared.dll&#xD;&#xA;del Eco.Simulation.dll&#xD;&#xA;del Eco.Stats.dll&#xD;&#xA;del Eco.Tests.dll&#xD;&#xA;del Eco.WebServer.dll&#xD;&#xA;del Eco.WindowsForms.dll&#xD;&#xA;del Eco.World.dll&#xD;&#xA;del Eco.WorldGenerator.dll" />
+	<Exec Command="cd $(TargetDir)&#xD;&#xA;del *.config&#xD;&#xA;del *.json&#xD;&#xA;del A*&#xD;&#xA;del B*&#xD;&#xA;del C*&#xD;&#xA;del D*&#xD;&#xA;del F*&#xD;&#xA;del G*&#xD;&#xA;del H*&#xD;&#xA;del I*&#xD;&#xA;del J*&#xD;&#xA;del K*&#xD;&#xA;del L*&#xD;&#xA;del M*&#xD;&#xA;del N*&#xD;&#xA;del O*&#xD;&#xA;del P*&#xD;&#xA;del Q*&#xD;&#xA;del R*&#xD;&#xA;del S*&#xD;&#xA;del T*&#xD;&#xA;del U*&#xD;&#xA;del V*&#xD;&#xA;del W*&#xD;&#xA;del X*&#xD;&#xA;del Y*&#xD;&#xA;del Z*&#xD;&#xA;del Eco.Core.dll&#xD;&#xA;del Eco.Gameplay.dll&#xD;&#xA;del Eco.Modkit.dll&#xD;&#xA;del Eco.Mods.dll&#xD;&#xA;del Eco.Networking.ENet.dll&#xD;&#xA;del Eco.Plugins.dll&#xD;&#xA;del Eco.Shared.dll&#xD;&#xA;del Eco.Simulation.dll&#xD;&#xA;del Eco.Stats.dll&#xD;&#xA;del Eco.Tests.dll&#xD;&#xA;del Eco.WebServer.dll&#xD;&#xA;del Eco.WindowsForms.dll&#xD;&#xA;del Eco.World.dll&#xD;&#xA;del Eco.WorldGenerator.dll" />
   </Target>
 
   <ItemGroup>
-    <Compile Remove="ConfigControllers\**" />
-    <EmbeddedResource Remove="ConfigControllers\**" />
-    <None Remove="ConfigControllers\**" />
+	<Compile Remove="ConfigControllers\**" />
+	<EmbeddedResource Remove="ConfigControllers\**" />
+	<None Remove="ConfigControllers\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Ecopedia\EcopediaStrings.csv" />
-    <EmbeddedResource Include="Ecopedia\ModDocumentation.xml" />
+	<EmbeddedResource Include="Ecopedia\EcopediaStrings.csv" />
+	<EmbeddedResource Include="Ecopedia\ModDocumentation.xml" />
   </ItemGroup>
 
+	<ItemGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<PackageReference Include="Eco.ReferenceAssemblies" Version="0.9.6.1-beta-release-337" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<Reference Include="Eco.Core">
+			<HintPath>..\dlls\Eco.Core.dll</HintPath>
+		</Reference>
+		<Reference Include="Eco.Gameplay">
+			<HintPath>..\dlls\Eco.Gameplay.dll</HintPath>
+		</Reference>
+		<Reference Include="Eco.ModKit">
+			<HintPath>..\dlls\Eco.ModKit.dll</HintPath>
+		</Reference>
+		<Reference Include="Eco.Mods">
+			<HintPath>..\dlls\Eco.Mods.dll</HintPath>
+		</Reference>
+		<Reference Include="Eco.Networking.ENet">
+			<HintPath>..\dlls\Eco.Networking.ENet.dll</HintPath>
+		</Reference>
+		<Reference Include="Eco.Plugins">
+			<HintPath>..\dlls\Eco.Plugins.dll</HintPath>
+		</Reference>
+		<Reference Include="Eco.Shared">
+			<HintPath>..\dlls\Eco.Shared.dll</HintPath>
+		</Reference>
+		<Reference Include="Eco.Simulation">
+			<HintPath>..\dlls\Eco.Simulation.dll</HintPath>
+		</Reference>
+		<Reference Include="Eco.Stats">
+			<HintPath>..\dlls\Eco.Stats.dll</HintPath>
+		</Reference>
+		<Reference Include="Eco.WebServer">
+			<HintPath>..\dlls\Eco.WebServer.dll</HintPath>
+		</Reference>
+		<Reference Include="Eco.WindowsForms">
+			<HintPath>..\dlls\Eco.WindowsForms.dll</HintPath>
+		</Reference>
+		<Reference Include="Eco.World">
+			<HintPath>..\dlls\Eco.World.dll</HintPath>
+		</Reference>
+		<Reference Include="Eco.WorldGenerator">
+			<HintPath>..\dlls\Eco.WorldGenerator.dll</HintPath>
+		</Reference>
+		<Reference Include="EcoServer">
+			<HintPath>..\dlls\EcoServer.dll</HintPath>
+		</Reference>
+		<Reference Include="NodeGraphControl">
+			<HintPath>..\dlls\NodeGraphControl.dll</HintPath>
+		</Reference>
+	</ItemGroup>
+		
   <ItemGroup>
-    <PackageReference Include="Eco.ReferenceAssemblies" Version="0.9.6.1-beta-release-337" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="NLog" Version="4.7.13" />
-  </ItemGroup>
+		<PackageReference Include="Eco.ReferenceAssemblies" Version="0.9.6.1-beta-release-337" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+		<PackageReference Include="NLog" Version="4.7.13" />
+	</ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DiscordHandling\Framework\" />
+	<Folder Include="DiscordHandling\Framework\" />
   </ItemGroup>
 
 </Project>

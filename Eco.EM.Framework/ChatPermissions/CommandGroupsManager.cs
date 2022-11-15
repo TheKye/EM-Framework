@@ -17,6 +17,7 @@ namespace Eco.EM.Framework.Permissions
         // The currently internally cached set of commands.
         private readonly IEnumerable<ChatCommand> _commands;
         private static HashSet<ChatCommandAdapter> Commands;
+        private static ChatCommandService ChatCommandService = new();
         private const string _configFile = "CommandGroupsConfig.json";
         internal static string protectorGroup = "command_admin";
         private const string _subPath = "/EM/CommandGroups";
@@ -43,6 +44,36 @@ namespace Eco.EM.Framework.Permissions
             else
                 return Commands.FirstOrDefault(adpt => adpt.ShortCut == cleanCommand);
 
+        }
+
+        public static ChatCommandAdapter[] FindAdapterAndChildren(string dirtyCommand)
+        {
+            var cleanCommand = StringUtils.Sanitize(dirtyCommand);
+
+            IEnumerable<ChatCommand> commands = ChatCommandService.GetAllCommands();
+
+            ChatCommandAdapter[] Results = null;
+
+            foreach(var c in commands)
+            {
+                if (c.Name == cleanCommand)
+                {
+
+                    if (c.HasSubCommands)
+                    {
+                        Results.AddNotNull(Commands.FirstOrDefault(adpt => adpt.Identifier == c.Name));
+
+                        foreach (var sub in c.SubCommands)
+                        {
+                            Results.AddNotNull(Commands.FirstOrDefault(adpt => adpt.Identifier == sub.Name));
+                        }
+
+                    }
+                    else break;
+                }
+                else break;
+            }
+            return Results;
         }
 
         // Permission system Server GUI Status
@@ -73,8 +104,8 @@ namespace Eco.EM.Framework.Permissions
         // Internally cache all the commands.
         private IEnumerable<ChatCommand> LoadCommandsInternal()
         {
-            ChatCommandService chatCommandService = new();
-            IEnumerable<ChatCommand> commands = chatCommandService.GetAllCommands();
+            
+            IEnumerable<ChatCommand> commands = ChatCommandService.GetAllCommands();
 
             return commands;
         }
