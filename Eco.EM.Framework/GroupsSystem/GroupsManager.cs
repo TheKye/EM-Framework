@@ -137,7 +137,7 @@ namespace Eco.EM.Framework.Groups
         {
             //Should adminId be empty string or null, or user of specific adminId does not exist on the server, leave.
             //Protects against errors on Eco side, where the adminId that event passes is incorrect.
-            if (string.IsNullOrEmpty(adminId) || UserManager.FindUser(adminId) is null)
+            if (string.IsNullOrEmpty(adminId) || PlayerUtils.GetUser(adminId) is null)
             {
                 return;
             }
@@ -146,7 +146,7 @@ namespace Eco.EM.Framework.Groups
 
             //We have to use FindUser as the adminId passed by the event can be any Id, including user's name.
             //No null check required here as it is already verified above.
-            var u = UserManager.FindUser(adminId);
+            var u = PlayerUtils.GetUser(adminId);
 
             switch (added)
             {
@@ -180,15 +180,9 @@ namespace Eco.EM.Framework.Groups
 
         public override string ToString() => Localizer.DoStr("EM - Groups System");
 
-        private static GroupsData LoadData()
-        {
-            return FileManager<GroupsData>.ReadTypeHandledFromFile(Defaults.SaveLocation + _subPath, _dataFile);
-        }
+        private static GroupsData LoadData() => FileManager<GroupsData>.ReadTypeHandledFromFile(Defaults.SaveLocation + _subPath, _dataFile);
 
-        private static GroupsData LoadBackupData()
-        {
-            return FileManager<GroupsData>.ReadTypeHandledFromFile(Defaults.SaveLocation + _subPath, _dataBackupFile, ".bak");
-        }
+        private static GroupsData LoadBackupData() => FileManager<GroupsData>.ReadTypeHandledFromFile(Defaults.SaveLocation + _subPath, _dataBackupFile, ".bak");
 
         internal static void SaveData()
         {
