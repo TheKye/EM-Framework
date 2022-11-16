@@ -45,5 +45,17 @@ namespace Eco.EM.Framework.Text
         public static string CustomMultiText(string color, string msg, string color2, string msg2, string color3, string msg3) => $"<color={color}>{msg}</color> <color={color2}>{msg2}</color> <color={color3}>{msg3}</color>";
 
         public static string CustomMultiText(string color, string msg, string color2, string msg2, string color3, string msg3, string color4, string msg4) => $"<color={color}>{msg}</color> <color={color2}>{msg2}</color> <color={color3}>{msg3}</color> <color={color4}>{msg4}</color>";
+
+        public static string MultiText(Dictionary<string, string> colorsAndValues)
+        {
+            StringBuilder sb = new();
+
+            foreach (var cv in colorsAndValues)
+            {
+                sb.Append($"<color={cv.Key}>{cv.Value}</color> ");
+            }
+
+            return sb.ToString();
+        }
     }
 }
