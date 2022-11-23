@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
 		<RootNamespace>Eco.EM.Framework</RootNamespace>
-		<Version>3.4.0-Beta-Release-1</Version>
+		<Version>3.4.0</Version>
 		<PackageId>ElixrMods.Framework</PackageId>
 		<Authors>Elixr Solutions</Authors>
 		<Product>EM Framework</Product>
@@ -43,55 +43,9 @@
 		<PackageReference Include="Eco.ReferenceAssemblies" Version="0.9.6.1-beta-release-337" />
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-		<Reference Include="Eco.Core">
-			<HintPath>..\dlls\Eco.Core.dll</HintPath>
-		</Reference>
-		<Reference Include="Eco.Gameplay">
-			<HintPath>..\dlls\Eco.Gameplay.dll</HintPath>
-		</Reference>
-		<Reference Include="Eco.ModKit">
-			<HintPath>..\dlls\Eco.ModKit.dll</HintPath>
-		</Reference>
-		<Reference Include="Eco.Mods">
-			<HintPath>..\dlls\Eco.Mods.dll</HintPath>
-		</Reference>
-		<Reference Include="Eco.Networking.ENet">
-			<HintPath>..\dlls\Eco.Networking.ENet.dll</HintPath>
-		</Reference>
-		<Reference Include="Eco.Plugins">
-			<HintPath>..\dlls\Eco.Plugins.dll</HintPath>
-		</Reference>
-		<Reference Include="Eco.Shared">
-			<HintPath>..\dlls\Eco.Shared.dll</HintPath>
-		</Reference>
-		<Reference Include="Eco.Simulation">
-			<HintPath>..\dlls\Eco.Simulation.dll</HintPath>
-		</Reference>
-		<Reference Include="Eco.Stats">
-			<HintPath>..\dlls\Eco.Stats.dll</HintPath>
-		</Reference>
-		<Reference Include="Eco.WebServer">
-			<HintPath>..\dlls\Eco.WebServer.dll</HintPath>
-		</Reference>
-		<Reference Include="Eco.WindowsForms">
-			<HintPath>..\dlls\Eco.WindowsForms.dll</HintPath>
-		</Reference>
-		<Reference Include="Eco.World">
-			<HintPath>..\dlls\Eco.World.dll</HintPath>
-		</Reference>
-		<Reference Include="Eco.WorldGenerator">
-			<HintPath>..\dlls\Eco.WorldGenerator.dll</HintPath>
-		</Reference>
-		<Reference Include="EcoServer">
-			<HintPath>..\dlls\EcoServer.dll</HintPath>
-		</Reference>
-		<Reference Include="NodeGraphControl">
-			<HintPath>..\dlls\NodeGraphControl.dll</HintPath>
-		</Reference>
-	</ItemGroup>
-
 	<ItemGroup>
+		<PackageReference Include="ConcurrentHashSet" Version="1.3.0" />
+		<PackageReference Include="Eco.ReferenceAssemblies" Version="0.9.7.1-beta-release-376" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 		<PackageReference Include="NLog" Version="4.7.13" />
