@@ -1158,9 +1158,11 @@ namespace Eco.EM.Framework.ChatBase
                 foreach (var user in PlayerUtils.OnlineUsers)
                 {
                     user.Player.Msg(Localizer.DoStr(Shared.Utils.Text.InfoLight(Message.Content)), Message.NotificationStyle);
-                    if (Message.SendToChat)
-                        NotificationManager.ServerMessageToPlayer(Localizer.DoStr(Message.Content), Message.User);
+
+                        //NotificationManager.ServerMessageToPlayer(Localizer.DoStr(Message.Content), Message.User);
                 }
+                if (Message.SendToChat)
+                    NotificationManager.ServerMessageToAll(Localizer.DoStr(Message.Content));
                 return true;
             }
             catch (Exception e)
