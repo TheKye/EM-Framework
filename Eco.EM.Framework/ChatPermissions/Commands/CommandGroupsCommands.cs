@@ -5,6 +5,10 @@ using Eco.Gameplay.Systems.Chat;
 using Eco.Shared.Localization;
 using Eco.Gameplay.Systems.Messaging.Chat.Commands;
 using Eco.EM.Framework.Utils;
+using Microsoft.AspNetCore.JsonPatch.Internal;
+using Eco.Gameplay.Objects;
+using Eco.Shared.Utils;
+using System;
 
 namespace Eco.EM.Framework.Permissions
 {
@@ -50,29 +54,48 @@ namespace Eco.EM.Framework.Permissions
         public static void GrantAll(IChatClient client, string command, string groupName)
         {
             Group group = GroupsManager.API.GetGroup(groupName);
-            ChatCommandAdapter adapter = CommandGroupsManager.FindAdapter(command);
+            if(group == null)
+            {
+                client.MsgLocStr(Defaults.appName + string.Format(Localizer.DoStr("Was unable to find Group {0}, please create the group first"), groupName));
+                return;
+            }
+            ChatCommandAdapter[] adapters = null;
             try
             {
-                if (adapter == null)
-                {
-                    client.ErrorLocStr(Defaults.appName + string.Format(Localizer.DoStr("Command {0} was unable to be found in the commands set"), command));
-                    return;
-                }
+                adapters = CommandGroupsManager.FindAdapterAndChildren(command);
 
-                if (!group.AddPermission(adapter))
-                {
-                    client.ErrorLocStr(Defaults.appName + string.Format(Localizer.DoStr("Command {0} was unable to be added to Group {1} permissions, its identifier already exists"), adapter.Identifier, group.GroupName));
-                    return;
-                }
-
-                group.AddPermission(adapter);
-                client.MsgLocStr(Defaults.appName + string.Format(Localizer.DoStr("Command {0} was added to Group {1} permissions"), adapter.Identifier, group.GroupName));
-                GroupsManager.API.SaveData();
             }
             catch
             {
-                client.MsgLocStr(Defaults.appName + string.Format(Localizer.DoStr("Command {0} was unable to be added to Group {1}, please create the group first"), adapter.Identifier, groupName));
+                client.MsgLocStr(Defaults.appName + string.Format(Localizer.DoStr("Command {0} was unable to be added to Group {1}, potential issue with the commands?"), command, groupName));
+                return;
             }
+
+            if (!adapters.AnyNotNull())
+            {
+                client.ErrorLocStr(Defaults.appName + string.Format(Localizer.DoStr("Command {0} was unable to be found in the commands set"), command));
+                return;
+            }
+            foreach (var adapter in adapters)
+            {
+                try
+                {
+                    if (!group.AddPermission(adapter))
+                    {
+                        client.ErrorLocStr(Defaults.appName + string.Format(Localizer.DoStr("Command {0} was unable to be added to Group {1} permissions, its identifier already exists"), adapter.Identifier, group.GroupName));
+                        continue;
+                    }
+
+                    group.AddPermission(adapter);
+                    client.MsgLocStr(Defaults.appName + string.Format(Localizer.DoStr("Command {0} was added to Group {1} permissions"), adapter.Identifier, group.GroupName));
+
+                }
+                catch
+                {
+                    client.MsgLocStr(Defaults.appName + string.Format(Localizer.DoStr("Command {0} was unable to be added to Group {1}, potential issue with the commands?"), adapter.Identifier, groupName));
+                }
+            }
+            GroupsManager.API.SaveData();
         }
 
         [ChatSubCommand("CommandPermissions", "Used to Remove Permissions from a Group", "revoke-command", ChatAuthorizationLevel.Admin)]

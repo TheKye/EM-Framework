@@ -1,32 +1,39 @@
-﻿using Eco.EM.Framework.Logging;
+﻿using Eco.Core.Controller;
+using Eco.EM.Framework.Logging;
 using Eco.Gameplay.Players;
+using Eco.Gameplay.Utils;
+using Eco.Shared.Networking;
+using Eco.Shared.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static Eco.Shared.Networking.EcoTextLimitAttribute;
 
 namespace Eco.EM.Framework.Groups
 {
     [Serializable]
-    public class Group
+    public class Group : SimpleEntry
     {
         public static event Action<string, string> PlayerAdded;
         public static event Action<string, string> PlayerRemoved;
 
         public string GroupName { get; private set; }
+
         public HashSet<SimpleGroupUser> GroupUsers { get; private set; }
         public List<IGroupAuthorizable> Permissions { get; private set; }
+
+        public override string ToString() => Name;
 
         public Group(string grpName, HashSet<SimpleGroupUser> users = null, List<IGroupAuthorizable> perms = null)
         {
             GroupName = grpName;
             Permissions = perms;
             GroupUsers = users;
+            this.Name = grpName;
+            this.Changed(nameof(this.Name));
+            GroupUsers ??= new HashSet<SimpleGroupUser>();
 
-            if (GroupUsers == null)
-                GroupUsers = new HashSet<SimpleGroupUser>();
-
-            if (Permissions == null)
-                Permissions = new List<IGroupAuthorizable>();
+            Permissions ??= new List<IGroupAuthorizable>();
         }
 
         public bool AddPermission(IGroupAuthorizable perm)

@@ -1,6 +1,7 @@
 ﻿using Eco.Gameplay.Items;
 using Eco.Gameplay.Players;
 using Eco.Gameplay.Systems.TextLinks;
+using Eco.Shared.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace Eco.EM.Framework.Extentsions.Items
 {
+    [Serialized]
     public partial class ConsumptionItem : DurabilityItem
     {
         public virtual float Durability { get; set; } = 100f;

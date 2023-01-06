@@ -26,14 +26,14 @@ namespace Eco.EM.Framework.Resolvers
         {
             var dModel = LoadedHomeOverrides[housingItem.Name];
             var dHomeFurnishingValue = CreateDefaultHomeValueFromModel(dModel);
-
+            
             // check if config override
             var loaded = LoadedHomeOverrides.TryGetValue(housingItem.Name, out HousingModel model);
             if (loaded)
             {
                 return CreateHomeValueFromModel(model);
             }
-
+            
             // return default
             return dHomeFurnishingValue;
         }
@@ -42,8 +42,8 @@ namespace Eco.EM.Framework.Resolvers
         {
             var HomeValue = new HomeFurnishingValue()
             {
-                Category = model.RoomType,     
-                SkillValue = model.SkillValue,
+                Category = HousingConfig.GetRoomCategory(model.RoomType),     
+                HouseValue = model.SkillValue,
                 TypeForRoomLimit = Localizer.DoStr(model.TypeForRoomLimit),
                 DiminishingReturnPercent = model.DiminishingReturn
             };
@@ -55,8 +55,8 @@ namespace Eco.EM.Framework.Resolvers
         {
             var HomeValue = new HomeFurnishingValue()
             {
-                Category = def.RoomType,
-                SkillValue = def.SkillValue,
+                Category = HousingConfig.GetRoomCategory(def.RoomType),
+                HouseValue = def.SkillValue,
                 TypeForRoomLimit = Localizer.DoStr(def.TypeForRoomLimit),
                 DiminishingReturnPercent = def.DiminishingReturn
             };

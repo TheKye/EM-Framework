@@ -45,5 +45,33 @@ namespace Eco.EM.Framework.Text
         public static string CustomMultiText(string color, string msg, string color2, string msg2, string color3, string msg3) => $"<color={color}>{msg}</color> <color={color2}>{msg2}</color> <color={color3}>{msg3}</color>";
 
         public static string CustomMultiText(string color, string msg, string color2, string msg2, string color3, string msg3, string color4, string msg4) => $"<color={color}>{msg}</color> <color={color2}>{msg2}</color> <color={color3}>{msg3}</color> <color={color4}>{msg4}</color>";
+
+        public static string MultiText(List<cText> colorsAndValues)
+        {
+            StringBuilder sb = new();
+
+            foreach (var cv in colorsAndValues)
+                sb.Append(cv);
+
+            return sb.ToString();
+        }
+    }
+
+    // Designed for Usage in the MultiText Method, could potentially be used elsewhere? 
+    // Ideal Usage: 
+    // List<cText> ColorsAndMessages;
+    // ColorsAndMessages.Add(new cText("", ""));
+    public class cText
+    {
+        public cText(string c, string t)
+        {
+            colour = c;
+            text = t;
+        }
+
+        string colour;
+        string text;
+
+        public override string ToString() => $"<color={colour}>{text}</color>";
     }
 }
