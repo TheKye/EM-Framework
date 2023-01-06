@@ -8,6 +8,7 @@ namespace Eco.EM.Framework.Models
 {
     public struct OfferedItem
     {
+        public Guid StoreID;
         public int Quantity;
         public float Price;
         public string tagItemName;

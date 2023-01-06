@@ -14,9 +14,9 @@ namespace Eco.EM.Framework.Extentsions.Items
 
     public static class VehicleExtentsions
     {
-        public static Type GetBaseType(this NBlock block)
+        public static Type GetBaseType(this NPhysicsWorldObject npWorldObject)
         {
-            return block.BaseType;
+            return npWorldObject.BaseType;
         }
     }
 }
