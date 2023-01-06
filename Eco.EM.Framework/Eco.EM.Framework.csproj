@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<TargetFramework>net7.0</TargetFramework>
 		<RootNamespace>Eco.EM.Framework</RootNamespace>
-		<Version>3.4.0-rc</Version>
+		<Version>3.4.1</Version>
 		<PackageId>ElixrMods.Framework</PackageId>
 		<Authors>Elixr Solutions</Authors>
 		<Product>EM Framework</Product>

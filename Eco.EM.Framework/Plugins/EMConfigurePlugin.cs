@@ -33,12 +33,12 @@ namespace Eco.EM.Framework.Resolvers
             EMLinkRadiusResolver.Obj.Initialize();
             EMStorageSlotResolver.Obj.Initialize();
             EMFoodItemResolver.Obj.Initialize();
-            EMHousingResolver.Obj.Initialize();
             EMVehicleResolver.Obj.Initialize();
         }
 
         public static void PostInitialize()
         {
+            EMHousingResolver.Obj.Initialize();
             EMStackSizeResolver.Initialize();
             EMItemWeightResolver.Initialize();
 
