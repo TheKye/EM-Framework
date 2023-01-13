@@ -31,8 +31,21 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="SpecialItems\largelumberStockpile.txt" />
+	  <None Remove="SpecialItems\lumberStockpile.txt" />
+	  <None Remove="SpecialItems\pickaxe.txt" />
+	  <None Remove="SpecialItems\smallStockpile.txt" />
+	  <None Remove="SpecialItems\Stockpile.txt" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<EmbeddedResource Include="Ecopedia\EcopediaStrings.csv" />
 		<EmbeddedResource Include="Ecopedia\ModDocumentation.xml" />
+		<EmbeddedResource Include="SpecialItems\pickaxe.txt" />
+		<EmbeddedResource Include="SpecialItems\largelumberStockpile.txt" />
+		<EmbeddedResource Include="SpecialItems\lumberStockpile.txt" />
+		<EmbeddedResource Include="SpecialItems\smallStockpile.txt" />
+		<EmbeddedResource Include="SpecialItems\Stockpile.txt" />
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="ConcurrentHashSet" Version="1.3.0" />

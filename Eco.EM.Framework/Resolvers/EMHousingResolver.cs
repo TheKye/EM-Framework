@@ -24,10 +24,11 @@ namespace Eco.EM.Framework.Resolvers
 
         private HomeFurnishingValue GetHomeValue(Type housingItem)
         {
-            var dModel = LoadedHomeOverrides[housingItem.Name];
+            var dModel = DefaultHomeOverrides[housingItem.Name];
             var dHomeFurnishingValue = CreateDefaultHomeValueFromModel(dModel);
             
             // check if config override
+
             var loaded = LoadedHomeOverrides.TryGetValue(housingItem.Name, out HousingModel model);
             if (loaded)
             {
