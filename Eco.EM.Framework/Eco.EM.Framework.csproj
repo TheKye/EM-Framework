@@ -74,7 +74,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Include="..\..\EM Web\Elixr Mods Web\Elixr Mods Web\wwwroot\assets\EMICON-text.png">
+	  <None Include="..\EMICON-text.png">
 	    <Pack>True</Pack>
 	    <PackagePath>\</PackagePath>
 	  </None>
