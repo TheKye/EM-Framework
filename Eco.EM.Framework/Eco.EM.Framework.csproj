@@ -3,15 +3,15 @@
 	<PropertyGroup>
 		<TargetFramework>net7.0</TargetFramework>
 		<RootNamespace>Eco.EM.Framework</RootNamespace>
-		<Version>3.4.1</Version>
+		<Version>3.4.2</Version>
 		<PackageId>ElixrMods.Framework</PackageId>
 		<Authors>Elixr Solutions</Authors>
 		<Product>EM Framework</Product>
 		<Copyright>Elixr Solutions 2020</Copyright>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageProjectUrl>https://elixrmods.com/</PackageProjectUrl>
-		<RepositoryUrl>https://git.elixr-solutions.com/elixrmods/elixr-mods</RepositoryUrl>
-		<RepositoryType>Private Gitlab</RepositoryType>
+		<RepositoryUrl>https://github.com/TheKye/EM-Framework/</RepositoryUrl>
+		<RepositoryType>Github</RepositoryType>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
 		<AssemblyName>Eco.EM.Framework</AssemblyName>
@@ -19,6 +19,24 @@
 
 	<PropertyGroup>
 		<OutputPath>..\bin\9.6\Framework\</OutputPath>
+		<Description>The EM Framework is a bundle of Tools and utilities for Modders of the Game Eco in order to improve their modding experience</Description>
+		<PackageIcon>EMICON-text.png</PackageIcon>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageReleaseNotes>- Adds a migration for Housing Items to prevent broken EMConfigure files when migrating to 9.7.x from older versions as well as fixing missing categories for items that don't have a proper category will now default to Decoration Category when compiling the housing data to prevent uncategorized items
+- Static Recipes not actually being static - Bug in EM Framework
+Added 2 New Config Options to the EM Configure:
+
+- Added OverrideVanillaStockpiles config value - Remove Stockpile Stack Restrictions (Requires server restart after Enabling)
+- Added EnableGlobalLuckyStrike config value - Enables lucky strike for everyone by default (Requires server restart after Enabling)
+
+Removed timer based admin changes checking in favor of event based notification.
+Added cText Class for MultiText Method For Custom Colored Text
+Added MultiText(List&lt;cText&gt; ColorsDndValues) for a massive collection of words and colors without being limited to a max of 4 to Eco.EM.Framework.Text
+
+Added Stack Size Multiplier to Storage Slot Resolver to allow for a Stack Size Increase based on multiplier in storages from mods should they wish to support that
+adds new config option to the EMConfigure file in the storage section
+
+Potential Fix for SendToChat Not working for the InfoBox</PackageReleaseNotes>
 	</PropertyGroup>
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(OS)' == 'Windows_NT'">
 		<Exec Command="cd $(TargetDir)&#xD;&#xA;del *.config&#xD;&#xA;del *.json&#xD;&#xA;del A*&#xD;&#xA;del B*&#xD;&#xA;del C*&#xD;&#xA;del D*&#xD;&#xA;del F*&#xD;&#xA;del G*&#xD;&#xA;del H*&#xD;&#xA;del I*&#xD;&#xA;del J*&#xD;&#xA;del K*&#xD;&#xA;del L*&#xD;&#xA;del M*&#xD;&#xA;del N*&#xD;&#xA;del O*&#xD;&#xA;del P*&#xD;&#xA;del Q*&#xD;&#xA;del R*&#xD;&#xA;del S*&#xD;&#xA;del T*&#xD;&#xA;del U*&#xD;&#xA;del V*&#xD;&#xA;del W*&#xD;&#xA;del X*&#xD;&#xA;del Y*&#xD;&#xA;del Z*&#xD;&#xA;del Eco.Core.dll&#xD;&#xA;del Eco.Gameplay.dll&#xD;&#xA;del Eco.Modkit.dll&#xD;&#xA;del Eco.Mods.dll&#xD;&#xA;del Eco.Networking.ENet.dll&#xD;&#xA;del Eco.Plugins.dll&#xD;&#xA;del Eco.Shared.dll&#xD;&#xA;del Eco.Simulation.dll&#xD;&#xA;del Eco.Stats.dll&#xD;&#xA;del Eco.Tests.dll&#xD;&#xA;del Eco.WebServer.dll&#xD;&#xA;del Eco.WindowsForms.dll&#xD;&#xA;del Eco.World.dll&#xD;&#xA;del Eco.WorldGenerator.dll" />
@@ -49,7 +67,7 @@
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="ConcurrentHashSet" Version="1.3.0" />
-		<PackageReference Include="Eco.ReferenceAssemblies" Version="0.9.7.6-beta-release-420" />
+		<PackageReference Include="Eco.ReferenceAssemblies" Version="0.9.7.7-beta-release-431" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 		<PackageReference Include="NLog" Version="4.7.13" />
@@ -57,6 +75,17 @@
 
 	<ItemGroup>
 		<Folder Include="DiscordHandling\Framework\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="..\..\EM Web\Elixr Mods Web\Elixr Mods Web\wwwroot\assets\EMICON-text.png">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+	  <None Include="..\README.md">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
 	</ItemGroup>
 
 </Project>

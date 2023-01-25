@@ -72,7 +72,7 @@ namespace Eco.Mods.TechTree
                     //Spawn the rubble if needed
                     if (result.Success)
                     {
-                        var forced = context.Player.User.Talentset.HasTalent(typeof(MiningLuckyBreakTalent)) ? RubbleObject.MaxAmountPerBlock : RubbleObject.MaxAmountPerBlock;
+                        var forced = context.Player.User.Talentset.HasTalent(typeof(MiningLuckyBreakTalent)) ? 4 : 4;
                         if (RubbleObject.TrySpawnFromBlock(context.Player, context.Block.GetType(), context.BlockPosition.Value, forced))
                         {
                             var addition = item != null ? " " + item.UILink() : string.Empty;

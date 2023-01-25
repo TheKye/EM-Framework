@@ -6,6 +6,7 @@ using Eco.Gameplay.Components;
 using Eco.Gameplay.Objects;
 using Eco.Gameplay.Players;
 using Eco.Gameplay.Systems.NewTooltip.TooltipLibraryFiles;
+using Eco.Mods.TechTree;
 using Eco.Plugins.Networking;
 using Eco.Shared.Localization;
 using Eco.Shared.Networking;
@@ -25,9 +26,9 @@ namespace Eco.EM.Framework.AdminUtils
     {
 
         #region IController
-        public event PropertyChangedEventHandler PropertyChanged;
+        public new event PropertyChangedEventHandler PropertyChanged;
         int controllerID;
-        public ref int ControllerID => ref this.controllerID;
+        public new ref int ControllerID => ref this.controllerID;
         #endregion
 
         public AdminUiUtil() { }

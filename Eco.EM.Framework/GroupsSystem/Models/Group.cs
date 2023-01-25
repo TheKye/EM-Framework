@@ -12,7 +12,7 @@ using static Eco.Shared.Networking.EcoTextLimitAttribute;
 namespace Eco.EM.Framework.Groups
 {
     [Serializable]
-    public class Group : SimpleEntry
+    public class Group 
     {
         public static event Action<string, string> PlayerAdded;
         public static event Action<string, string> PlayerRemoved;
@@ -22,15 +22,12 @@ namespace Eco.EM.Framework.Groups
         public HashSet<SimpleGroupUser> GroupUsers { get; private set; }
         public List<IGroupAuthorizable> Permissions { get; private set; }
 
-        public override string ToString() => Name;
 
         public Group(string grpName, HashSet<SimpleGroupUser> users = null, List<IGroupAuthorizable> perms = null)
         {
             GroupName = grpName;
             Permissions = perms;
             GroupUsers = users;
-            this.Name = grpName;
-            this.Changed(nameof(this.Name));
             GroupUsers ??= new HashSet<SimpleGroupUser>();
 
             Permissions ??= new List<IGroupAuthorizable>();

@@ -1,4 +1,5 @@
 ﻿using Eco.Core.Utils;
+using Eco.EM.Framework.Utils;
 using Eco.Gameplay.Housing.PropertyValues;
 using Eco.Shared.Localization;
 using Eco.Shared.Utils;
@@ -26,7 +27,7 @@ namespace Eco.EM.Framework.Resolvers
         {
             var dModel = DefaultHomeOverrides[housingItem.Name];
             var dHomeFurnishingValue = CreateDefaultHomeValueFromModel(dModel);
-            
+
             // check if config override
 
             var loaded = LoadedHomeOverrides.TryGetValue(housingItem.Name, out HousingModel model);
@@ -34,7 +35,7 @@ namespace Eco.EM.Framework.Resolvers
             {
                 return CreateHomeValueFromModel(model);
             }
-            
+
             // return default
             return dHomeFurnishingValue;
         }
@@ -43,7 +44,7 @@ namespace Eco.EM.Framework.Resolvers
         {
             var HomeValue = new HomeFurnishingValue()
             {
-                Category = HousingConfig.GetRoomCategory(model.RoomType),     
+                Category = string.IsNullOrEmpty(HousingConfig.GetRoomCategory(model.RoomType).Name) ? HousingConfig.GetRoomCategory("Decoration") : HousingConfig.GetRoomCategory(model.RoomType),
                 HouseValue = model.SkillValue,
                 TypeForRoomLimit = Localizer.DoStr(model.TypeForRoomLimit),
                 DiminishingReturnPercent = model.DiminishingReturn
@@ -56,7 +57,7 @@ namespace Eco.EM.Framework.Resolvers
         {
             var HomeValue = new HomeFurnishingValue()
             {
-                Category = HousingConfig.GetRoomCategory(def.RoomType),
+                Category = string.IsNullOrEmpty(HousingConfig.GetRoomCategory(def.RoomType).Name) ? HousingConfig.GetRoomCategory("Decoration") : HousingConfig.GetRoomCategory(def.RoomType),
                 HouseValue = def.SkillValue,
                 TypeForRoomLimit = Localizer.DoStr(def.TypeForRoomLimit),
                 DiminishingReturnPercent = def.DiminishingReturn
@@ -68,7 +69,15 @@ namespace Eco.EM.Framework.Resolvers
         public void Initialize()
         {
             SerializedSynchronizedCollection<HousingModel> newModels = new();
-            var previousModels = EMConfigurePlugin.Config.EMHousingValue;
+            var previousModels = newModels;
+            try
+            {
+                previousModels = EMConfigurePlugin.Config.EMHousingValue;
+            }
+            catch
+            {
+                previousModels = new();
+            }
             foreach (var type in typeof(IConfigurableHousing).ConcreteTypes())
             {
                 System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(type.TypeHandle);
@@ -81,8 +90,19 @@ namespace Eco.EM.Framework.Resolvers
             {
                 var m = previousModels.SingleOrDefault(x => x.ModelType == lModel.ModelType);
 
+
+
                 if (m != null)
+                {
+                    if (HousingConfig.GetRoomCategory(m.RoomType) == null || m.RoomType == "General")
+                    {
+                        ConsoleColors.PrintConsoleMultiColored("[EM Framework] (EM Configure) ", ConsoleColor.Magenta, Localizer.DoStr($"Old Data Found In Housing Data, Performing Migration on {m.DisplayName}"), ConsoleColor.Yellow);
+                        m.RoomType = HousingConfig.GetRoomCategory("Decoration").Name;
+
+                    }
+
                     newModels.Add(m);
+                }
                 else
                     newModels.Add(lModel);
             }

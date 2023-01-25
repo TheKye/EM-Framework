@@ -1,6 +1,7 @@
 ﻿using Eco.Core.Plugins;
 using Eco.Core.Plugins.Interfaces;
 using Eco.Core.Utils;
+using Eco.EM.Framework.Utils;
 using Eco.Gameplay.Objects;
 using Eco.Gameplay.Players;
 using Eco.Gameplay.Systems.Chat;
@@ -50,81 +51,32 @@ namespace Eco.EM.Framework.Resolvers
         private static void RunLuckyStrikeResolver()
         {
             if (!Config.EnableGlobalLuckyStrike) return;
-            var directory = Defaults.AssemblyLocation + "/Mods/UserCode";
-            var alsdir = directory + "/Tools";
+
+            var alsdir = "/Mods/UserCode/Tools";
 
             if (!Directory.Exists(alsdir))
             {
                 Directory.CreateDirectory(alsdir);
             }
-
-            var assembly = Assembly.GetCallingAssembly();
-            var pickaxeresourceName = "Eco.EM.Framework.SpecialItems." + "pickaxe.txt";
-            string resource = null;
-            try
-            {
-                using Stream stream = assembly.GetManifestResourceStream(pickaxeresourceName);
-                using StreamReader reader = new(stream);
-                resource = reader.ReadToEnd();
-                File.WriteAllText(alsdir + "/" + "PickaxeItem.override.cs", resource);
-                resource = null;
-            }
-            catch { }
+            WritingUtils.WriteFromEmbeddedResource("Eco.EM.Framework.SpecialItems", "pickaxe.txt", alsdir, ".cs", specificFileName: "PickaxeItem.override");
         }
 
         private static void RunStockpileResolver()
         {
             if (!Config.OverrideVanillaStockpiles) return;
-            var directory = Defaults.AssemblyLocation + "/Mods/UserCode";
-            var agdir = directory + "/Objects";
+
+            var agdir = "/Mods/UserCode/Objects";
 
             if (!Directory.Exists(agdir))
             {
                 Directory.CreateDirectory(agdir);
             }
 
-            var assembly = Assembly.GetCallingAssembly();
-            var stockpileresourceName = "Eco.EM.Framework.SpecialItems." + "Stockpile.txt";
-            var smallstockpileresourceName = "Eco.EM.Framework.SpecialItems." + "smallStockpile.txt";
-            var lumberstockpileresourceName = "Eco.EM.Framework.SpecialItems." + "lumberStockpile.txt";
-            var largelumberstockpileresourceName = "Eco.EM.Framework.SpecialItems." + "largelumberStockpile.txt";
-            string resource = null;
-            try
-            {
-                using Stream stream = assembly.GetManifestResourceStream(stockpileresourceName);
-                using StreamReader reader = new(stream);
-                resource = reader.ReadToEnd();
-                File.WriteAllText(agdir + "/" + "StockpileObject.override.cs", resource);
-                resource = null;
-            }
-            catch { }
-            try
-            {
-                using Stream stream = assembly.GetManifestResourceStream(smallstockpileresourceName);
-                using StreamReader reader = new(stream);
-                resource = reader.ReadToEnd();
-                File.WriteAllText(agdir + "/" + "SmallStockpileObject.override.cs", resource);
-                resource = null;
-            }
-            catch { }
-            try
-            {
-                using Stream stream = assembly.GetManifestResourceStream(lumberstockpileresourceName);
-                using StreamReader reader = new(stream);
-                resource = reader.ReadToEnd();
-                File.WriteAllText(agdir + "/" + "LumberStockpileObject.override.cs", resource);
-                resource = null;
-            }
-            catch { }
-            try
-            {
-                using Stream stream = assembly.GetManifestResourceStream(largelumberstockpileresourceName);
-                using StreamReader reader = new(stream);
-                resource = reader.ReadToEnd();
-                File.WriteAllText(agdir + "/" + "LargeLumberStockpileObject.override.cs", resource);
-                resource = null;
-            }
-            catch { }
+            WritingUtils.WriteFromEmbeddedResource("Eco.EM.Framework.SpecialItems", "Stockpile.txt", agdir, ".cs", specificFileName: "StockpileObject.override");
+            WritingUtils.WriteFromEmbeddedResource("Eco.EM.Framework.SpecialItems", "smallStockpile.txt", agdir, ".cs", specificFileName: "SmallStockpileObject.override");
+            WritingUtils.WriteFromEmbeddedResource("Eco.EM.Framework.SpecialItems", "lumberStockpile.txt", agdir, ".cs", specificFileName: "LumberStockpileObject.override");
+            WritingUtils.WriteFromEmbeddedResource("Eco.EM.Framework.SpecialItems", "largelumberStockpile.txt", agdir, ".cs", specificFileName: "LargeLumberStockpileObject.override");
+
         }
 
         public static void PostInitialize()
