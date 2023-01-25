@@ -29,6 +29,14 @@ namespace Eco.EM.Framework.Resolvers
         [LocDescription("Enable the Use of Config overrides for Recipes, only enable this if you wish to configure the recipes yourself")]
         public bool useConfigOverrides { get; set; } = false;
 
+        [LocDisplayName("Remove Stockpile Stack Restriction")]
+        [LocDescription("Removes the Stack Limit Restriction in Stockpiles. Requires Manual Removal after Disable. Requires a Server Restart.")]
+        public bool OverrideVanillaStockpiles { get; set; } = false;
+
+        [LocDisplayName("Enable Lucky Strike For All")]
+        [LocDescription("Enables Lucky Strike as a Default Thing, which means the talent is no longer needed, Requires Manual Removal after Disable. Requires Server Restart.")]
+        public bool EnableGlobalLuckyStrike { get; set; } = false;
+
         [LocDescription("Recipes loaded by modules. ANY change to this list will require a server restart to take effect.")]
         [LocDisplayName("Recipes")]
         public SerializedSynchronizedCollection<RecipeModel> EMRecipes { get; set; } = new();

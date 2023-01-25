@@ -11,9 +11,11 @@ using Eco.Shared.Utils;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
+using static Eco.EM.Framework.Utils.JSONRecipeExporter;
 
 namespace Eco.EM.Framework.Utils
 {
@@ -89,7 +91,7 @@ namespace Eco.EM.Framework.Utils
 
         private static void ExportJSON()
         {
-            FileManager<Dictionary<string,RecipeData>>.WriteTypeHandledToFile(ExportData,Defaults.SaveLocation + _subPath, _exportFile);
+            FileManager<Dictionary<string, RecipeData>>.WriteTypeHandledToFile(ExportData, Defaults.SaveLocation + _subPath, _exportFile);
         }
 
         internal static Dictionary<string, RecipeData> BuildExportData()
@@ -117,7 +119,7 @@ namespace Eco.EM.Framework.Utils
 
                 ExportData.Add(recipe, new RecipeData());
 
-                UpdateErrorPosition(recipe, "CraftStation"); 
+                UpdateErrorPosition(recipe, "CraftStation");
                 // Crafting Station
                 foreach (Type type in CraftingComponent.TablesForRecipe(r.Family.GetType()))
                 {

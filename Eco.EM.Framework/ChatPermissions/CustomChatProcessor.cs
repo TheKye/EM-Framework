@@ -14,7 +14,7 @@ namespace Eco.EM.Framework.Permissions
     // Custom chat command processor assists in overriding SLG defined Auth levels and allows us to assign standard command to our own processing logic
     public class EMCustomChatProcessor : ICommandProcessorHandler
     {
-        private static Func<ChatCommand, IChatClient, bool> commandProcessor;
+        private static readonly Func<ChatCommand, IChatClient, bool> commandProcessor;
 
         public EMCustomChatProcessor() { }
 

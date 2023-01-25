@@ -127,6 +127,13 @@ namespace Eco.EM.Framework.Resolvers
                     if (value.Static)
                     {
                         if (!value.Tag)
+                            ingredients.Add(new IngredientElement(Item.Get(value.Item), value.Amount, true));
+                        else
+                            ingredients.Add(new IngredientElement(value.Item, value.Amount, true));
+                    }
+                    else if(!value.Static && skill == null)
+                    {
+                        if (!value.Tag)
                             ingredients.Add(new IngredientElement(Item.Get(value.Item), value.Amount, false));
                         else
                             ingredients.Add(new IngredientElement(value.Item, value.Amount, false));
@@ -321,10 +328,15 @@ namespace Eco.EM.Framework.Resolvers
             foreach (var dModel in loadtypes)
             {
                 var m = previousModels.SingleOrDefault(x => x.ModelType == dModel.ModelType);
-                if (m != null && EMConfigurePlugin.Config.useConfigOverrides)
+                if (m != null && EMConfigurePlugin.Config.useConfigOverrides && !m.Equals(dModel))
+                {
                     newModels.Add(m);
+#if DEBUG
+                    ConsoleColors.PrintConsoleMultiColored("[EM Framework] ", ConsoleColor.Magenta, Localizer.DoStr($"Loaded Config Override For: {m.ModelType}"), ConsoleColor.Yellow);
+#endif
+                }
                 else
-                    newModels.Add(dModel as RecipeModel);
+                    newModels.Add(dModel);
             }
             EMConfigurePlugin.Config.EMRecipes = newModels;
 
@@ -346,6 +358,7 @@ namespace Eco.EM.Framework.Resolvers
                 {
                     IRecipeOverride t = Activator.CreateInstance(type) as IRecipeOverride;
                     AddRecipeOverride(t.OverrideType, t.Model);
+                    ConsoleColors.PrintConsoleMultiColored("[EM Framework] ", ConsoleColor.Magenta, Localizer.DoStr($"Loaded Mod Override For: {t.Model.ModelType}"), ConsoleColor.Yellow);
                 }
                 catch (Exception e)
                 {
