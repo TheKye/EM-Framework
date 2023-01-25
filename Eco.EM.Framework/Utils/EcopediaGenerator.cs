@@ -21,7 +21,7 @@ namespace Eco.EM.Framework.Utils
         internal static Dictionary<string, string> subPages = new();
         internal static Dictionary<string, Dictionary<string, string>> pages = new();
         internal const string SavePath = "Mods/UserCode/Ecopedia/";
-        static Ecopedia eco;
+        private static readonly Ecopedia eco;
 
         /// <summary>
         /// This method will autogenerate a File in a folder Called Ecopedia inside the usercode folder, the folder it will make will be the modName param
@@ -83,13 +83,11 @@ namespace Eco.EM.Framework.Utils
         {
             var assembly = Assembly.GetCallingAssembly();
             var resourceName = modNamespace + "." + fileName;
-            string resource = null;
             var cleanName = fileName.Split(".")[0];
+            string resource;
             try
             {
-                using Stream stream = assembly.GetManifestResourceStream(resourceName);
-                using StreamReader reader = new(stream);
-                resource = reader.ReadToEnd();
+                resource = WritingUtils.ReadFromEmbeddedResource(assembly, modNamespace, fileName);
             }
             catch (Exception e)
             {

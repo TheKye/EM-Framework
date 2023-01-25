@@ -7,12 +7,22 @@ using Eco.Shared.Utils;
 using System;
 using Eco.Gameplay.EcopediaRoot;
 using Eco.Gameplay.Systems.Chat;
+using Eco.EM.Framework.AdminUtils;
+using Eco.Gameplay.Objects;
+using Eco.Shared.Networking;
 
 namespace Eco.EM.Framework.Commands
 {
     [ChatCommandHandler]
     public class SpecialCommands
     {
+        /*[ChatCommand("Opens the Admin Util UI", "admin-util",ChatAuthorizationLevel.Admin)]
+        public static void AdminUtilities(User user)
+        {
+            user.Player.Client.RPC("OpenUI", user.Player.Client, "WorldObjectUI", typeof(AdminUiUtil));
+        }
+        */
+
 
         [ChatCommand("Reloads the Unity Data Files without needing to reboot the server", "rl-unity", ChatAuthorizationLevel.Admin)]
         public static void ReloadUnityData(IChatClient chatClient)

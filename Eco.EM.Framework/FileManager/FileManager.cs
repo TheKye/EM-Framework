@@ -7,6 +7,7 @@ using System.IO;
 namespace Eco.EM.Framework.FileManager
 {
     using System;
+
     public static class FileManager<T> where T : class, new()
     {
         public static bool WriteToFile(T input, string SavePath, string FileName)

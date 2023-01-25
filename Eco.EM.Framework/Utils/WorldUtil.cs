@@ -138,7 +138,7 @@ namespace Eco.EM.Framework.Utils
                                 info.Method = InteractionMethod.Right;
                                 info.BlockPosition = positionAbove;
                                 InteractionContext context = info.MakeContext(user.Player);
-                                var authResult = ServiceHolder<IAuthManager>.Obj.IsAuthorized(PlotUtil.ToPlotPos(context.Player.Position.XZi()), context.Player.User, (AccessType.ConsumerAccess | AccessType.FullAccess | AccessType.OwnerAccess), null);
+                                var authResult = ServiceHolder<IAuthManager>.Obj.IsAuthorized(PlotUtil.ToPlotPos(context.Player.User.Position.XZi()), context.Player.User, (AccessType.ConsumerAccess | AccessType.FullAccess | AccessType.OwnerAccess), null);
                                 var blockAuthResult = ServiceHolder<IAuthManager>.Obj.IsAuthorized(PlotUtil.ToPlotPos(context.TargetPosition.XZ), context.Player.User, (AccessType.ConsumerAccess | AccessType.FullAccess | AccessType.OwnerAccess), null);
                                 if (!authResult.Success && !blockAuthResult.Success || !authResult.Success || !blockAuthResult.Success)
                                 {
@@ -218,7 +218,7 @@ namespace Eco.EM.Framework.Utils
                                 info.Method = InteractionMethod.Right;
                                 info.BlockPosition = positionAbove;
                                 InteractionContext context = info.MakeContext(user.Player);
-                                var authResult = ServiceHolder<IAuthManager>.Obj.IsAuthorized(PlotUtil.ToPlotPos(context.Player.Position.XZi()), context.Player.User, (AccessType.ConsumerAccess | AccessType.FullAccess | AccessType.OwnerAccess), null);
+                                var authResult = ServiceHolder<IAuthManager>.Obj.IsAuthorized(PlotUtil.ToPlotPos(context.Player.User.Position.XZi()), context.Player.User, (AccessType.ConsumerAccess | AccessType.FullAccess | AccessType.OwnerAccess), null);
                                 var blockAuthResult = ServiceHolder<IAuthManager>.Obj.IsAuthorized(PlotUtil.ToPlotPos(context.TargetPosition.XZ), context.Player.User, (AccessType.ConsumerAccess | AccessType.FullAccess | AccessType.OwnerAccess), null);
                                 if (!authResult.Success && !blockAuthResult.Success || !authResult.Success || !blockAuthResult.Success)
                                 {

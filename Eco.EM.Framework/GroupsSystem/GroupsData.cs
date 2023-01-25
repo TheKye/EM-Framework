@@ -34,7 +34,7 @@ namespace Eco.EM.Framework.Groups
                 Groups.Add(group);
             }
 
-            if (GroupCreated != null) GroupCreated.Invoke(group.GroupName);
+            GroupCreated?.Invoke(group.GroupName);
 
             return group;
         }

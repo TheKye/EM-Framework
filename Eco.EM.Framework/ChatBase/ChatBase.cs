@@ -1000,10 +1000,10 @@ namespace Eco.EM.Framework.ChatBase
             switch (Message.MessageType)
             {
                 case MessageType.Temporary:
-                    NotificationManager.ServerMessageToPlayer(Localizer.DoStr(Message.Content), Message.User, Message.NotificationCategory, Message.NotificationStyle, true);
+                    NotificationManager.ServerMessageToPlayer(Localizer.DoStr(Message.Content), Message.Player.User, Message.NotificationCategory, Message.NotificationStyle, true);
                     break;
                 case MessageType.Permanent:
-                    NotificationManager.ServerMessageToPlayer(Localizer.DoStr(Message.Content), Message.User, Message.NotificationCategory, Message.NotificationStyle, false);
+                    NotificationManager.ServerMessageToPlayer(Localizer.DoStr(Message.Content), Message.Player.User, Message.NotificationCategory, Message.NotificationStyle, false);
                     break;
             }
 
@@ -1066,7 +1066,7 @@ namespace Eco.EM.Framework.ChatBase
         {
             Message.Player.Msg(Localizer.DoStr(Shared.Utils.Text.Error(Message.Content)), Message.NotificationStyle);
             if (Message.SendToChat)
-                NotificationManager.ServerMessageToPlayer(Localizer.DoStr(Message.Content), Message.User);
+                NotificationManager.ServerMessageToPlayer(Localizer.DoStr(Message.Content), Message.Player.User);
             return true;
         }
         internal static bool SendToServer(Error Message)
@@ -1077,7 +1077,7 @@ namespace Eco.EM.Framework.ChatBase
                 {
                     user.Player.Msg(Localizer.DoStr(Shared.Utils.Text.Error(Message.Content)), Message.NotificationStyle);
                     if (Message.SendToChat)
-                        NotificationManager.ServerMessageToPlayer(Localizer.DoStr(Message.Content), Message.User);
+                        NotificationManager.ServerMessageToPlayer(Localizer.DoStr(Message.Content), Message.Player.User);
                 }
                 return true;
             }
@@ -1107,7 +1107,7 @@ namespace Eco.EM.Framework.ChatBase
         {
             Message.Player.Msg(Localizer.DoStr(Shared.Utils.Text.Info(Message.Content)), Message.NotificationStyle);
             if (Message.SendToChat)
-                NotificationManager.ServerMessageToPlayer(Localizer.DoStr(Message.Content), Message.User);
+                NotificationManager.ServerMessageToPlayer(Localizer.DoStr(Message.Content), Message.Player.User);
             return true;
         }
         internal static bool SendToServer(Info Message)
@@ -1118,7 +1118,7 @@ namespace Eco.EM.Framework.ChatBase
                 {
                     user.Player.Msg(Localizer.DoStr(Shared.Utils.Text.Info(Message.Content)), Message.NotificationStyle);
                     if (Message.SendToChat)
-                        NotificationManager.ServerMessageToPlayer(Localizer.DoStr(Message.Content), Message.User);
+                        NotificationManager.ServerMessageToPlayer(Localizer.DoStr(Message.Content), Message.Player.User);
                 }
                 return true;
             }
@@ -1148,7 +1148,7 @@ namespace Eco.EM.Framework.ChatBase
         {
             Message.Player.Msg(Localizer.DoStr(Shared.Utils.Text.InfoLight(Message.Content)), Message.NotificationStyle);
             if (Message.SendToChat)
-                NotificationManager.ServerMessageToPlayer(Localizer.DoStr(Message.Content), Message.User);
+                NotificationManager.ServerMessageToPlayer(Localizer.DoStr(Message.Content), Message.Player.User);
             return true;
         }
         internal static bool SendToServer(InfoBox Message)
@@ -1158,9 +1158,11 @@ namespace Eco.EM.Framework.ChatBase
                 foreach (var user in PlayerUtils.OnlineUsers)
                 {
                     user.Player.Msg(Localizer.DoStr(Shared.Utils.Text.InfoLight(Message.Content)), Message.NotificationStyle);
-                    if (Message.SendToChat)
-                        NotificationManager.ServerMessageToPlayer(Localizer.DoStr(Message.Content), Message.User);
+
+                        //NotificationManager.ServerMessageToPlayer(Localizer.DoStr(Message.Content), Message.User);
                 }
+                if (Message.SendToChat)
+                    NotificationManager.ServerMessageToAll(Localizer.DoStr(Message.Content));
                 return true;
             }
             catch (Exception e)
@@ -1199,9 +1201,9 @@ namespace Eco.EM.Framework.ChatBase
             if (Message.SendToChat)
             {
                 if (Message.TempMessage)
-                    NotificationManager.ServerMessageToPlayer(Localizer.DoStr(Message.Content), Message.User, Message.NotificationCategory, Message.ChatCategory, true);
+                    NotificationManager.ServerMessageToPlayer(Localizer.DoStr(Message.Content), Message.Player.User, Message.NotificationCategory, Message.ChatCategory, true);
                 else
-                    NotificationManager.ServerMessageToPlayer(Localizer.DoStr(Message.Content), Message.User, Message.NotificationCategory, Message.ChatCategory, false);
+                    NotificationManager.ServerMessageToPlayer(Localizer.DoStr(Message.Content), Message.Player.User, Message.NotificationCategory, Message.ChatCategory, false);
             }
             return true;
         }
@@ -1307,10 +1309,10 @@ namespace Eco.EM.Framework.ChatBase
                     Message.Player.OkBoxLoc($"{Message.Content}");
                     break;
                 case MessageType.Temporary:
-                    NotificationManager.ServerMessageToPlayer(Localizer.DoStr(Message.Content), Message.User, Message.NotificationCategory, Message.NotificationStyle, true);
+                    NotificationManager.ServerMessageToPlayer(Localizer.DoStr(Message.Content), Message.Player.User, Message.NotificationCategory, Message.NotificationStyle, true);
                     break;
                 case MessageType.Permanent:
-                    NotificationManager.ServerMessageToPlayer(Localizer.DoStr(Message.Content), Message.User, Message.NotificationCategory, Message.NotificationStyle, false);
+                    NotificationManager.ServerMessageToPlayer(Localizer.DoStr(Message.Content), Message.Player.User, Message.NotificationCategory, Message.NotificationStyle, false);
                     break;
             }
 
@@ -1410,7 +1412,7 @@ namespace Eco.EM.Framework.ChatBase
         {
             Message.Player.Msg(Localizer.DoStr(Shared.Utils.Text.Warning(Message.Content)), Message.NotificationStyle);
             if (Message.SendToChat)
-                NotificationManager.ServerMessageToPlayer(Localizer.DoStr(Message.Content), Message.User);
+                NotificationManager.ServerMessageToPlayer(Localizer.DoStr(Message.Content), Message.Player.User);
             return true;
         }
         internal static bool SendToServer(Warning Message)
@@ -1421,7 +1423,7 @@ namespace Eco.EM.Framework.ChatBase
                 {
                     user.Player.Msg(Localizer.DoStr(Shared.Utils.Text.Warning(Message.Content)), Message.NotificationStyle);
                     if (Message.SendToChat)
-                        NotificationManager.ServerMessageToPlayer(Localizer.DoStr(Message.Content), Message.User);
+                        NotificationManager.ServerMessageToPlayer(Localizer.DoStr(Message.Content), Message.Player.User);
                 }
                 return true;
             }
