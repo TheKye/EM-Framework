@@ -42,6 +42,23 @@ namespace Eco.EM.Framework.Utils
                 return "";
             }
         }
+
+        public static string ReadFromEmbeddedResource(Assembly assembly, string usingNamespace, string fileName, bool debug = false)
+        {
+            var resourceName = usingNamespace + "." + fileName;
+            try
+            {
+                using Stream stream = assembly.GetManifestResourceStream(resourceName);
+                using StreamReader reader = new(stream);
+                return reader.ReadToEnd();
+            }
+            catch (Exception e)
+            {
+                if (debug)
+                    Log.WriteErrorLineLocStr($"[EM Framework] (Writing Utils) There was an error reading the Resource Provided: Exception was: \n{e}\nEmpty String was returned to prevent server breaking.");
+                return "";
+            }
+        }
         /// <summary>
         /// WriteFromEmbeddedResource will read the embedded resource from the location passed to this method and then write it out to file with the Extension provided at the location specified.
         /// This can be good for doing easy vanilla overrides without doing it by hand and just embedding resources in your DLL

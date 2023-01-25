@@ -83,11 +83,11 @@ namespace Eco.EM.Framework.Utils
         {
             var assembly = Assembly.GetCallingAssembly();
             var resourceName = modNamespace + "." + fileName;
-            string resource = null;
             var cleanName = fileName.Split(".")[0];
+            string resource;
             try
             {
-                resource = WritingUtils.ReadFromEmbeddedResource(modNamespace, fileName);
+                resource = WritingUtils.ReadFromEmbeddedResource(assembly, modNamespace, fileName);
             }
             catch (Exception e)
             {
