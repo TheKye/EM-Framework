@@ -7,6 +7,7 @@ using System.IO;
 namespace Eco.EM.Framework.FileManager
 {
     using System;
+
     public static class FileManager<T> where T : class, new()
     {
         public static bool WriteToFile(T input, string SavePath, string FileName)
@@ -159,21 +160,18 @@ namespace Eco.EM.Framework.FileManager
             if (!FileName.EndsWith(format) && !FileName.EndsWith(ecoFormat))
                 FileName += format;
 
-            using (var file = new StreamWriter(Path.Combine(SavePath, FileName)))
-            {
-                file.Write(Input);
-            }
+            using var file = new StreamWriter(Path.Combine(SavePath, FileName));
+            file.Write(Input);
         }
+
         //Allows for custom Extensions
         public static void WriteToFile(string Input, string SavePath, string FileName, string extension)
         {
             if (!Directory.Exists(SavePath))
                 Directory.CreateDirectory(SavePath);
 
-            using (var file = new StreamWriter(Path.Combine(SavePath, FileName + extension)))
-            {
-                file.Write(Input);
-            }
+            using var file = new StreamWriter(Path.Combine(SavePath, FileName + extension));
+            file.Write(Input);
         }
 
         public static string ReadFromFile(string SavePath, string FileName)

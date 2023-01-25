@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Collections;
 
 namespace Eco.EM.Framework.Groups
 {
     [Serializable]
-    public class SimpleGroupUser
+    public class SimpleGroupUser : IEquatable<SimpleGroupUser>
     {
          public string Name { get; private set; }
          public string SlgID { get; private set; }
@@ -14,6 +15,11 @@ namespace Eco.EM.Framework.Groups
             this.Name = name;
             this.SlgID = slgid;
             this.SteamID = steamid;
+        }
+
+        public bool Equals(SimpleGroupUser other)
+        {
+            return this.Name == other.Name && this.SlgID == other.SlgID && this.SteamID == other.SteamID;
         }
     }
 }

@@ -131,6 +131,7 @@ namespace Eco.EM.Framework.Utils
                                 case > 0:
                                     Items.Add(new OfferedItem
                                     {
+                                        StoreID = o.StoreID,
                                         tagItemName = o.tagItemName,
                                         Quantity = o.Quantity,
                                         Price = o.Price,
@@ -144,6 +145,7 @@ namespace Eco.EM.Framework.Utils
                                     if (includeOutOfStock)
                                         Items.Add(new OfferedItem
                                         {
+                                            StoreID = o.StoreID,
                                             tagItemName = o.tagItemName,
                                             Quantity = o.Quantity,
                                             Price = o.Price,
@@ -166,26 +168,28 @@ namespace Eco.EM.Framework.Utils
                                 case > 0:
                                     Items.Add(new OfferedItem
                                     {
+                                        StoreID = o.StoreID,
                                         tagItemName = o.tagItemName,
                                         Quantity = o.Quantity,
                                         Price = o.Price,
                                         Currency = o.Currency,
                                         StoreName = o.StoreName,
                                         StoreOwner = o.StoreOwner,
-                                        ForSale = true
+                                        ForSale = false
                                     });
                                     break;
                                 case < 1:
                                     if (includeOutOfStock)
                                         Items.Add(new OfferedItem
                                         {
+                                            StoreID = o.StoreID,
                                             tagItemName = o.tagItemName,
                                             Quantity = o.Quantity,
                                             Price = o.Price,
                                             Currency = o.Currency,
                                             StoreName = o.StoreName,
                                             StoreOwner = o.StoreOwner,
-                                            ForSale = true
+                                            ForSale = false
                                         });
                                     break;
                             }

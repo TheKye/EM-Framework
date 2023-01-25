@@ -1,6 +1,7 @@
 ﻿using Eco.Gameplay.Items;
 using Eco.Mods.TechTree;
 using Eco.Shared.Localization;
+using Eco.Shared.Utils;
 using Eco.World.Blocks;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,27 @@ namespace Eco.EM.Framework.Utils
         }
 
         public override int MaxAccepted(Item item, int currentQuantity) => (int)(item.MaxStackSize * this.MaxItems);
+    }
+
+    public class TagStackRestriction : InventoryRestriction
+    {
+        public override bool SurpassStackSize => true;
+        private List<string> allowedTags;
+        private float Multiplier { get; set; } = 1;
+
+        public TagStackRestriction(float multiplier, params string[] allowedTags)
+        {
+            this.allowedTags = new List<string>(allowedTags);
+            Multiplier = multiplier;
+        }
+        public TagStackRestriction(float multiplier, IEnumerable<Tag> allowedTags)
+        {
+            this.allowedTags = new List<string>(allowedTags.Select(tag => tag.Name));
+            Multiplier = multiplier;
+        }
+
+        public override LocString Message => Localizer.DoStr("Inventory does not accept that type of item.");
+        public override int MaxAccepted(Item item, int currentQuantity) => item.Tags().Any(x => this.allowedTags.Contains(x.Name)) ? (int)(item.MaxStackSize * Multiplier) : 0;
     }
 
     // Limits stack sizes to a different quantity other than item.maxstacksize, while restricting Tools and Tailings/Garbage.
@@ -53,5 +75,20 @@ namespace Eco.EM.Framework.Utils
                 return this.MaxItems;
             }
         }
+    }
+
+    public class MiningItemsStackRestriction : InventoryRestriction
+    {
+        public override bool SurpassStackSize => true;
+        private readonly HashSet<Type> allowedItemTypes = new(new Type[] { typeof(SandItem), typeof(DirtItem), typeof(ClayItem), typeof(CrushedIronOreItem), typeof(CrushedCopperOreItem), typeof(CrushedGoldOreItem) });
+        public override LocString Message => Localizer.DoStr("This Inventory only accepts Minable or Diggable Items");
+        public string[] allowedTags = { "CrushedRock", "Rock", "Ore", "ConcentraredOre", "Coal" };
+        private float Multiplier { get; set; }
+        public MiningItemsStackRestriction(float multiplier = 1) 
+        {
+            Multiplier = multiplier;
+        }
+
+        public override int MaxAccepted(Item item, int currentQuantity) => item.Tags().Any(x => this.allowedTags.Contains(x.Name)) ? (int)(item.MaxStackSize * Multiplier) : allowedItemTypes.Contains(item.Type) ? (int)(item.MaxStackSize * Multiplier) : 0;
     }
 }

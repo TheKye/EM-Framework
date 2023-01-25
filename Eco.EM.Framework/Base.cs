@@ -1,22 +1,7 @@
 ﻿using Eco.EM.Framework.FileManager;
-using Eco.Gameplay.Players;
-using Eco.Shared.Localization;
-using Eco.Shared.Utils;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using Eco.Core.Plugins.Interfaces;
-using Eco.Core.Utils;
-using System.Diagnostics;
 using System.Reflection;
-using Eco.Core.Plugins;
-using Eco.EM.Framework.VersioningTools;
-using Eco.Plugins.Networking;
-using System.Threading;
-using Eco.EM.Framework.Logging;
-using NLog;
-using Eco.Core.Utils.Logging;
 
 namespace Eco.EM.Framework
 {

@@ -1,16 +1,26 @@
 ﻿using Eco.Core.Plugins;
 using Eco.Core.Plugins.Interfaces;
 using Eco.Core.Utils;
+using Eco.EM.Framework.Utils;
+using Eco.Gameplay.Objects;
 using Eco.Gameplay.Players;
 using Eco.Gameplay.Systems.Chat;
 using Eco.Gameplay.Systems.Messaging.Chat.Commands;
+using Eco.Mods.TechTree;
+using Eco.Shared.Items;
 using Eco.Shared.Localization;
 using Eco.Shared.Utils;
+using Eco.Simulation.WorldLayers.History;
+using System;
+using System.IO;
+using System.Reflection;
 
 namespace Eco.EM.Framework.Resolvers
 {
     [LocDisplayName("EM Configure Plugin")]
     [ChatCommandHandler]
+    [Priority(200)]
+    
     public class EMConfigurePlugin : Singleton<EMConfigurePlugin>, IModKitPlugin, IConfigurablePlugin, IModInit
     {
         private static readonly PluginConfig<EMConfigureConfig> config;
@@ -33,12 +43,45 @@ namespace Eco.EM.Framework.Resolvers
             EMLinkRadiusResolver.Obj.Initialize();
             EMStorageSlotResolver.Obj.Initialize();
             EMFoodItemResolver.Obj.Initialize();
-            EMHousingResolver.Obj.Initialize();
             EMVehicleResolver.Obj.Initialize();
+            RunStockpileResolver();
+            RunLuckyStrikeResolver();
+        }
+
+        private static void RunLuckyStrikeResolver()
+        {
+            if (!Config.EnableGlobalLuckyStrike) return;
+
+            var alsdir = "/Mods/UserCode/Tools";
+
+            if (!Directory.Exists(alsdir))
+            {
+                Directory.CreateDirectory(alsdir);
+            }
+            WritingUtils.WriteFromEmbeddedResource("Eco.EM.Framework.SpecialItems", "pickaxe.txt", alsdir, ".cs", specificFileName: "PickaxeItem.override");
+        }
+
+        private static void RunStockpileResolver()
+        {
+            if (!Config.OverrideVanillaStockpiles) return;
+
+            var agdir = "/Mods/UserCode/Objects";
+
+            if (!Directory.Exists(agdir))
+            {
+                Directory.CreateDirectory(agdir);
+            }
+
+            WritingUtils.WriteFromEmbeddedResource("Eco.EM.Framework.SpecialItems", "Stockpile.txt", agdir, ".cs", specificFileName: "StockpileObject.override");
+            WritingUtils.WriteFromEmbeddedResource("Eco.EM.Framework.SpecialItems", "smallStockpile.txt", agdir, ".cs", specificFileName: "SmallStockpileObject.override");
+            WritingUtils.WriteFromEmbeddedResource("Eco.EM.Framework.SpecialItems", "lumberStockpile.txt", agdir, ".cs", specificFileName: "LumberStockpileObject.override");
+            WritingUtils.WriteFromEmbeddedResource("Eco.EM.Framework.SpecialItems", "largelumberStockpile.txt", agdir, ".cs", specificFileName: "LargeLumberStockpileObject.override");
+
         }
 
         public static void PostInitialize()
         {
+            EMHousingResolver.Obj.Initialize();
             EMStackSizeResolver.Initialize();
             EMItemWeightResolver.Initialize();
 

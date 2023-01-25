@@ -20,6 +20,21 @@ namespace Eco.EM.Framework.Resolvers
 
         public int ResolveSlots(IStorageSlotObject obj) => GetSlots(obj);
 
+        public float ResolveStackMultiplier(IStorageSlotObject obj) => GetMultiplier(obj);
+
+        private float GetMultiplier(IStorageSlotObject obj)
+        {
+            try
+            {
+                return LoadedSlotOverrides[obj.GetType().Name].StackMultiplier;
+            }
+            catch
+            {
+                Log.WriteErrorLine(Localizer.DoStr(string.Format("Unable to load storage slots for {0}. Please check config.", obj.GetType().Name)));
+                throw;
+            }
+        }
+
         private int GetSlots(IStorageSlotObject obj)
         {
             try

@@ -1,16 +1,15 @@
 ﻿using Eco.Core.Plugins.Interfaces;
 using Eco.Core.Utils;
+using Eco.EM.Framework.FileManager;
+using Eco.EM.Framework.Plugins;
+using Eco.EM.Framework.Utils;
 using Eco.Gameplay.Players;
+using Eco.Shared.Localization;
 using Eco.Shared.Utils;
+using Eco.WorldGenerator;
+using System;
 using System.IO;
 using System.Linq;
-using Eco.EM.Framework.FileManager;
-using Eco.Shared.Localization;
-using Eco.EM.Framework.Utils;
-using System.Threading;
-using Eco.WorldGenerator;
-using Eco.EM.Framework.Plugins;
-using System;
 using System.Threading.Tasks;
 
 namespace Eco.EM.Framework.Groups
@@ -20,7 +19,6 @@ namespace Eco.EM.Framework.Groups
         internal const string _dataFile = "ElixrMods-GroupsData.json";
         internal const string _dataBackupFile = "ElixrMods-GroupsData-Bakup.json";
         internal const string _subPath = "/EM/Groups";
-        public Timer Timer;
 
         public static GroupsData Data { get; internal set; }
         public static GroupsData DataBackup { get; internal set; }
@@ -38,25 +36,27 @@ namespace Eco.EM.Framework.Groups
 
         private GroupsData ValidateDataFile()
         {
-            try
+
+            Data = LoadData();
+
+            if (Data != null)
             {
-                return LoadData();
+                return Data;
             }
-            catch
+
+            else
             {
-                ConsoleColors.PrintConsoleMultiColored(Defaults.appNameCon, ConsoleColor.Magenta, "The Groups file for the permissions system was found to be corrupted, Attempting to restore from backup.", ConsoleColor.White);
-                try
-                {
-                    Data = LoadBackupData();
-                    SaveData();
+                ConsoleColors.PrintConsoleMultiColored(Defaults.appNameCon, ConsoleColor.Magenta, "The Main Groups file was found to be corrupted, Loading from backup", ConsoleColor.Red);
+                Data = LoadBackupData();
+                SaveData();
+                if (Data != null)
                     return Data;
-                }
-                catch
+                else
                 {
-                    ConsoleColors.PrintConsoleMultiColored(Defaults.appNameCon, ConsoleColor.Magenta, "There was an issue loading from the backup file. generating new files.", ConsoleColor.White);
+                    ConsoleColors.PrintConsoleMultiColored(Defaults.appNameCon, ConsoleColor.Magenta, "There was an issue loading from the backup file. generating new files.", ConsoleColor.Red);
                     Data = new();
                     SaveData();
-                    return LoadData();
+                    return Data;
                 }
             }
         }
@@ -73,7 +73,7 @@ namespace Eco.EM.Framework.Groups
             {
                 lock (Data.AllUsers)
                 {
-                    if (!Data.AllUsers.Any(entry => entry.Name == usr.Name || entry.SteamID == usr.SteamId || entry.SlgID == usr.SlgId))
+                    if (!Data.AllUsers.Any(entry => entry.Name == usr.Name && (entry.SlgID == usr.SlgId || entry.SteamID == usr.SteamId)))
                     {
                         Data.AllUsers.Add(new SimpleGroupUser(usr.Name, usr.SlgId ?? "", usr.SteamId ?? ""));
                         SaveData();
@@ -87,7 +87,7 @@ namespace Eco.EM.Framework.Groups
                     else
                         group = Data.GetorAddGroup("default");
 
-                    if (!group.GroupUsers.Any(entry => entry.Name == usr.Name || entry.SteamID == usr.SteamId || entry.SlgID == usr.SlgId))
+                    if (!group.GroupUsers.Any(entry => entry.Name == usr.Name && (entry.SlgID == usr.SlgId || entry.SteamID == usr.SteamId)))
                     {
                         group.AddUser(usr);
                         SaveData();
@@ -99,7 +99,7 @@ namespace Eco.EM.Framework.Groups
             {
                 lock (Data.AllUsers)
                 {
-                    if (!Data.AllUsers.Any(entry => entry.Name == u.Name || entry.SteamID == u.SteamId || entry.SlgID == u.SlgId))
+                    if (!Data.AllUsers.Any(entry => entry.Name == u.Name && (entry.SlgID == u.SlgId || entry.SteamID == u.SteamId)))
                     {
                         Data.AllUsers.Add(new SimpleGroupUser(u.Name, u.SlgId ?? "", u.SteamId ?? ""));
                         SaveData();
@@ -113,7 +113,7 @@ namespace Eco.EM.Framework.Groups
                     else
                         group = Data.GetorAddGroup("default");
 
-                    if (!group.GroupUsers.Any(entry => entry.Name == u.Name && entry.SteamID == u.SteamId || entry.SlgID == u.SlgId))
+                    if (!group.GroupUsers.Any(entry => entry.Name == u.Name && (entry.SlgID == u.SlgId || entry.SteamID == u.SteamId)))
                     {
                         group.AddUser(u);
                         SaveData();
@@ -121,46 +121,68 @@ namespace Eco.EM.Framework.Groups
                 }
             });
 
-            Timer = new(Timer_tick, null, 10000, 10000);
+            //Subscribe to Admins' list added and removed events.
+            UserManager.Config.UserPermission.Admins.UserIDAddedEvent.Add(userId =>
+            {
+                AdminsChanged(true, userId);
+            });
+
+            UserManager.Config.UserPermission.Admins.UserIDRemovedEvent.Add(userId =>
+            {
+                AdminsChanged(false, userId);
+            });
         }
 
-        static void Timer_tick(object state)
+        static void AdminsChanged(bool added, string adminId)
         {
-            var users = PlayerUtils.Users;
-            lock (Data.AllUsers)
+            //Should adminId be empty string or null, or user of specific adminId does not exist on the server, leave.
+            //Protects against errors on Eco side, where the adminId that event passes is incorrect.
+            if (string.IsNullOrEmpty(adminId) || PlayerUtils.GetUser(adminId) is null)
             {
-                foreach (var u in users)
-                {
-                    var agroup = Data.GetorAddGroup("admin");
+                return;
+            }
 
-                    if (!u.IsAdmin && agroup.GroupUsers.Any(entry => entry.Name == u.Name && entry.SteamID == u.SteamId || entry.SlgID == u.SlgId))
+            var agroup = Data.GetorAddGroup("admin");
+
+            //We have to use FindUser as the adminId passed by the event can be any Id, including user's name.
+            //No null check required here as it is already verified above.
+            var u = PlayerUtils.GetUser(adminId);
+
+            switch (added)
+            {
+                //When adding, ensure that user does not already exist among admins on EM side.
+                case true when !agroup.GroupUsers.Any(entry => entry.Name == u.Name && (entry.SlgID == u.SlgId || entry.SteamID == u.SteamId)):
+                {
+                    lock (Data.AllUsers)
+                    {
+                        agroup.AddUser(u);
+                        SaveData();
+                    }
+
+                    break;
+                }
+                //When removing, ensure that user actually exists in the admin group on EM side.
+                case false when agroup.GroupUsers.Any(entry => entry.Name == u.Name && (entry.SlgID == u.SlgId || entry.SteamID == u.SteamId)):
+                {
+                    lock (Data.AllUsers)
                     {
                         agroup.RemoveUser(u);
                         SaveData();
                     }
 
-                    if (u.IsAdmin && !agroup.GroupUsers.Any(entry => entry.Name == u.Name && entry.SteamID == u.SteamId || entry.SlgID == u.SlgId))
-                    {
-                        agroup.AddUser(u);
-                        SaveData();
-                    }
+                    break;
                 }
             }
         }
+
 
         public string GetStatus() => "Groups System Active";
 
         public override string ToString() => Localizer.DoStr("EM - Groups System");
 
-        private static GroupsData LoadData()
-        {
-            return FileManager<GroupsData>.ReadTypeHandledFromFile(Defaults.SaveLocation + _subPath, _dataFile);
-        }
+        private static GroupsData LoadData() => FileManager<GroupsData>.ReadTypeHandledFromFile(Defaults.SaveLocation + _subPath, _dataFile);
 
-        private static GroupsData LoadBackupData()
-        {
-            return FileManager<GroupsData>.ReadTypeHandledFromFile(Defaults.SaveLocation + _subPath, _dataBackupFile, ".bak");
-        }
+        private static GroupsData LoadBackupData() => FileManager<GroupsData>.ReadTypeHandledFromFile(Defaults.SaveLocation + _subPath, _dataBackupFile, ".bak");
 
         internal static void SaveData()
         {
@@ -171,10 +193,10 @@ namespace Eco.EM.Framework.Groups
 
         public string GetCategory() => "Elixr Mods";
 
-        public Task ShutdownAsync()
+        public async Task ShutdownAsync()
         {
             SaveData();
-            return Task.CompletedTask;
+            await Task.CompletedTask;
         }
     }
 

@@ -4,19 +4,24 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
+using System.Xml.Linq;
 using Eco.Gameplay.EcopediaRoot;
+using Eco.Shared.Localization;
 using Eco.Shared.Utils;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Eco.EM.Framework.Utils
 {
     /// <summary>
     /// EcopediaGenerator, Automatically Generates the EcoPedia Files for your mods so you don't have to!
     /// </summary>
-    public static class EcopediaGenerator
+    public class EcopediaGenerator : Singleton<EcopediaGenerator>
     {
         internal static Dictionary<string, string> subPages = new();
         internal static Dictionary<string, Dictionary<string, string>> pages = new();
         internal const string SavePath = "Mods/UserCode/Ecopedia/";
+        private static readonly Ecopedia eco;
 
         /// <summary>
         /// This method will autogenerate a File in a folder Called Ecopedia inside the usercode folder, the folder it will make will be the modName param
@@ -78,13 +83,11 @@ namespace Eco.EM.Framework.Utils
         {
             var assembly = Assembly.GetCallingAssembly();
             var resourceName = modNamespace + "." + fileName;
-            string resource = null;
             var cleanName = fileName.Split(".")[0];
+            string resource;
             try
             {
-                using Stream stream = assembly.GetManifestResourceStream(resourceName);
-                using StreamReader reader = new(stream);
-                resource = reader.ReadToEnd();
+                resource = WritingUtils.ReadFromEmbeddedResource(assembly, modNamespace, fileName);
             }
             catch (Exception e)
             {
@@ -104,6 +107,9 @@ namespace Eco.EM.Framework.Utils
             if (isSubPage)
                 subPages.Add(cleanName.Split(";")[1], cleanName.Split(";")[2]);
 
+            if (File.Exists(SavePath + modName + "/" + fileName + ".xml"))
+                File.Delete(SavePath + modName + "/" + fileName + ".xml");
+
             Logging.LoggingUtils.Debug($"Added new Ecopedia file at {SavePath}{modName}");
             return true;
         }
@@ -114,13 +120,13 @@ namespace Eco.EM.Framework.Utils
             {
                 foreach (var p in mod.Value)
                 {
+                    //lets try using XML Writer to fix an issue
                     var fileName = mod.Key.Split("-")[0];
-                    if (File.Exists(SavePath + p.Key + "/" + fileName + ".xml"))
-                        File.Delete(SavePath + p.Key + "/" + fileName + ".xml");
-
+                    var sb = new StringBuilder();
+                        sb.Append(p.Value);
                     if (!File.Exists(SavePath + p.Key + "/" + fileName + ".xml"))
                     {
-                        FileManager.FileManager.WriteToFile(p.Value, SavePath + p.Key, fileName, ".xml");
+                        FileManager.FileManager.WriteToFile(sb.ToString(), SavePath + p.Key, fileName, ".xml");
 
                         Logging.LoggingUtils.Debug($"Added new Ecopedia file");
                     }
@@ -132,11 +138,18 @@ namespace Eco.EM.Framework.Utils
                             try
                             {
                                 var modname = mod.Key.Split("-")[0];
-                                var final = modname.Split(";")[1];
-                                if (sp.Key.ToLower() == final.ToLower())
+                                var cleanName = modname.Split(";");
+                                if (sp.Key.ToLower() == cleanName[1].ToLower())
                                 {
-                                    var mainpage = Ecopedia.Obj.GetPage(final);
-                                    var subpage = Ecopedia.Obj.GetPage(sp.Value);
+                                    var mainpage = Ecopedia.Obj.GetPage(cleanName[1]);
+                                    var cat = eco.Categories.GetOrAdd("Mods");
+                                    var page = cat.Pages.GetOrAdd(mainpage.Name);
+
+                                    var subpage = page.SubPages.GetOrAdd(cleanName[2]);
+                                    subpage.Name = sp.Value;
+                                    subpage.FullName = page.FullName + ';' + sp.Value;
+                                    subpage.DisplayName = Localizer.DoStr(sp.Value);
+
                                     mainpage.SubPages.Add(subpage.Name, subpage);
                                 }
                             }
@@ -150,6 +163,7 @@ namespace Eco.EM.Framework.Utils
 
             }
         }
+
         internal static Task ShutDown()
         {
             foreach (var mod in pages)

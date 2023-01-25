@@ -8,15 +8,20 @@ using System.Linq;
 using System.IO;
 using Eco.Shared.Localization;
 using Eco.Gameplay.Systems.Messaging.Chat.Commands;
+using Eco.Gameplay.Systems.Messaging.Chat;
 using Eco.EM.Framework.Utils;
+using Eco.WebServer;
+using Eco.Gameplay.Systems.InitialSpawn;
+using Eco.Core.Utils;
 
 namespace Eco.EM.Framework.Permissions
 {
     public class CommandGroupsManager : IModKitPlugin, IInitializablePlugin
     {
         // The currently internally cached set of commands.
-        private readonly IEnumerable<ChatCommand> _commands;
+        private IEnumerable<ChatCommand> _commands;
         private static HashSet<ChatCommandAdapter> Commands;
+        private static ChatCommandService ChatCommandService = new();
         private const string _configFile = "CommandGroupsConfig.json";
         internal static string protectorGroup = "command_admin";
         private const string _subPath = "/EM/CommandGroups";
@@ -25,24 +30,61 @@ namespace Eco.EM.Framework.Permissions
 
         public CommandGroupsManager()
         {
-            _commands = LoadCommandsInternal();
-            Commands = new HashSet<ChatCommandAdapter>();
             Config = LoadConfig();
 
             if (!File.Exists(Defaults.SaveLocation + _subPath + _configFile))
                 SaveConfig();
         }
 
+        public void GetCommandsAndSet()
+        {
+            _commands = LoadCommandsInternal();
+            Commands = new HashSet<ChatCommandAdapter>();
+
+
+            CreateAdapters();
+        }
+
         // Retrieve a specific adapter based on an input string (may return null)
         public static ChatCommandAdapter FindAdapter(string dirtyCommand)
         {
-            var cleanCommand = StringUtils.Sanitize(dirtyCommand);
+            var cleanCommand = Utils.StringUtils.Sanitize(dirtyCommand);
 
             if (Commands.FirstOrDefault(adpt => adpt.Identifier == cleanCommand) != null)
                 return Commands.FirstOrDefault(adpt => adpt.Identifier == cleanCommand);
             else
                 return Commands.FirstOrDefault(adpt => adpt.ShortCut == cleanCommand);
 
+        }
+
+        public static ChatCommandAdapter[] FindAdapterAndChildren(string dirtyCommand)
+        {
+            var cleanCommand = Utils.StringUtils.Sanitize(dirtyCommand);
+
+            IEnumerable<ChatCommand> commands = ChatManager.Obj.ChatCommandService.GetAllCommands();
+
+            ChatCommandAdapter[] Results = null;
+
+            foreach(var c in commands)
+            {
+                if (c.Name == cleanCommand)
+                {
+
+                    if (c.HasSubCommands)
+                    {
+                        Results.AddNotNull(Commands.FirstOrDefault(adpt => adpt.Identifier == c.Name));
+
+                        foreach (var sub in c.SubCommands)
+                        {
+                            Results.AddNotNull(Commands.FirstOrDefault(adpt => adpt.Identifier == sub.Name));
+                        }
+
+                    }
+                    else break;
+                }
+                else break;
+            }
+            return Results;
         }
 
         // Permission system Server GUI Status
@@ -56,9 +98,9 @@ namespace Eco.EM.Framework.Permissions
             return Localizer.DoStr("EM - Permissions");
         }
 
-        public void Initialize(Core.Utils.TimedTask timer)
+        public void Initialize(TimedTask timer)
         {
-            CreateAdapters();
+            GetCommandsAndSet();
         }
 
         private void CreateAdapters()
@@ -73,8 +115,7 @@ namespace Eco.EM.Framework.Permissions
         // Internally cache all the commands.
         private IEnumerable<ChatCommand> LoadCommandsInternal()
         {
-            ChatCommandService chatCommandService = new();
-            IEnumerable<ChatCommand> commands = chatCommandService.GetAllCommands();
+            IEnumerable<ChatCommand> commands = ChatManager.Obj.GetAllCommands();
 
             return commands;
         }
