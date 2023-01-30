@@ -94,7 +94,7 @@ namespace Eco.EM.Framework.Resolvers
 
                 if (m != null)
                 {
-                    if (HousingConfig.GetRoomCategory(m.RoomType) == null || m.RoomType == "General")
+                    if (string.IsNullOrEmpty(HousingConfig.GetRoomCategory(m.RoomType).Name) || m.RoomType == "General")
                     {
                         ConsoleColors.PrintConsoleMultiColored("[EM Framework] (EM Configure) ", ConsoleColor.Magenta, Localizer.DoStr($"Old Data Found In Housing Data, Performing Migration on {m.DisplayName}"), ConsoleColor.Yellow);
                         m.RoomType = HousingConfig.GetRoomCategory("Decoration").Name;

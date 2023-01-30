@@ -25,7 +25,7 @@ namespace Eco.EM.Framework.Utils
         /// <param name="usingnamespace"></param>
         /// <param name="filename"></param>
         /// <returns>string or empty string</returns>
-        public static string ReadFromEmbeddedResource(string usingNamespace, string fileName, bool debug = false)
+        private static string ReadFromEmbeddedResource(string usingNamespace, string fileName, bool debug = false)
         {
             var assembly = Assembly.GetCallingAssembly();
             var resourceName = usingNamespace + "." + fileName;
@@ -43,6 +43,20 @@ namespace Eco.EM.Framework.Utils
             }
         }
 
+        /// <summary>
+        /// Read From Embedded Resource only reads from an Embedded File. this can be used for storing special values in a text file and reading from the file to use those values
+        /// <para>Example: EcopediaGenerator Util</para>
+        /// <para>Exception Handling is taken care of by this method so you only need to check for string.IsNullOrWhiteSpace(); Error Reporting will be Logged to the Console only if you set debug to true</para>
+        /// <para>Assembly is your Assembly, so just do: var assem = Assembly.GetExecutingAssembly();</para> 
+        /// <para>usingnamespace: this is the fully Qualified Assembly name to the resource (Folder included) Example: Eco.EM.Framework.SpecialItems (Here SpecialItems is the folder name)</para>
+        /// <para>filename: the name of the file and its file extension example: HiddenValues.txt</para>
+        /// 
+        /// 
+        /// In order for this system to work, the files properties must be set to EmbeddedResource in your IDE
+        /// </summary>
+        /// <param name="usingnamespace"></param>
+        /// <param name="filename"></param>
+        /// <returns>string or empty string</returns>
         public static string ReadFromEmbeddedResource(Assembly assembly, string usingNamespace, string fileName, bool debug = false)
         {
             var resourceName = usingNamespace + "." + fileName;

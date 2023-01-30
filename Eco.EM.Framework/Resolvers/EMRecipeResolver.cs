@@ -7,6 +7,7 @@ using Eco.Shared.Localization;
 using System.Linq;
 using Eco.Core.Utils;
 using Eco.EM.Framework.Utils;
+using Eco.Gameplay.Skills;
 
 // This mod is created by Elixr Mods for Eco under the SLG TOS. 
 // Please feel free to join our community Discord which aims to brings together modders of Eco to share knowledge, 
@@ -98,22 +99,22 @@ namespace Eco.EM.Framework.Resolvers
         private static Recipe CreateRecipeFromModel(RecipeModel model, RecipeDefaultModel def)
         {
             var recipe = new Recipe();
-                recipe.Init(
-                def.HiddenName,
-                def.LocalizableName,
-                CreateIngredientList(model, def.RequiredSkillType, def.IngredientImprovementTalents),
-                CreateProductList(model));
+            recipe.Init(
+            def.HiddenName,
+            def.LocalizableName,
+            CreateIngredientList(model, def.RequiredSkillType, def.IngredientImprovementTalents),
+            CreateProductList(model));
             return recipe;
         }
 
         private static Recipe CreateDefaultRecipeFromModel(RecipeDefaultModel def)
         {
             var recipe = new Recipe();
-                recipe.Init(
-                def.HiddenName,
-                def.LocalizableName,
-                CreateIngredientList(def, def.RequiredSkillType, def.IngredientImprovementTalents),
-                CreateProductList(def));
+            recipe.Init(
+            def.HiddenName,
+            def.LocalizableName,
+            CreateIngredientList(def, def.RequiredSkillType, def.IngredientImprovementTalents),
+            CreateProductList(def));
             return recipe;
         }
 
@@ -131,19 +132,27 @@ namespace Eco.EM.Framework.Resolvers
                         else
                             ingredients.Add(new IngredientElement(value.Item, value.Amount, true));
                     }
-                    else if(!value.Static && skill == null)
-                    {
-                        if (!value.Tag)
-                            ingredients.Add(new IngredientElement(Item.Get(value.Item), value.Amount, false));
-                        else
-                            ingredients.Add(new IngredientElement(value.Item, value.Amount, false));
-                    }
-                    else
+                    else if (skill != null && talent != null)
                     {
                         if (!value.Tag)
                             ingredients.Add(new IngredientElement(Item.Get(value.Item), value.Amount, skill, talent));
                         else
                             ingredients.Add(new IngredientElement(value.Item, value.Amount, skill, talent));
+                    }
+                    else if(skill !=null && talent == null)
+                    {
+                        if (!value.Tag)
+                            ingredients.Add(new IngredientElement(Item.Get(value.Item), value.Amount, skill));
+                        else
+                            ingredients.Add(new IngredientElement(value.Item, value.Amount, skill));
+                    }
+                    else
+                    {
+                        if (!value.Tag)
+                            ingredients.Add(new IngredientElement(Item.Get(value.Item), value.Amount, false));
+                        else
+                            ingredients.Add(new IngredientElement(value.Item, value.Amount, false));
+                        
                     }
                 }
                 catch

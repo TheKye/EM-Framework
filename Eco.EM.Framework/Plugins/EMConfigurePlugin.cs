@@ -19,7 +19,6 @@ namespace Eco.EM.Framework.Resolvers
 {
     [LocDisplayName("EM Configure Plugin")]
     [ChatCommandHandler]
-    [Priority(200)]
     
     public class EMConfigurePlugin : Singleton<EMConfigurePlugin>, IModKitPlugin, IConfigurablePlugin, IModInit
     {

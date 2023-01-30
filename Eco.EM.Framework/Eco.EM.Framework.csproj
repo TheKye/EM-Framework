@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<TargetFramework>net7.0</TargetFramework>
 		<RootNamespace>Eco.EM.Framework</RootNamespace>
-		<Version>3.4.2</Version>
+		<Version>3.4.3</Version>
 		<PackageId>ElixrMods.Framework</PackageId>
 		<Authors>Elixr Solutions</Authors>
 		<Product>EM Framework</Product>
@@ -45,6 +45,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Remove="AdminUtils\AdminUiUtil.cs" />
+	  <Compile Remove="AdminUtils\TestingBlock.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <None Remove="SpecialItems\largelumberStockpile.txt" />
 	  <None Remove="SpecialItems\lumberStockpile.txt" />
 	  <None Remove="SpecialItems\pickaxe.txt" />
@@ -82,6 +87,8 @@
 	    <Pack>True</Pack>
 	    <PackagePath>\</PackagePath>
 	  </None>
+	  <None Include="AdminUtils\AdminUiUtil.cs" />
+	  <None Include="AdminUtils\TestingBlock.cs" />
 	</ItemGroup>
 
 </Project>

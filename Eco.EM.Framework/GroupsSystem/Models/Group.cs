@@ -11,7 +11,6 @@ using static Eco.Shared.Networking.EcoTextLimitAttribute;
 
 namespace Eco.EM.Framework.Groups
 {
-    [Serializable]
     public class Group 
     {
         public static event Action<string, string> PlayerAdded;

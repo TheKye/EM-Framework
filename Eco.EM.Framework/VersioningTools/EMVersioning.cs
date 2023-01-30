@@ -143,7 +143,22 @@ namespace Eco.EM.Framework
                     }
                 }
                 else
-                    chat += string.Format("<color=red>{0}</color>", "An error occured while attempting to check versions.Please contact the EM Development Team");
+                {
+                    var packs = GetEMInstalledInfo();
+                    int count = 0;
+                    foreach (var p in packs)
+                    {
+                        count++;
+                        logFile.Write($"{p.Key} - Installed Version: {p.Value}");
+                        if (console)
+                            PrintSinglePackConsole(p.Key, p.Value, p.Value);
+                        else
+                        {
+                            chat += string.Format("<color=red>{0}</color>", "An error occured while attempting to check versions.Please contact the EM Development Team");
+                            chat += PrintSingleStringChat(p.Key, p.Value, p.Value);
+                        }
+                    }
+                }
             }
         }
 

@@ -6,6 +6,7 @@ using System.IO;
 
 namespace Eco.EM.Framework.FileManager
 {
+    using Eco.Shared.Utils;
     using System;
 
     public static class FileManager<T> where T : class, new()
@@ -167,11 +168,19 @@ namespace Eco.EM.Framework.FileManager
         //Allows for custom Extensions
         public static void WriteToFile(string Input, string SavePath, string FileName, string extension)
         {
-            if (!Directory.Exists(SavePath))
-                Directory.CreateDirectory(SavePath);
+            try
+            {
+                if (!Directory.Exists(SavePath))
+                    Directory.CreateDirectory(SavePath);
 
-            using var file = new StreamWriter(Path.Combine(SavePath, FileName + extension));
-            file.Write(Input);
+                using var file = new StreamWriter(Path.Combine(SavePath, FileName + extension));
+                file.Write(Input);
+
+            }
+            catch (Exception)
+            {
+                Log.WriteErrorLineLocStr($"There Was an Error Writing to: {SavePath}. Do you have Read Write Access for the server?");
+            }
         }
 
         public static string ReadFromFile(string SavePath, string FileName)
