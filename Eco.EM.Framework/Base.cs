@@ -10,7 +10,7 @@ namespace Eco.EM.Framework
         internal const string oldLocation = "ElixrMods";
         internal const string fileFormat = ".json";
         public static readonly string version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-        public const string saveLocation = "/Configs/Mods";
+        public const string saveLocation = "\\Configs\\Mods";
         public const string appName = "<color=purple>[EM Framework]:</color> ";
         public const string appNameCon = "[EM Framework]: ";
 

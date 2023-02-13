@@ -8,6 +8,7 @@ using System.Linq;
 using Eco.Core.Utils;
 using Eco.EM.Framework.Utils;
 using Eco.Gameplay.Skills;
+using System.Threading.Tasks;
 
 // This mod is created by Elixr Mods for Eco under the SLG TOS. 
 // Please feel free to join our community Discord which aims to brings together modders of Eco to share knowledge, 
@@ -322,72 +323,78 @@ namespace Eco.EM.Framework.Resolvers
         }
 
         // Load overrides from config changes.
-        private void LoadConfigOverrides()
+        private async void LoadConfigOverrides()
         {
-            SerializedSynchronizedCollection<RecipeModel> newModels = new();
-            var previousModels = EMConfigurePlugin.Config.EMRecipes;
-
-            foreach (var type in typeof(IConfigurableRecipe).ConcreteTypes())
+            await Task.Run( () =>
             {
-                System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(type.TypeHandle);
-            }
+                SerializedSynchronizedCollection<RecipeModel> newModels = new();
+                var previousModels = EMConfigurePlugin.Config.EMRecipes;
 
-            var loadtypes = LoadedDefaultRecipes.Values.ToList();
-            // for each type that exists that we are trying to load
-            foreach (var dModel in loadtypes)
-            {
-                var m = previousModels.SingleOrDefault(x => x.ModelType == dModel.ModelType);
-                if (m != null && EMConfigurePlugin.Config.useConfigOverrides && !m.Equals(dModel))
+                foreach (var type in typeof(IConfigurableRecipe).ConcreteTypes())
                 {
-                    newModels.Add(m);
+                    System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(type.TypeHandle);
+                }
+
+                var loadtypes = LoadedDefaultRecipes.Values.ToList();
+                // for each type that exists that we are trying to load
+                foreach (var dModel in loadtypes)
+                {
+                    var m = previousModels.SingleOrDefault(x => x.ModelType == dModel.ModelType);
+                    if (m != null && EMConfigurePlugin.Config.useConfigOverrides && !m.Equals(dModel))
+                    {
+                        newModels.Add(m);
 #if DEBUG
                     ConsoleColors.PrintConsoleMultiColored("[EM Framework] ", ConsoleColor.Magenta, Localizer.DoStr($"Loaded Config Override For: {m.ModelType}"), ConsoleColor.Yellow);
 #endif
+                    }
+                    else
+                        newModels.Add(dModel);
                 }
-                else
-                    newModels.Add(dModel);
-            }
-            EMConfigurePlugin.Config.EMRecipes = newModels;
+                EMConfigurePlugin.Config.EMRecipes = newModels;
 
-            foreach (var model in EMConfigurePlugin.Config.EMRecipes)
-            {
-                if (!LoadedConfigRecipes.ContainsKey(model.ModelType))
+                foreach (var model in EMConfigurePlugin.Config.EMRecipes)
                 {
-                    LoadedConfigRecipes.Add(model.ModelType, model);
+                    if (!LoadedConfigRecipes.ContainsKey(model.ModelType))
+                    {
+                        LoadedConfigRecipes.Add(model.ModelType, model);
+                    }
                 }
-            }
+            });
         }
 
         // Load overrides from other mods.
-        private void InitModOverrides()
+        private async void InitModOverrides()
         {
-            foreach (var type in typeof(IRecipeOverride).ConcreteTypes())
+            await Task.Run(() =>
             {
-                try
+                foreach (var type in typeof(IRecipeOverride).ConcreteTypes())
                 {
-                    IRecipeOverride t = Activator.CreateInstance(type) as IRecipeOverride;
-                    AddRecipeOverride(t.OverrideType, t.Model);
-                    ConsoleColors.PrintConsoleMultiColored("[EM Framework] ", ConsoleColor.Magenta, Localizer.DoStr($"Loaded Mod Override For: {t.Model.ModelType}"), ConsoleColor.Yellow);
-                }
-                catch (Exception e)
-                {
+                    try
+                    {
+                        IRecipeOverride t = Activator.CreateInstance(type) as IRecipeOverride;
+                        AddRecipeOverride(t.OverrideType, t.Model);
+                        ConsoleColors.PrintConsoleMultiColored("[EM Framework] ", ConsoleColor.Magenta, Localizer.DoStr($"Loaded Mod Override For: {t.Model.ModelType}"), ConsoleColor.Yellow);
+                    }
+                    catch (Exception e)
+                    {
 #if DEBUG
                     Log.WriteErrorLine(Localizer.DoStr(string.Format("Unable to add override recipe {0}. Invalid implementation for IRecipeOverride.", type.Name)));
                     Log.WriteErrorLine(Localizer.DoStr($"{e.Message}"));
 #endif
+                    }
                 }
-            }
 
-            /*
-            var bindings = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static;
-            var tagMan = typeof(GeneratedRegistrarWrapper<TagManager>);
-            var whenRdy = (WhenReady)tagMan.GetField("whenSetupDone", bindings).GetValue(tagMan);
-            whenRdy.Do(() =>
-            {
-                foreach (var type in typeof(IRecipeOverride).ConcreteTypes())
-                    AddRecipeOverride((string)type.GetProperty("OverrideType").GetValue(type), (RecipeModel)type.GetProperty("Model").GetValue(type));
+                /*
+                var bindings = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static;
+                var tagMan = typeof(GeneratedRegistrarWrapper<TagManager>);
+                var whenRdy = (WhenReady)tagMan.GetField("whenSetupDone", bindings).GetValue(tagMan);
+                whenRdy.Do(() =>
+                {
+                    foreach (var type in typeof(IRecipeOverride).ConcreteTypes())
+                        AddRecipeOverride((string)type.GetProperty("OverrideType").GetValue(type), (RecipeModel)type.GetProperty("Model").GetValue(type));
+                });
+                */
             });
-            */
         }
 
         private void AddRecipeOverride(string recipeType, RecipeModel r)

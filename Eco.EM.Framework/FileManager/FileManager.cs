@@ -160,24 +160,55 @@ namespace Eco.EM.Framework.FileManager
 
             if (!FileName.EndsWith(format) && !FileName.EndsWith(ecoFormat))
                 FileName += format;
-
             using var file = new StreamWriter(Path.Combine(SavePath, FileName));
-            file.Write(Input);
+            try
+            {
+                file.Write(Input);
+            }
+            catch
+            {
+                WriteToFileAlt(file.ToString(), SavePath, FileName);
+            }
+
         }
 
         //Allows for custom Extensions
         public static void WriteToFile(string Input, string SavePath, string FileName, string extension)
         {
-            try
-            {
                 if (!Directory.Exists(SavePath))
                     Directory.CreateDirectory(SavePath);
 
                 using var file = new StreamWriter(Path.Combine(SavePath, FileName + extension));
+            try
+            {
+
                 file.Write(Input);
 
             }
-            catch (Exception)
+            catch
+            {
+                WriteToFileAlt(file.ToString(), SavePath, FileName, extension);
+            }
+        }
+        private static void WriteToFileAlt(string Input, string SavePath, string FileName)
+        {
+            try
+            {
+                File.WriteAllText(Path.Combine(SavePath, FileName), Input);
+            }
+            catch
+            {
+                Log.WriteErrorLineLocStr($"There Was an Error Writing to: {SavePath}. Do you have Read Write Access for the server?");
+            }
+        }
+
+        private static void WriteToFileAlt(string Input, string SavePath, string FileName, string extension)
+        {
+            try
+            {
+                File.WriteAllText(Path.Combine(SavePath, FileName + extension), Input);
+            }
+            catch
             {
                 Log.WriteErrorLineLocStr($"There Was an Error Writing to: {SavePath}. Do you have Read Write Access for the server?");
             }

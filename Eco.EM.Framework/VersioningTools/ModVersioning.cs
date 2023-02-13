@@ -49,7 +49,7 @@ namespace Eco.EM.Framework.VersioningTools
             {
                 string EcoModIo = $"https://api.mod.io/v1/games/6/mods/{modId}?api_key={modApi}";
                 var request = Network.GetRequest(EcoModIo);
-                return JsonConvert.DeserializeObject<ModRequestObject>(request);
+                return JsonConvert.DeserializeObject<ModRequestObject>(request.Result);
             }
             catch
             {

@@ -18,7 +18,7 @@ namespace Eco.EM.Framework.Groups
     {
         internal const string _dataFile = "ElixrMods-GroupsData.json";
         internal const string _dataBackupFile = "ElixrMods-GroupsData-Bakup.json";
-        internal const string _subPath = "/EM/Groups";
+        internal const string _subPath = "\\EM\\Groups";
 
         public static GroupsData Data { get; internal set; }
         public static GroupsData DataBackup { get; internal set; }

@@ -14,13 +14,14 @@ using Eco.Simulation.WorldLayers.History;
 using System;
 using System.IO;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace Eco.EM.Framework.Resolvers
 {
     [LocDisplayName("EM Configure Plugin")]
     [ChatCommandHandler]
-    
-    public class EMConfigurePlugin : Singleton<EMConfigurePlugin>, IModKitPlugin, IConfigurablePlugin, IModInit
+
+    public class EMConfigurePlugin : Singleton<EMConfigurePlugin>, IModKitPlugin, IConfigurablePlugin, IModInit, ISaveablePlugin
     {
         private static readonly PluginConfig<EMConfigureConfig> config;
         public IPluginConfig PluginConfig => config;
@@ -29,62 +30,71 @@ namespace Eco.EM.Framework.Resolvers
 
         public object GetEditObject() => config.Config;
         public void OnEditObjectChanged(object o, string param) => this.SaveConfig();
-        public string GetStatus() => $"Loaded EM Configure - Recipes Overriden: {EMRecipeResolver.Obj.ModRecipeOverrides?.Count : 0}";
+        public string GetStatus() => $"Loaded EM Configure - Recipes Overriden: {EMRecipeResolver.Obj.ModRecipeOverrides?.Count: 0}";
 
         static EMConfigurePlugin()
         {
-            config = new PluginConfig<EMConfigureConfig>("EMConfigure");          
+            config = new PluginConfig<EMConfigureConfig>("EMConfigure");
         }
 
         public static void Initialize()
         {
-            EMRecipeResolver.Obj.Initialize();
-            EMLinkRadiusResolver.Obj.Initialize();
-            EMStorageSlotResolver.Obj.Initialize();
-            EMFoodItemResolver.Obj.Initialize();
-            EMVehicleResolver.Obj.Initialize();
-            RunStockpileResolver();
-            RunLuckyStrikeResolver();
+            Task.Run(() =>
+            {
+                EMRecipeResolver.Obj.Initialize();
+                EMLinkRadiusResolver.Obj.Initialize();
+                EMStorageSlotResolver.Obj.Initialize();
+                EMFoodItemResolver.Obj.Initialize();
+                EMVehicleResolver.Obj.Initialize();
+                RunStockpileResolver();
+                RunLuckyStrikeResolver();
+            });
         }
 
         private static void RunLuckyStrikeResolver()
         {
             if (!Config.EnableGlobalLuckyStrike) return;
 
-            var alsdir = "/Mods/UserCode/Tools";
+            var alsdir = "\\Mods\\UserCode\\Tools";
 
             if (!Directory.Exists(alsdir))
             {
                 Directory.CreateDirectory(alsdir);
             }
-            WritingUtils.WriteFromEmbeddedResource("Eco.EM.Framework.SpecialItems", "pickaxe.txt", alsdir, ".cs", specificFileName: "PickaxeItem.override");
+            if (!File.Exists(Path.Combine(alsdir, "PickaxeItem.override.cs")))
+                WritingUtils.WriteFromEmbeddedResource("Eco.EM.Framework.SpecialItems", "pickaxe.txt", alsdir, ".cs", specificFileName: "PickaxeItem.override");
         }
 
         private static void RunStockpileResolver()
         {
             if (!Config.OverrideVanillaStockpiles) return;
 
-            var agdir = "/Mods/UserCode/Objects";
+            var agdir = "\\Mods\\UserCode\\Objects";
 
             if (!Directory.Exists(agdir))
             {
                 Directory.CreateDirectory(agdir);
             }
 
-            WritingUtils.WriteFromEmbeddedResource("Eco.EM.Framework.SpecialItems", "Stockpile.txt", agdir, ".cs", specificFileName: "StockpileObject.override");
-            WritingUtils.WriteFromEmbeddedResource("Eco.EM.Framework.SpecialItems", "smallStockpile.txt", agdir, ".cs", specificFileName: "SmallStockpileObject.override");
-            WritingUtils.WriteFromEmbeddedResource("Eco.EM.Framework.SpecialItems", "lumberStockpile.txt", agdir, ".cs", specificFileName: "LumberStockpileObject.override");
-            WritingUtils.WriteFromEmbeddedResource("Eco.EM.Framework.SpecialItems", "largelumberStockpile.txt", agdir, ".cs", specificFileName: "LargeLumberStockpileObject.override");
+            if (!File.Exists(Path.Combine(agdir, "StockpileObject.override.cs")))
+                WritingUtils.WriteFromEmbeddedResource("Eco.EM.Framework.SpecialItems", "Stockpile.txt", agdir, ".cs", specificFileName: "StockpileObject.override");
+            if (!File.Exists(Path.Combine(agdir, "SmallStockpileObject..override.cs")))
+                WritingUtils.WriteFromEmbeddedResource("Eco.EM.Framework.SpecialItems", "smallStockpile.txt", agdir, ".cs", specificFileName: "SmallStockpileObject.override");
+            if (!File.Exists(Path.Combine(agdir, "LumberStockpileObject.override.cs")))
+                WritingUtils.WriteFromEmbeddedResource("Eco.EM.Framework.SpecialItems", "lumberStockpile.txt", agdir, ".cs", specificFileName: "LumberStockpileObject.override");
+            if (!File.Exists(Path.Combine(agdir, "LargeLumberStockpileObject.override.cs")))
+                WritingUtils.WriteFromEmbeddedResource("Eco.EM.Framework.SpecialItems", "largelumberStockpile.txt", agdir, ".cs", specificFileName: "LargeLumberStockpileObject.override");
 
         }
 
         public static void PostInitialize()
         {
+            Task.Run(() => { 
             EMHousingResolver.Obj.Initialize();
             EMStackSizeResolver.Initialize();
             EMItemWeightResolver.Initialize();
-
             config.SaveAsync();
+            });
         }
 
         public override string ToString() => Localizer.DoStr("EM Configure");
@@ -105,5 +115,7 @@ namespace Eco.EM.Framework.Resolvers
         }
 
         public string GetCategory() => "Elixr Mods";
+
+        public void SaveAll() => this.SaveConfig();
     }
 }

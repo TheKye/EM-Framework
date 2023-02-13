@@ -24,7 +24,7 @@ namespace Eco.EM.Framework.Permissions
         private static ChatCommandService ChatCommandService = new();
         private const string _configFile = "CommandGroupsConfig.json";
         internal static string protectorGroup = "command_admin";
-        private const string _subPath = "/EM/CommandGroups";
+        private const string _subPath = "\\EM\\CommandGroups";
 
         public static CommandGroupsConfig Config { get; private set; }
 

@@ -90,11 +90,14 @@ namespace Eco.EM.Framework.Resolvers
             {
                 var m = previousModels.SingleOrDefault(x => x.ModelType == lModel.ModelType);
 
-
+                if (lModel.RoomType.Equals("LivingRoom"))
+                    lModel.RoomType = "Living Room";
+                if (m.RoomType.Equals("LivingRoom"))
+                    m.RoomType = "Living Room";
 
                 if (m != null)
                 {
-                    if (string.IsNullOrEmpty(HousingConfig.GetRoomCategory(m.RoomType).Name) || m.RoomType == "General")
+                    if (HousingConfig.GetRoomCategory(m.RoomType) == null || m.RoomType == "General")
                     {
                         ConsoleColors.PrintConsoleMultiColored("[EM Framework] (EM Configure) ", ConsoleColor.Magenta, Localizer.DoStr($"Old Data Found In Housing Data, Performing Migration on {m.DisplayName}"), ConsoleColor.Yellow);
                         m.RoomType = HousingConfig.GetRoomCategory("Decoration").Name;
@@ -104,7 +107,12 @@ namespace Eco.EM.Framework.Resolvers
                     newModels.Add(m);
                 }
                 else
+                {
+                    if(HousingConfig.GetRoomCategory(lModel.RoomType) == null || lModel.RoomType == "General")
+                        lModel.RoomType = HousingConfig.GetRoomCategory("Decoration").Name;
+
                     newModels.Add(lModel);
+                }
             }
 
             EMConfigurePlugin.Config.EMHousingValue = newModels;
