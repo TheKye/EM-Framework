@@ -55,7 +55,7 @@ namespace Eco.EM.Framework.Resolvers
         {
             if (!Config.EnableGlobalLuckyStrike) return;
 
-            var alsdir = "\\Mods\\UserCode\\Tools";
+            var alsdir = Path.DirectorySeparatorChar + "Mods" + Path.DirectorySeparatorChar + "UserCode" + Path.DirectorySeparatorChar + "Tools";
 
             if (!Directory.Exists(alsdir))
             {
@@ -69,7 +69,7 @@ namespace Eco.EM.Framework.Resolvers
         {
             if (!Config.OverrideVanillaStockpiles) return;
 
-            var agdir = "\\Mods\\UserCode\\Objects";
+            var agdir = Path.DirectorySeparatorChar + "Mods"+ Path.DirectorySeparatorChar + "UserCode" + Path.DirectorySeparatorChar + "Objects";
 
             if (!Directory.Exists(agdir))
             {

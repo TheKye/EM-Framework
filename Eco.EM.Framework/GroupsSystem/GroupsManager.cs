@@ -18,7 +18,7 @@ namespace Eco.EM.Framework.Groups
     {
         internal const string _dataFile = "ElixrMods-GroupsData.json";
         internal const string _dataBackupFile = "ElixrMods-GroupsData-Bakup.json";
-        internal const string _subPath = "\\EM\\Groups";
+        internal static string _subPath = Defaults.SaveLocation + Path.DirectorySeparatorChar + "EM" + Path.DirectorySeparatorChar + "Groups";
 
         public static GroupsData Data { get; internal set; }
         public static GroupsData DataBackup { get; internal set; }
@@ -180,15 +180,15 @@ namespace Eco.EM.Framework.Groups
 
         public override string ToString() => Localizer.DoStr("EM - Groups System");
 
-        private static GroupsData LoadData() => FileManager<GroupsData>.ReadTypeHandledFromFile(Defaults.SaveLocation + _subPath, _dataFile);
+        private static GroupsData LoadData() => FileManager<GroupsData>.ReadTypeHandledFromFile(_subPath, _dataFile);
 
-        private static GroupsData LoadBackupData() => FileManager<GroupsData>.ReadTypeHandledFromFile(Defaults.SaveLocation + _subPath, _dataBackupFile, ".bak");
+        private static GroupsData LoadBackupData() => FileManager<GroupsData>.ReadTypeHandledFromFile(_subPath, _dataBackupFile, ".bak");
 
         internal static void SaveData()
         {
-            FileManager<GroupsData>.WriteTypeHandledToFile(Data, Defaults.SaveLocation + _subPath, _dataFile);
-            Task.Delay(2000);
-            FileManager<GroupsData>.WriteTypeHandledToFile(Data, Defaults.SaveLocation + _subPath, _dataBackupFile, ".bak");
+            FileManager<GroupsData>.WriteTypeHandledToFile(Data, _subPath, _dataFile);
+            Task.Delay(2000);                                  
+            FileManager<GroupsData>.WriteTypeHandledToFile(Data, _subPath, _dataBackupFile, ".bak");
         }
 
         public string GetCategory() => "Elixr Mods";
@@ -217,10 +217,10 @@ namespace Eco.EM.Framework.Groups
         public void HandleWorldReset()
         {
             ConsoleColors.PrintConsoleMultiColored(Defaults.appNameCon, System.ConsoleColor.Magenta, "New World Detected - Deleting Old Groups Data", System.ConsoleColor.White);
-            if (File.Exists(Defaults.SaveLocation + GroupsManager._subPath + GroupsManager._dataFile))
-                File.Delete(Defaults.SaveLocation + GroupsManager._subPath + GroupsManager._dataFile);
-            if (File.Exists(Defaults.SaveLocation + GroupsManager._subPath + GroupsManager._dataBackupFile))
-                File.Delete(Defaults.SaveLocation + GroupsManager._subPath + GroupsManager._dataBackupFile);
+            if (File.Exists(Path.Combine(Defaults.SaveLocation, GroupsManager._subPath, GroupsManager._dataFile)))
+                File.Delete(Path.Combine(Defaults.SaveLocation, GroupsManager._subPath, GroupsManager._dataFile));
+            if (File.Exists(Path.Combine(Defaults.SaveLocation, GroupsManager._subPath, GroupsManager._dataBackupFile)))
+                File.Delete(Path.Combine(Defaults.SaveLocation, GroupsManager._subPath, GroupsManager._dataBackupFile));
             GroupsManager.Data = new();
             GroupsManager.SaveData();
         }

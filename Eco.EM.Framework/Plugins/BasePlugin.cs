@@ -44,7 +44,7 @@ namespace Eco.EM.Framework.Plugins
 
         public object GetEditObject() => this.config.Config;
         public void OnEditObjectChanged(object o, string param) => this.SaveConfig();
-        public string GetStatus() => $"Loaded and using Version: {Defaults.version}, All Systems Active";
+        public string GetStatus() => $"Loaded and using Version: {Defaults.Version}, All Systems Active";
 
         public void Initialize(TimedTask timer)
         {
