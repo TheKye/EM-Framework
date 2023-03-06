@@ -36,7 +36,7 @@ namespace Eco.EM.Framework.Resolvers
         public void Initialize()
         {
             SerializedSynchronizedCollection<LinkModel> newModels = new();
-            var config = EMConfigurePlugin.Config.EMLinkDistances;
+            var config = EMLinkDistancesPlugin.Config.EMLinkDistances;
 
             foreach (var type in typeof(ILinkRadiusObject).ConcreteTypes())
             {
@@ -55,7 +55,7 @@ namespace Eco.EM.Framework.Resolvers
                     newModels.Add(lModel);
             }
 
-            EMConfigurePlugin.Config.EMLinkDistances = newModels;
+            EMLinkDistancesPlugin.Config.EMLinkDistances = newModels;
 
             foreach (var model in newModels)
             {

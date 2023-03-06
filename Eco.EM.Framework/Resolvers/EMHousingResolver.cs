@@ -72,7 +72,7 @@ namespace Eco.EM.Framework.Resolvers
             var previousModels = newModels;
             try
             {
-                previousModels = EMConfigurePlugin.Config.EMHousingValue;
+                previousModels = EMHousingValuePlugin.Config.EMHousingValue;
             }
             catch
             {
@@ -107,7 +107,7 @@ namespace Eco.EM.Framework.Resolvers
                     newModels.Add(lModel);
             }
 
-            EMConfigurePlugin.Config.EMHousingValue = newModels;
+            EMHousingValuePlugin.Config.EMHousingValue = newModels;
 
             foreach (var model in newModels)
             {

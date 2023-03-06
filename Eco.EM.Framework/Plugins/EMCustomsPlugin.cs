@@ -8,7 +8,6 @@ using Eco.Shared.Utils;
 
 namespace Eco.EM.Framework.Resolvers
 {
-    /// <summary>This is the EMConfigurePlugin with some minor edits</summary>
     [LocDisplayName("EM Customs Plugin")]
     [ChatCommandHandler]
     [Priority(200)]
@@ -21,7 +20,7 @@ namespace Eco.EM.Framework.Resolvers
 
         public object GetEditObject() => config.Config;
         public void OnEditObjectChanged(object o, string param) => this.SaveConfig();
-        public string GetStatus() => $"Loaded EM Customs - Customs Used: {EMCustomsResolver.Obj.LoadedCustomsOverrides?.Count: 0}";
+        public string GetStatus() => $"Loaded EM Customs - Overrides Used: {EMCustomsResolver.Obj.LoadedCustomsOverrides?.Count: 0}";
 
         static EMCustomsPlugin()
         {
@@ -40,7 +39,7 @@ namespace Eco.EM.Framework.Resolvers
         public static void GenerateEmCustoms(User user)
         {
             config.SaveAsync();
-            ChatBase.ChatBaseExtended.CBOkBox("Customs File Generated, you can find it in: Configs/EMCustoms.eco", user);
+            ChatBase.ChatBaseExtended.CBOkBox("Config File Generated, you can find it in: Configs/EMCustoms.eco", user);
         }
 
         [ChatCommand("Force the Rebuild of the EMCustoms.eco File", "fbuild-emcustoms", ChatAuthorizationLevel.Admin)]

@@ -168,7 +168,7 @@ namespace Eco.EM.Framework.Resolvers
         public void Initialize()
         {
             SerializedSynchronizedCollection<VehicleModel> newModels = new();
-            var config = EMConfigurePlugin.Config.EMVehicles;
+            var config = EMVehiclesPlugin.Config.EMVehicles;
 
             foreach (var type in typeof(IConfigurableVehicle).ConcreteTypes())
             {
@@ -187,7 +187,7 @@ namespace Eco.EM.Framework.Resolvers
                     newModels.Add(lModel);
             }
 
-            EMConfigurePlugin.Config.EMVehicles = newModels;
+            EMVehiclesPlugin.Config.EMVehicles = newModels;
 
             foreach (var model in newModels)
             {

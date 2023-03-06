@@ -33,13 +33,9 @@ namespace Eco.EM.Framework.Resolvers
 
         public static void Initialize()
         {
-            EMRecipeResolver.Obj.Initialize();
-            EMLinkRadiusResolver.Obj.Initialize();
-            EMStorageSlotResolver.Obj.Initialize();
-            EMFoodItemResolver.Obj.Initialize();
-            EMVehicleResolver.Obj.Initialize();
             RunStockpileResolver();
             RunLuckyStrikeResolver();
+            config.SaveAsync();
         }
 
         private static void RunLuckyStrikeResolver()
@@ -71,15 +67,6 @@ namespace Eco.EM.Framework.Resolvers
             WritingUtils.WriteFromEmbeddedResource("Eco.EM.Framework.SpecialItems", "lumberStockpile.txt", agdir, ".cs", specificFileName: "LumberStockpileObject.override");
             WritingUtils.WriteFromEmbeddedResource("Eco.EM.Framework.SpecialItems", "largelumberStockpile.txt", agdir, ".cs", specificFileName: "LargeLumberStockpileObject.override");
 
-        }
-        // Moved EMCustomsResolver.Obj.Initalize() into EMCustomsPlugin.PostInitialize()
-        public static void PostInitialize()
-        {
-            EMHousingResolver.Obj.Initialize();
-            EMStackSizeResolver.Initialize();
-            EMItemWeightResolver.Initialize();
-
-            config.SaveAsync();
         }
 
         public override string ToString() => Localizer.DoStr("EM Configure");

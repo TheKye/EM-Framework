@@ -99,7 +99,7 @@ namespace Eco.EM.Framework.Resolvers
         public void Initialize()
         {
             SerializedSynchronizedCollection<FoodItemModel> newModels = new();
-            var previousModels = EMConfigurePlugin.Config.EMFoodItem;
+            var previousModels = EMFoodItemPlugin.Config.EMFoodItem;
             foreach (var type in typeof(IConfigurableFoodItem).ConcreteTypes())
             {
                 System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(type.TypeHandle);
@@ -118,7 +118,7 @@ namespace Eco.EM.Framework.Resolvers
                     newModels.Add(lModel);
             }
 
-            EMConfigurePlugin.Config.EMFoodItem = newModels;
+            EMFoodItemPlugin.Config.EMFoodItem = newModels;
 
             foreach (var model in newModels)
             {
