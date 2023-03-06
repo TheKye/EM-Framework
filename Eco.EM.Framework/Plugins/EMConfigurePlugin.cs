@@ -82,6 +82,7 @@ namespace Eco.EM.Framework.Resolvers
         public static void PostInitialize()
         {
             EMHousingResolver.Obj.Initialize();
+            EMCustomsResolver.Obj.Initialize();
             EMStackSizeResolver.Initialize();
             EMItemWeightResolver.Initialize();
 
