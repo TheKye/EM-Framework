@@ -316,7 +316,7 @@ namespace Eco.EM.Framework.Resolvers
         private void LoadConfigOverrides()
         {
             SerializedSynchronizedCollection<RecipeModel> newModels = new();
-            var previousModels = EMConfigurePlugin.Config.EMRecipes;
+            var previousModels = EMRecipesPlugin.Config.EMRecipes;
 
             foreach (var type in typeof(IConfigurableRecipe).ConcreteTypes())
             {
@@ -338,9 +338,9 @@ namespace Eco.EM.Framework.Resolvers
                 else
                     newModels.Add(dModel);
             }
-            EMConfigurePlugin.Config.EMRecipes = newModels;
+            EMRecipesPlugin.Config.EMRecipes = newModels;
 
-            foreach (var model in EMConfigurePlugin.Config.EMRecipes)
+            foreach (var model in EMRecipesPlugin.Config.EMRecipes)
             {
                 if (!LoadedConfigRecipes.ContainsKey(model.ModelType))
                 {

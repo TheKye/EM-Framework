@@ -23,7 +23,7 @@ namespace Eco.EM.Framework.Resolvers
         // Goes through and loads new items for stack sizes into the dictionary.
         private static void BuildStackSizeList(IEnumerable<Item> locals)
         {
-            var config = EMConfigurePlugin.Config.EMStackSizes;
+            var config = EMStackSizesPlugin.Config.EMStackSizes;
             // Go through and keep items that are still referenced in the namespace
             SerializedSynchronizedCollection<StackSizeModel> cleanList = new SerializedSynchronizedCollection<StackSizeModel>();
             for (int i = 0; i < config.Count; i++)
@@ -42,7 +42,7 @@ namespace Eco.EM.Framework.Resolvers
                     cleanList.Add(new StackSizeModel(i.GetType(), i.DisplayName, i.MaxStackSize, false));
             }
 
-            EMConfigurePlugin.Config.EMStackSizes = cleanList;
+            EMStackSizesPlugin.Config.EMStackSizes = cleanList;
         }
 
         // Overrides the preset stacksizes to those set in the config on load before adding newly created items
@@ -51,7 +51,7 @@ namespace Eco.EM.Framework.Resolvers
             foreach (var i in locals)
             {
                 // Check for the items in the stack size list
-                var element = EMConfigurePlugin.Config.EMStackSizes.SingleOrDefault(x => x.DisplayName == i.DisplayName);
+                var element = EMStackSizesPlugin.Config.EMStackSizes.SingleOrDefault(x => x.DisplayName == i.DisplayName);
                 if (element == null) continue;
                 var orThis = element.OverrideThis;
                 var forced = EMConfigurePlugin.Config.ForceSameStackSizes;
