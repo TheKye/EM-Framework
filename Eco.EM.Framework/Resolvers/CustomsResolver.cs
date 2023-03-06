@@ -37,7 +37,7 @@ namespace Eco.EM.Framework.Resolvers
             // gets configs if they exist
             try
             {
-                previousModels = EMConfigurePlugin.Config.EMCustoms;
+                previousModels = EMCustomsPlugin.Config.EMCustoms;
             }
             catch
             {
@@ -59,7 +59,7 @@ namespace Eco.EM.Framework.Resolvers
                 else newModels.Add(lModel);
             }
 
-            EMConfigurePlugin.Config.EMCustoms = newModels;
+            EMCustomsPlugin.Config.EMCustoms = newModels;
 
             // adds the models to the overrides for use by GetCustom()
             foreach (var model in newModels)

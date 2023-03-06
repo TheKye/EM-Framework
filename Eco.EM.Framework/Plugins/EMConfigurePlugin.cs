@@ -2,18 +2,12 @@
 using Eco.Core.Plugins.Interfaces;
 using Eco.Core.Utils;
 using Eco.EM.Framework.Utils;
-using Eco.Gameplay.Objects;
 using Eco.Gameplay.Players;
-using Eco.Gameplay.Systems.Chat;
 using Eco.Gameplay.Systems.Messaging.Chat.Commands;
-using Eco.Mods.TechTree;
-using Eco.Shared.Items;
 using Eco.Shared.Localization;
 using Eco.Shared.Utils;
-using Eco.Simulation.WorldLayers.History;
-using System;
 using System.IO;
-using System.Reflection;
+// Removed unused references
 
 namespace Eco.EM.Framework.Resolvers
 {
@@ -78,11 +72,10 @@ namespace Eco.EM.Framework.Resolvers
             WritingUtils.WriteFromEmbeddedResource("Eco.EM.Framework.SpecialItems", "largelumberStockpile.txt", agdir, ".cs", specificFileName: "LargeLumberStockpileObject.override");
 
         }
-
+        // Moved EMCustomsResolver.Obj.Initalize() into EMCustomsPlugin.PostInitialize()
         public static void PostInitialize()
         {
             EMHousingResolver.Obj.Initialize();
-            EMCustomsResolver.Obj.Initialize(); //Added CustomsResolver initalization to PostInitalize
             EMStackSizeResolver.Initialize();
             EMItemWeightResolver.Initialize();
 
