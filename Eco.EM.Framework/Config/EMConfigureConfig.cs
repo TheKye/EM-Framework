@@ -68,10 +68,6 @@ namespace Eco.EM.Framework.Resolvers
         [LocDescription("Vehicle Configuration Values by modules. ANY change to this list will require a server restart to take effect.")]
         [LocDisplayName("Vehicle Configuration Values")]
         public SerializedSynchronizedCollection<VehicleModel> EMVehicles { get; set; } = new();
-
-        //Added Customs to the config file
-        [LocDescription("Custom Configuration Values by modules. ANY change to this list will require a server restart to take effect.")]
-        [LocDisplayName("Custom Configuration Values")]
-        public SerializedSynchronizedCollection<CustomsModel> EMCustoms { get; set; } = new();
+        //Moved EMCustoms into EMCustoomsConfig
     }
 }
