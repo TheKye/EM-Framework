@@ -8,6 +8,7 @@ using Eco.Shared.Utils;
 
 namespace Eco.EM.Framework.Resolvers
 {
+    /// <summary>This is the EMConfigurePlugin with some minor edits</summary>
     [LocDisplayName("EM Customs Plugin")]
     [ChatCommandHandler]
     [Priority(200)]
