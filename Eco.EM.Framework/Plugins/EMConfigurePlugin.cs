@@ -1,20 +1,12 @@
-﻿using Eco.Core.Plugins;
+using Eco.Core.Plugins;
 using Eco.Core.Plugins.Interfaces;
 using Eco.Core.Utils;
 using Eco.EM.Framework.Utils;
-using Eco.Gameplay.Objects;
 using Eco.Gameplay.Players;
-using Eco.Gameplay.Systems.Chat;
 using Eco.Gameplay.Systems.Messaging.Chat.Commands;
-using Eco.Mods.TechTree;
-using Eco.Shared.Items;
 using Eco.Shared.Localization;
 using Eco.Shared.Utils;
-using Eco.Simulation.WorldLayers.History;
-using System;
 using System.IO;
-using System.Reflection;
-using System.Threading.Tasks;
 
 namespace Eco.EM.Framework.Resolvers
 {
@@ -39,16 +31,9 @@ namespace Eco.EM.Framework.Resolvers
 
         public static void Initialize()
         {
-            Task.Run(() =>
-            {
-                EMRecipeResolver.Obj.Initialize();
-                EMLinkRadiusResolver.Obj.Initialize();
-                EMStorageSlotResolver.Obj.Initialize();
-                EMFoodItemResolver.Obj.Initialize();
-                EMVehicleResolver.Obj.Initialize();
-                RunStockpileResolver();
-                RunLuckyStrikeResolver();
-            });
+            RunStockpileResolver();
+            RunLuckyStrikeResolver();
+            config.SaveAsync();
         }
 
         private static void RunLuckyStrikeResolver()
@@ -86,17 +71,7 @@ namespace Eco.EM.Framework.Resolvers
                 WritingUtils.WriteFromEmbeddedResource("Eco.EM.Framework.SpecialItems", "largelumberStockpile.txt", agdir, ".cs", specificFileName: "LargeLumberStockpileObject.override");
 
         }
-
-        public static void PostInitialize()
-        {
-            Task.Run(() => { 
-            EMHousingResolver.Obj.Initialize();
-            EMStackSizeResolver.Initialize();
-            EMItemWeightResolver.Initialize();
-            config.SaveAsync();
-            });
-        }
-
+        
         public override string ToString() => Localizer.DoStr("EM Configure");
 
         [ChatCommand("Generates The EMConfigure.eco File for people who have headless server", "gen-emcon", ChatAuthorizationLevel.Admin)]

@@ -22,7 +22,7 @@ namespace Eco.EM.Framework.Resolvers
         // Goes through and loads new items for stack sizes into the dictionary.
         private static void BuildStackSizeList(IEnumerable<Item> locals)
         {
-            var config = EMConfigurePlugin.Config.EMItemWeight;
+            var config = EMItemWeightPlugin.Config.EMItemWeight;
             // Go through and keep items that are still referenced in the namespace
             SerializedSynchronizedCollection<ItemWeightModel> cleanList = new SerializedSynchronizedCollection<ItemWeightModel>();
             for (int i = 0; i < config.Count; i++)
@@ -41,7 +41,7 @@ namespace Eco.EM.Framework.Resolvers
                     cleanList.Add(new ItemWeightModel(i.GetType(), i.DisplayName, i.Weight, false));
             }
 
-            EMConfigurePlugin.Config.EMItemWeight = cleanList;
+            EMItemWeightPlugin.Config.EMItemWeight = cleanList;
         }
 
         // Overrides the preset stacksizes to those set in the config on load before adding newly created items
@@ -50,7 +50,7 @@ namespace Eco.EM.Framework.Resolvers
             foreach (var i in locals)
             {
                 // Check for the items in the stack size list
-                var element = EMConfigurePlugin.Config.EMItemWeight.SingleOrDefault(x => x.DisplayName == i.DisplayName);
+                var element = EMItemWeightPlugin.Config.EMItemWeight.SingleOrDefault(x => x.DisplayName == i.DisplayName);
                 if (element == null) continue;
                 var orThis = element.OverrideThis;
                 // Get the stacksize attribute and override it.

@@ -325,7 +325,10 @@ namespace Eco.EM.Framework.Resolvers
         // Load overrides from config changes.
         private async void LoadConfigOverrides()
         {
-            await Task.Run( () =>
+            SerializedSynchronizedCollection<RecipeModel> newModels = new();
+            var previousModels = EMRecipesPlugin.Config.EMRecipes;
+
+            foreach (var type in typeof(IConfigurableRecipe).ConcreteTypes())
             {
                 SerializedSynchronizedCollection<RecipeModel> newModels = new();
                 var previousModels = EMConfigurePlugin.Config.EMRecipes;
@@ -350,9 +353,14 @@ namespace Eco.EM.Framework.Resolvers
                     else
                         newModels.Add(dModel);
                 }
-                EMConfigurePlugin.Config.EMRecipes = newModels;
+                else
+                    newModels.Add(dModel);
+            }
+            EMRecipesPlugin.Config.EMRecipes = newModels;
 
-                foreach (var model in EMConfigurePlugin.Config.EMRecipes)
+            foreach (var model in EMRecipesPlugin.Config.EMRecipes)
+            {
+                if (!LoadedConfigRecipes.ContainsKey(model.ModelType))
                 {
                     if (!LoadedConfigRecipes.ContainsKey(model.ModelType))
                     {

@@ -51,7 +51,7 @@ namespace Eco.EM.Framework.Resolvers
         public void Initialize()
         {
             SerializedSynchronizedCollection<StorageSlotModel> newModels = new();
-            var config = EMConfigurePlugin.Config.EMStorageSlots;
+            var config = EMStorageSlotsPlugin.Config.EMStorageSlots;
 
             foreach (var type in typeof(IStorageSlotObject).ConcreteTypes())
             {
@@ -70,7 +70,7 @@ namespace Eco.EM.Framework.Resolvers
                     newModels.Add(lModel);
             }
 
-            EMConfigurePlugin.Config.EMStorageSlots = newModels;
+            EMStorageSlotsPlugin.Config.EMStorageSlots = newModels;
 
             foreach (var model in newModels)
             {
