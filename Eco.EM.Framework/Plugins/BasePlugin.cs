@@ -16,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Reflection;
 using System.Text;
 using System.Threading;
@@ -43,10 +44,13 @@ namespace Eco.EM.Framework.Plugins
 
         public object GetEditObject() => this.config.Config;
         public void OnEditObjectChanged(object o, string param) => this.SaveConfig();
-        public string GetStatus() => $"Loaded and using Version: {Defaults.version}, All Systems Active";
+        public string GetStatus() => $"Loaded and using Version: {Defaults.Version}, All Systems Active";
 
         public void Initialize(TimedTask timer)
         {
+            Log.WriteLine(Localizer.DoStr("==========================================================="));
+            Log.WriteLine(Localizer.DoStr("EM Base Takes a little while to load. this is completely natural as it runs a bunch of checks on its systems, Mod Versions and more. We promise your server is still Responding"));
+            Log.WriteLine(Localizer.DoStr("==========================================================="));
             this.SaveConfig();
             if (Config.VersionDisplayEnabled)
                 EMVersioning.GetInit();

@@ -90,7 +90,10 @@ namespace Eco.EM.Framework.Resolvers
             {
                 var m = previousModels.SingleOrDefault(x => x.ModelType == lModel.ModelType);
 
-
+                if (lModel.RoomType.Equals("LivingRoom"))
+                    lModel.RoomType = "Living Room";
+                if (m.RoomType.Equals("LivingRoom"))
+                    m.RoomType = "Living Room";
 
                 if (m != null)
                 {
@@ -104,7 +107,12 @@ namespace Eco.EM.Framework.Resolvers
                     newModels.Add(m);
                 }
                 else
+                {
+                    if(HousingConfig.GetRoomCategory(lModel.RoomType) == null || lModel.RoomType == "General")
+                        lModel.RoomType = HousingConfig.GetRoomCategory("Decoration").Name;
+
                     newModels.Add(lModel);
+                }
             }
 
             EMHousingValuePlugin.Config.EMHousingValue = newModels;

@@ -10,12 +10,14 @@ namespace Eco.EM.Framework.Resolvers
     public class StorageSlotModel : ModelBase
     {
         [LocDisplayName("Storage Slots")] public float StorageSlots { get; set; }
-        [LocDisplayName("Storage Stack Multiplier")] public float StackMultiplier {get; set;}
+        [LocDisplayName("Storage Stack Multiplier")] public float StackMultiplier { get; set; } = 1;
 
-        public StorageSlotModel(Type type)
+        public StorageSlotModel(Type type, float storageSlots, float stackMultiplier)
         {
             ModelType = type.Name;
             Assembly = type.AssemblyQualifiedName;
+            StorageSlots = storageSlots;
+            StackMultiplier = stackMultiplier;
         }
 
         [JsonConstructor]

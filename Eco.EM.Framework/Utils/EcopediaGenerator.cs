@@ -20,7 +20,7 @@ namespace Eco.EM.Framework.Utils
     {
         internal static Dictionary<string, string> subPages = new();
         internal static Dictionary<string, Dictionary<string, string>> pages = new();
-        internal const string SavePath = "Mods/UserCode/Ecopedia/";
+        internal static string SavePath = "Mods" + Path.DirectorySeparatorChar + "UserCode" + Path.DirectorySeparatorChar + "Ecopedia";
         private static readonly Ecopedia eco;
 
         /// <summary>
@@ -107,61 +107,70 @@ namespace Eco.EM.Framework.Utils
             if (isSubPage)
                 subPages.Add(cleanName.Split(";")[1], cleanName.Split(";")[2]);
 
-            if (File.Exists(SavePath + modName + "/" + fileName + ".xml"))
-                File.Delete(SavePath + modName + "/" + fileName + ".xml");
+            if (File.Exists(SavePath + Path.DirectorySeparatorChar + modName + Path.DirectorySeparatorChar + fileName + ".xml"))
+                File.Delete(SavePath + Path.DirectorySeparatorChar + modName + Path.DirectorySeparatorChar + fileName + ".xml");
 
             Logging.LoggingUtils.Debug($"Added new Ecopedia file at {SavePath}{modName}");
             return true;
         }
 
-        internal static void BuildPages()
+        internal static async void BuildPages()
         {
-            foreach (var mod in pages)
+            await Task.Run(() =>
             {
-                foreach (var p in mod.Value)
+                foreach (var mod in pages)
                 {
-                    //lets try using XML Writer to fix an issue
-                    var fileName = mod.Key.Split("-")[0];
-                    var sb = new StringBuilder();
+                    foreach (var p in mod.Value)
+                    {
+                        //lets try using XML Writer to fix an issue
+                        var fileName = mod.Key.Split("-")[0];
+                        var sb = new StringBuilder();
                         sb.Append(p.Value);
-                    if (!File.Exists(SavePath + p.Key + "/" + fileName + ".xml"))
-                    {
-                        FileManager.FileManager.WriteToFile(sb.ToString(), SavePath + p.Key, fileName, ".xml");
-
-                        Logging.LoggingUtils.Debug($"Added new Ecopedia file");
-                    }
-
-                    if (subPages.Count > 0)
-                    {
-                        foreach (var sp in subPages)
+                        if (!File.Exists(SavePath + Path.DirectorySeparatorChar + p.Key + Path.DirectorySeparatorChar + fileName + ".xml"))
                         {
                             try
                             {
-                                var modname = mod.Key.Split("-")[0];
-                                var cleanName = modname.Split(";");
-                                if (sp.Key.ToLower() == cleanName[1].ToLower())
-                                {
-                                    var mainpage = Ecopedia.Obj.GetPage(cleanName[1]);
-                                    var cat = eco.Categories.GetOrAdd("Mods");
-                                    var page = cat.Pages.GetOrAdd(mainpage.Name);
-
-                                    var subpage = page.SubPages.GetOrAdd(cleanName[2]);
-                                    subpage.Name = sp.Value;
-                                    subpage.FullName = page.FullName + ';' + sp.Value;
-                                    subpage.DisplayName = Localizer.DoStr(sp.Value);
-
-                                    mainpage.SubPages.Add(subpage.Name, subpage);
-                                }
+                                FileManager.FileManager.WriteToFile(sb.ToString(), SavePath + Path.DirectorySeparatorChar + p.Key, fileName, ".xml");
                             }
                             catch
                             {
-                                continue;
+
+                            }
+                            Logging.LoggingUtils.Debug($"Added new Ecopedia file");
+                        }
+
+                        if (subPages.Count > 0)
+                        {
+                            foreach (var sp in subPages)
+                            {
+                                try
+                                {
+                                    var modname = mod.Key.Split("-")[0];
+                                    var cleanName = modname.Split(";");
+                                    if (sp.Key.ToLower() == cleanName[1].ToLower())
+                                    {
+                                        var mainpage = Ecopedia.Obj.GetPage(cleanName[1]);
+                                        var cat = eco.Categories.GetOrAdd("Mods");
+                                        var page = cat.Pages.GetOrAdd(mainpage.Name);
+
+                                        var subpage = page.SubPages.GetOrAdd(cleanName[2]);
+                                        subpage.Name = sp.Value;
+                                        subpage.FullName = page.FullName + ';' + sp.Value;
+                                        subpage.DisplayName = Localizer.DoStr(sp.Value);
+
+                                        mainpage.SubPages.Add(subpage.Name, subpage);
+                                    }
+                                }
+                                catch
+                                {
+                                    continue;
+                                }
                             }
                         }
                     }
-                }
 
-            }
+                }
+            });
         }
 
         internal static Task ShutDown()
@@ -171,8 +180,8 @@ namespace Eco.EM.Framework.Utils
                 foreach (var p in mod.Value)
                 {
                     var fileName = mod.Key.Split("-")[0];
-                    if (File.Exists(SavePath + p.Key + "/" + fileName + ".xml"))
-                        File.Delete(SavePath + p.Key + "/" + fileName + ".xml");
+                    if (File.Exists(SavePath + Path.DirectorySeparatorChar + p.Key + Path.DirectorySeparatorChar + fileName + ".xml"))
+                        File.Delete(SavePath + Path.DirectorySeparatorChar + p.Key + Path.DirectorySeparatorChar + fileName + ".xml");
                 }
             }
 

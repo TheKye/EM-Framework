@@ -19,7 +19,7 @@ namespace Eco.EM.Framework.Networking
         private readonly static string jsonMediaType = "application/json";
 
 
-        public static string GetRequest(string URL)
+        public static async Task<string> GetRequest(string URL)
         {
             try
             {

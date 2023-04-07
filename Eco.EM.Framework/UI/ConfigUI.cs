@@ -33,7 +33,8 @@ namespace Eco.EM.Framework.UI
                 overrideTitle: title,
                 onSubmit: val => setVal(objToEdit),
                 savePlugin: plugin,
-                buttonText: buttonName);
+                buttonText: buttonName
+                );
         }
     }
 }

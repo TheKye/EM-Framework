@@ -14,7 +14,6 @@ namespace Eco.EM.Framework.AdminUtils
 {
     [Serialized]
     [LocDisplayName("Admin Testing Block")]
-    [NotSpawnable]
     public partial class TestingBlockItem : WorldObjectItem<TestingBlockObject>
     {
     }

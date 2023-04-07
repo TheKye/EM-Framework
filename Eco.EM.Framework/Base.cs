@@ -9,21 +9,23 @@ namespace Eco.EM.Framework
     {
         internal const string oldLocation = "ElixrMods";
         internal const string fileFormat = ".json";
-        public static readonly string version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-        public const string saveLocation = "/Configs/Mods";
+        private static readonly string version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+        private static readonly string saveLocation = Path.Combine("Configs","Mods");
         public const string appName = "<color=purple>[EM Framework]:</color> ";
         public const string appNameCon = "[EM Framework]: ";
+        public static string Version => version;
 
         public static string SaveLocation => GetRelevantDirectory();
+
         public static string AssemblyLocation => Directory.GetCurrentDirectory();
 
         public static double UTime => DateTime.Now.Subtract(new DateTime(1970, 1, 1, 0, 0, 0)).TotalSeconds;
 
         static string GetRelevantDirectory()
         {
-            if (saveLocation.StartsWith("/"))
+            if (saveLocation.StartsWith(Path.DirectorySeparatorChar))
             {
-                return AssemblyLocation + saveLocation;
+                return Path.Combine(AssemblyLocation, saveLocation);
             }
             return saveLocation;
         }
@@ -52,6 +54,7 @@ namespace Eco.EM.Framework
         }
 
         public static bool ConfigExists(string FileName) => File.Exists(GetPathOf(FileName));
+
         static string GetPath(string FileName)
         {
             if (!FileName.EndsWith(fileFormat))

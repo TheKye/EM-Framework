@@ -25,7 +25,16 @@ namespace Eco.EM.Framework.Utils
             this.MaxItems = multiplier;
         }
 
-        public override int MaxAccepted(Item item, int currentQuantity) => (int)(item.MaxStackSize * this.MaxItems);
+        public override int MaxAccepted(Item item, int currentQuantity)
+        {
+            if (item is ToolItem)
+            {
+                return item.MaxStackSize;
+            }
+
+            return (int)(item.MaxStackSize * this.MaxItems);
+
+        }
     }
 
     public class TagStackRestriction : InventoryRestriction
