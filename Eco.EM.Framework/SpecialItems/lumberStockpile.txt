@@ -20,7 +20,8 @@
         protected override void PostInitialize()
         {
             base.PostInitialize();
-                        
+            this.GetComponent<StockpileComponent>().Initialize(DefaultDim, 1);
+            
             var storage = this.GetComponent<PublicStorageComponent>();
             storage.Initialize(DefaultDim.x * DefaultDim.z);
 

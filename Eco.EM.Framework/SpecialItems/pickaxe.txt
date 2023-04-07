@@ -16,13 +16,17 @@ namespace Eco.Mods.TechTree
     using Eco.Gameplay.Systems.Tooltip;
     using Eco.Shared.Items;
     using Eco.Shared.Localization;
+    using Eco.Shared.Serialization;
     using Eco.Shared.Utils;
     using Eco.World.Blocks;
     using Eco.Gameplay.Objects;
     using Eco.Core.Items;
 
+    [Serialized]
+    [LocDisplayName("Pickaxe")]
+    [Weight(0)]
     [Category("Hidden"), Tag("Excavation")]
-    public partial class PickaxeItem : ToolItem
+    public abstract partial class PickaxeItem : ToolItem
     {
         private static SkillModifiedValue caloriesBurn = CreateCalorieValue(20, typeof(MiningSkill), typeof(PickaxeItem));
         static PickaxeItem() { }
@@ -36,6 +40,7 @@ namespace Eco.Mods.TechTree
         [SyncToView] public virtual  float         Damage           => 1.0f;      // damage per tier level
         [SyncToView] public override IDynamicValue Tier             => base.Tier; // tool tier, overriden to have SyncToView only for pickaxe
         public override              int           FullRepairAmount => 1;
+        public override              ToolCategory  ToolCategory => ToolCategory.Pickaxe;
 
         [Tooltip(200)] public TooltipSection MinablesTooltip(TooltipContext context)
         {
