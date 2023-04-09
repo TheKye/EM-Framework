@@ -126,10 +126,10 @@ namespace Eco.EM.Framework
             {
                 if (console)
                 {
-                    System.Console.ForegroundColor = ConsoleColor.Magenta;
-                    System.Console.WriteLine(Localizer.DoStr(string.Format("An error occured while attempting to check versions.")));
-                    System.Console.WriteLine(Localizer.DoStr(string.Format("Current installed versions")));
-                    System.Console.ResetColor();
+                   // System.Console.ForegroundColor = ConsoleColor.Magenta;
+                   // System.Console.WriteLine(Localizer.DoStr(string.Format("An error occured while attempting to check versions.")));
+                   // System.Console.WriteLine(Localizer.DoStr(string.Format("Current installed versions")));
+                   // System.Console.ResetColor();
                     //print the versions anyway so people know even on fail
                     var packs = GetEMInstalledInfo();
                     int count = 0;
@@ -198,9 +198,9 @@ namespace Eco.EM.Framework
                 }
                 catch (Exception)
                 {
-                    System.Console.ForegroundColor = ConsoleColor.Magenta;
-                    System.Console.WriteLine(Localizer.DoStr(string.Format("An error occured while attempting to check versions. Please contact the EM Development Team")));
-                    System.Console.ResetColor();
+                    //System.Console.ForegroundColor = ConsoleColor.Magenta;
+                    //System.Console.WriteLine(Localizer.DoStr(string.Format("An error occured while attempting to check versions. Please contact the EM Development Team")));
+                    //System.Console.ResetColor();
                 }
             });
         }

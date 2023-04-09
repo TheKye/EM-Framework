@@ -51,6 +51,6 @@ namespace Eco.EM.Framework.Resolvers
             ChatBase.ChatBaseExtended.CBOkBox("Config File Reset and Re-Generated, you can find it in: Configs/EMStorageSlots.eco", user);
         }
 
-        public string GetCategory() => "Elixr Mods";
+        public string GetCategory() => "EM Configure";
     }
 }

@@ -131,7 +131,7 @@ namespace Eco.EM.Framework.Resolvers
         {
             try
             {
-                return (int)LoadedVehicleOverrides[obj.GetType().Name].MaxWeight;  
+                return (int)LoadedVehicleOverrides[obj.GetType().Name].MaxWeight;
             }
             catch
             {

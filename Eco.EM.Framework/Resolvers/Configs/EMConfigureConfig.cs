@@ -2,7 +2,7 @@
 
 namespace Eco.EM.Framework.Resolvers
 {
-    public class EMConfigureConfig
+    public class EMConfigureBaseConfig
     {
         [LocDisplayName("Default Max Stack Size")]
         [LocDescription("Set the default max stack size of those that don't have the max stack size attribute (Default is 100)")]
@@ -17,7 +17,7 @@ namespace Eco.EM.Framework.Resolvers
         public int ForcedSameStackAmount { get; set; } = 100;
 
         [LocDisplayName("Change Carried Items Stack Size Amount")]
-        [LocDescription("Enable the setting of Carried Items Stack Sizes only")]
+        [LocDescription("Enable the setting of Carried Items Stack Sizes only - Not to be used with forced as it will override forced stack sizes and use the below value instead.")]
         public bool CarriedItemsOverride { get; set; } = false;
 
         [LocDisplayName("Forced Stack Size Amount for carried items")]

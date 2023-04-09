@@ -15,9 +15,9 @@ namespace Eco.EM.Framework.Resolvers
 
     public class EMConfigurePlugin : Singleton<EMConfigurePlugin>, IModKitPlugin, IConfigurablePlugin, IModInit, ISaveablePlugin
     {
-        private static readonly PluginConfig<EMConfigureConfig> config;
+        private static readonly PluginConfig<EMConfigureBaseConfig> config;
         public IPluginConfig PluginConfig => config;
-        public static EMConfigureConfig Config => config.Config;
+        public static EMConfigureBaseConfig Config => config.Config;
         public ThreadSafeAction<object, string> ParamChanged { get; set; } = new ThreadSafeAction<object, string>();
 
         public object GetEditObject() => config.Config;
@@ -26,7 +26,7 @@ namespace Eco.EM.Framework.Resolvers
 
         static EMConfigurePlugin()
         {
-            config = new PluginConfig<EMConfigureConfig>("EMConfigure");
+            config = new PluginConfig<EMConfigureBaseConfig>("EMConfigureBase");
         }
 
         public static void Initialize()
@@ -54,7 +54,7 @@ namespace Eco.EM.Framework.Resolvers
         {
             if (!Config.OverrideVanillaStockpiles) return;
 
-            var agdir = Path.DirectorySeparatorChar + "Mods"+ Path.DirectorySeparatorChar + "UserCode" + Path.DirectorySeparatorChar + "Objects";
+            var agdir = Path.DirectorySeparatorChar + "Mods" + Path.DirectorySeparatorChar + "UserCode" + Path.DirectorySeparatorChar + "Objects";
 
             if (!Directory.Exists(agdir))
             {
@@ -71,7 +71,7 @@ namespace Eco.EM.Framework.Resolvers
                 WritingUtils.WriteFromEmbeddedResource("Eco.EM.Framework.SpecialItems", "largelumberStockpile.txt", agdir, ".cs", specificFileName: "LargeLumberStockpileObject.override");
 
         }
-        
+
         public override string ToString() => Localizer.DoStr("EM Configure");
 
         [ChatCommand("Generates The EMConfigure.eco File for people who have headless server", "gen-emcon", ChatAuthorizationLevel.Admin)]
@@ -89,8 +89,12 @@ namespace Eco.EM.Framework.Resolvers
             ChatBase.ChatBaseExtended.CBOkBox("Config File Reset and Re-Generated, you can find it in: Configs/EMConfigure.eco", user);
         }
 
-        public string GetCategory() => "Elixr Mods";
-
-        public void SaveAll() => this.SaveConfig();
+        public string GetCategory() => "EM Configure";
+        public void SaveAll()
+        {
+            RunLuckyStrikeResolver();
+            RunStockpileResolver();
+            this.SaveConfig();
+        }
     }
 }

@@ -64,7 +64,7 @@ namespace Eco.EM.Framework.Resolvers
             // adds the models to the overrides for use by GetCustom()
             foreach (var model in newModels)
             {
-                if (!LoadedCustomsOverrides.ContainsKey(model.ModelType)) 
+                if (!LoadedCustomsOverrides.ContainsKey(model.ModelType))
                     LoadedCustomsOverrides.Add(model.ModelType, model);
             }
         }

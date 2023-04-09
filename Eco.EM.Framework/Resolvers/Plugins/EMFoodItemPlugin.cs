@@ -33,7 +33,7 @@ namespace Eco.EM.Framework.Resolvers
             config.SaveAsync();
         }
 
-        public override string ToString() => Localizer.DoStr("EM Food Items");
+        public override string ToString() => Localizer.DoStr("EM Configure - Food Config");
 
         [ChatCommand("Generates The EMFoodItems.eco File for people who have headless server", "gen-emfoods", ChatAuthorizationLevel.Admin)]
         public static void GenerateEmFoodItems(User user)
@@ -50,6 +50,6 @@ namespace Eco.EM.Framework.Resolvers
             ChatBase.ChatBaseExtended.CBOkBox("Config File Reset and Re-Generated, you can find it in: Configs/EMFoodItems.eco", user);
         }
 
-        public string GetCategory() => "Elixr Mods";
+        public string GetCategory() => "EM Configure";
     }
 }
