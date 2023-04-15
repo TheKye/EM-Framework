@@ -5,12 +5,12 @@ using Eco.Gameplay.Players;
 using Eco.Gameplay.Systems.Messaging.Chat.Commands;
 using Eco.Shared.Localization;
 using Eco.Shared.Utils;
+using System.Threading.Tasks;
 
 namespace Eco.EM.Framework.Resolvers
 {
     [LocDisplayName("EM Housing Value Plugin")]
     [ChatCommandHandler]
-    [Priority(200)]
     public class EMHousingValuePlugin : Singleton<EMHousingValuePlugin>, IModKitPlugin, IConfigurablePlugin, IModInit
     {
         private static readonly PluginConfig<EMHousingValueConfig> config;
@@ -29,8 +29,10 @@ namespace Eco.EM.Framework.Resolvers
 
         public static void PostInitialize()
         {
-            EMHousingResolver.Obj.Initialize();
-            config.SaveAsync();
+            Task.Run(() => {
+                EMHousingResolver.Obj.Initialize();
+                config.SaveAsync();
+            });
         }
 
         public override string ToString() => Localizer.DoStr("EM Housing Value");
@@ -50,6 +52,6 @@ namespace Eco.EM.Framework.Resolvers
             ChatBase.ChatBaseExtended.CBOkBox("Config File Reset and Re-Generated, you can find it in: Configs/EMHousingValue.eco", user);
         }
 
-        public string GetCategory() => "Elixr Mods";
+        public string GetCategory() => "EM Configure";
     }
 }

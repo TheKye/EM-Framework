@@ -108,7 +108,7 @@ namespace Eco.EM.Framework.Resolvers
                 }
                 else
                 {
-                    if(HousingConfig.GetRoomCategory(lModel.RoomType) == null || lModel.RoomType == "General")
+                    if (HousingConfig.GetRoomCategory(lModel.RoomType) == null || lModel.RoomType == "General")
                         lModel.RoomType = HousingConfig.GetRoomCategory("Decoration").Name;
 
                     newModels.Add(lModel);

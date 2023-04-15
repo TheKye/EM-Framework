@@ -34,7 +34,7 @@ namespace Eco.EM.Framework.Resolvers
             config.SaveAsync();
         }
 
-        public override string ToString() => Localizer.DoStr("EM Customs");
+        public override string ToString() => Localizer.DoStr("EM Configure - Customs Plugin");
 
         [ChatCommand("Generates The EMCustoms.eco File for people who have headless server", "gen-emcustoms", ChatAuthorizationLevel.Admin)]
         public static void GenerateEmCustoms(User user)
@@ -51,6 +51,6 @@ namespace Eco.EM.Framework.Resolvers
             ChatBase.ChatBaseExtended.CBOkBox("Config File Reset and Re-Generated, you can find it in: Configs/EMCustoms.eco", user);
         }
 
-        public string GetCategory() => "Elixr Mods";
+        public string GetCategory() => "EM Configure";
     }
 }

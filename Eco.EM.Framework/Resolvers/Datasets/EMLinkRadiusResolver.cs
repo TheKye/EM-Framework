@@ -8,7 +8,7 @@ namespace Eco.EM.Framework.Resolvers
 {
     public interface ILinkRadiusObject { }
 
-    public class EMLinkRadiusResolver: AutoSingleton<EMLinkRadiusResolver>
+    public class EMLinkRadiusResolver : AutoSingleton<EMLinkRadiusResolver>
     {
         public Dictionary<string, LinkModel> DefaultLinkOverrides { get; private set; } = new();
         public Dictionary<string, LinkModel> LoadedLinkOverrides { get; private set; } = new();

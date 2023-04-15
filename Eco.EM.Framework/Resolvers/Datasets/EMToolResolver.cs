@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Eco.EM.Framework.Resolvers
+namespace Eco.EM.Framework.Resolvers.Datasets
 {
     class EMToolResolver
     {

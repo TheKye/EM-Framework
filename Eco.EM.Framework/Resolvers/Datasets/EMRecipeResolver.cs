@@ -58,7 +58,7 @@ namespace Eco.EM.Framework.Resolvers
             var dModel = LoadedDefaultRecipes[recipe.GetType().Name];
             // check if config override
             var loaded = LoadedConfigRecipes.TryGetValue(recipe.GetType().Name, out RecipeModel model);
-            if (loaded && (model.BaseExperienceOnCraft != dModel.BaseExperienceOnCraft))
+            if (loaded && model.BaseExperienceOnCraft != dModel.BaseExperienceOnCraft)
                 return model.BaseExperienceOnCraft;
 
             // check if mod override
@@ -140,7 +140,7 @@ namespace Eco.EM.Framework.Resolvers
                         else
                             ingredients.Add(new IngredientElement(value.Item, value.Amount, skill, talent));
                     }
-                    else if(skill !=null && talent == null)
+                    else if (skill != null && talent == null)
                     {
                         if (!value.Tag)
                             ingredients.Add(new IngredientElement(Item.Get(value.Item), value.Amount, skill));
@@ -153,7 +153,7 @@ namespace Eco.EM.Framework.Resolvers
                             ingredients.Add(new IngredientElement(Item.Get(value.Item), value.Amount, false));
                         else
                             ingredients.Add(new IngredientElement(value.Item, value.Amount, false));
-                        
+
                     }
                 }
                 catch
@@ -302,7 +302,7 @@ namespace Eco.EM.Framework.Resolvers
             var smv = new ModuleModifiedValue(start * RecipeFamily.CraftTimeModifier, skillType, DynamicValueType.Speed);
             return talents != null
                 ? new MultiDynamicValue(MultiDynamicOps.Multiply, talents.Select(x => new TalentModifiedValue(beneficiary, x) as IDynamicValue).Concat(new[] { smv }).ToArray())
-                : (IDynamicValue)smv;
+                : smv;
         }
 
         private static IDynamicValue CreateLaborInCaloriesValue(float start) => new ConstantValue(start);
@@ -330,13 +330,7 @@ namespace Eco.EM.Framework.Resolvers
 
             foreach (var type in typeof(IConfigurableRecipe).ConcreteTypes())
             {
-                SerializedSynchronizedCollection<RecipeModel> newModels = new();
-                var previousModels = EMConfigurePlugin.Config.EMRecipes;
-
-                foreach (var type in typeof(IConfigurableRecipe).ConcreteTypes())
-                {
-                    System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(type.TypeHandle);
-                }
+                System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(type.TypeHandle);
 
                 var loadtypes = LoadedDefaultRecipes.Values.ToList();
                 // for each type that exists that we are trying to load
@@ -353,8 +347,6 @@ namespace Eco.EM.Framework.Resolvers
                     else
                         newModels.Add(dModel);
                 }
-                else
-                    newModels.Add(dModel);
             }
             EMRecipesPlugin.Config.EMRecipes = newModels;
 
@@ -367,7 +359,7 @@ namespace Eco.EM.Framework.Resolvers
                         LoadedConfigRecipes.Add(model.ModelType, model);
                     }
                 }
-            });
+            }
         }
 
         // Load overrides from other mods.
