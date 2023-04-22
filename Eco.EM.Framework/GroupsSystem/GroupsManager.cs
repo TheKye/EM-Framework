@@ -46,14 +46,14 @@ namespace Eco.EM.Framework.Groups
 
             else
             {
-                ConsoleColors.PrintConsoleMultiColored(Defaults.appNameCon, ConsoleColor.Magenta, "The Main Groups file was found to be corrupted, Loading from backup", ConsoleColor.Red);
+                ConsoleColors.PrintConsoleMultiColored(Defaults.appNameCon, ConsoleColor.Magenta, Localizer.DoStr("The Main Groups file was found to be corrupted, Loading from backup"), ConsoleColor.Red);
                 Data = LoadBackupData();
                 SaveData();
                 if (Data != null)
                     return Data;
                 else
                 {
-                    ConsoleColors.PrintConsoleMultiColored(Defaults.appNameCon, ConsoleColor.Magenta, "There was an issue loading from the backup file. generating new files.", ConsoleColor.Red);
+                    ConsoleColors.PrintConsoleMultiColored(Defaults.appNameCon, ConsoleColor.Magenta, Localizer.DoStr("There was an issue loading from the backup file. generating new files."), ConsoleColor.Red);
                     Data = new();
                     SaveData();
                     return Data;
@@ -216,7 +216,7 @@ namespace Eco.EM.Framework.Groups
 
         public void HandleWorldReset()
         {
-            ConsoleColors.PrintConsoleMultiColored(Defaults.appNameCon, System.ConsoleColor.Magenta, "New World Detected - Deleting Old Groups Data", System.ConsoleColor.White);
+            ConsoleColors.PrintConsoleMultiColored(Defaults.appNameCon, System.ConsoleColor.Magenta, Localizer.DoStr("New World Detected - Deleting Old Groups Data"), System.ConsoleColor.White);
             if (File.Exists(Path.Combine(Defaults.SaveLocation, GroupsManager._subPath, GroupsManager._dataFile)))
                 File.Delete(Path.Combine(Defaults.SaveLocation, GroupsManager._subPath, GroupsManager._dataFile));
             if (File.Exists(Path.Combine(Defaults.SaveLocation, GroupsManager._subPath, GroupsManager._dataBackupFile)))

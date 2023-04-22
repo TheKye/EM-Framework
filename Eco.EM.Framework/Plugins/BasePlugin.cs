@@ -44,7 +44,7 @@ namespace Eco.EM.Framework.Plugins
 
         public object GetEditObject() => this.config.Config;
         public void OnEditObjectChanged(object o, string param) => this.SaveConfig();
-        public string GetStatus() => $"Loaded and using Version: {Defaults.Version}, All Systems Active";
+        public string GetStatus() => string.Format($"Loaded and using Version: {0}, All Systems Active", Defaults.Version);
 
         public void Initialize(TimedTask timer)
         {
@@ -86,7 +86,7 @@ namespace Eco.EM.Framework.Plugins
         {
             if (string.IsNullOrWhiteSpace(Obj.Config.DiscordWebhookURL))
             {
-                LoggingUtils.Error("Can't Post Update Information without a webhook url.");
+                LoggingUtils.Error(Localizer.DoStr("Can't Post Update Information without a webhook url."));
                 return;
             }
             LoggingUtils.Write("Checking For Updates");

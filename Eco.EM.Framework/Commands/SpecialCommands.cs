@@ -49,7 +49,7 @@ namespace Eco.EM.Framework.Commands
             }
             catch (Exception e)
             {
-                chatClient.ErrorLocStr(Localizer.Do($"Failed to open server GUI, it may not be supported on your OS.\r\nThe exception encountered was: {e.ToStringPretty()}"));
+                chatClient.ErrorLocStr(Localizer.DoStr(string.Format($"Failed to open server GUI, it may not be supported on your OS.\r\nThe exception encountered was: {0}", e.ToStringPretty())));
             }
         }
     }

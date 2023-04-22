@@ -1,6 +1,7 @@
 ﻿using Eco.Gameplay.Items;
 using Eco.Gameplay.Players;
 using Eco.Gameplay.Systems.TextLinks;
+using Eco.Shared.Localization;
 using Eco.Shared.Serialization;
 using System;
 using System.Collections.Generic;
@@ -20,7 +21,7 @@ namespace Eco.EM.Framework.Extentsions.Items
             if (!this.Broken)
             {
                 this.Durability = Math.Max(0, this.Durability - (this.DurabilityRate * multiplier));
-                if (this.Durability == 0) player.ErrorLoc($"Your {this.UILink()} broke!  It will be much less efficient until repaired.");
+                if (this.Durability == 0) player.ErrorLocStr(Localizer.DoStr(string.Format($"Your {0} broke!  It will be much less efficient until repaired.", this.UILink())));
             }
 
             return this.DurabilityMultiplier;

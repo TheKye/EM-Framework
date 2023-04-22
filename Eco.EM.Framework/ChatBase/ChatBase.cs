@@ -976,7 +976,7 @@ namespace Eco.EM.Framework.ChatBase
             }
             catch (Exception e)
             {
-                Log.WriteErrorLineLocStr($"There was an error, Error was: {e}");
+                Log.WriteErrorLineLocStr(string.Format($"There was an error, Error was: {0}", e));
                 return false;
             }
         }
@@ -1043,7 +1043,7 @@ namespace Eco.EM.Framework.ChatBase
             }
             catch (Exception e)
             {
-                Log.WriteErrorLineLocStr($"There was an error, Error was: {e}");
+                Log.WriteErrorLineLocStr(string.Format($"There was an error, Error was: {0}", e));
                 return false;
             }
         }
@@ -1084,7 +1084,7 @@ namespace Eco.EM.Framework.ChatBase
             }
             catch (Exception e)
             {
-                Log.WriteErrorLineLocStr($"There was an error, Error was: {e}");
+                Log.WriteErrorLineLocStr(string.Format($"There was an error, Error was: {0}", e));
                 return false;
             }
         }
@@ -1125,7 +1125,7 @@ namespace Eco.EM.Framework.ChatBase
             }
             catch (Exception e)
             {
-                Log.WriteErrorLineLocStr($"There was an error, Error was: {e}");
+                Log.WriteErrorLineLocStr(string.Format($"There was an error, Error was: {0}", e));
                 return false;
             }
         }
@@ -1168,7 +1168,7 @@ namespace Eco.EM.Framework.ChatBase
             }
             catch (Exception e)
             {
-                Log.WriteErrorLineLocStr($"There was an error, Error was: {e}");
+                Log.WriteErrorLineLocStr(string.Format($"There was an error, Error was: {0}", e));
                 return false;
             }
         }
@@ -1236,7 +1236,7 @@ namespace Eco.EM.Framework.ChatBase
             }
             catch (Exception e)
             {
-                Log.WriteErrorLineLocStr($"There was an error, Error was: {e}");
+                Log.WriteErrorLineLocStr(string.Format($"There was an error, Error was: {0}", e));
                 return false;
             }
         }
@@ -1276,7 +1276,7 @@ namespace Eco.EM.Framework.ChatBase
             }
             catch (Exception e)
             {
-                Log.WriteErrorLineLocStr($"There was an error, Error was: {e}");
+                Log.WriteErrorLineLocStr(string.Format($"There was an error, Error was: {0}", e));
                 return false;
             }
         }
@@ -1352,7 +1352,7 @@ namespace Eco.EM.Framework.ChatBase
             }
             catch (Exception e)
             {
-                Log.WriteErrorLineLocStr($"There was an error, Error was: {e}");
+                Log.WriteErrorLineLocStr(string.Format($"There was an error, Error was: {0}", e));
                 return false;
             }
         }
@@ -1389,7 +1389,7 @@ namespace Eco.EM.Framework.ChatBase
             }
             catch (Exception e)
             {
-                Log.WriteErrorLineLocStr($"There was an error, Error was: {e}");
+                Log.WriteErrorLineLocStr(string.Format($"There was an error, Error was: {0}", e));
                 return false;
             }
         }
@@ -1430,7 +1430,7 @@ namespace Eco.EM.Framework.ChatBase
             }
             catch (Exception e)
             {
-                Log.WriteErrorLineLocStr($"There was an error, Error was: {e}");
+                Log.WriteErrorLineLocStr(string.Format($"There was an error, Error was: {0}", e));
                 return false;
             }
         }
@@ -1467,7 +1467,7 @@ namespace Eco.EM.Framework.ChatBase
             }
             catch (Exception e)
             {
-                Log.WriteErrorLineLocStr($"There was an error, Error was: {e}");
+                Log.WriteErrorLineLocStr(string.Format($"There was an error, Error was: {0}", e));
                 return false;
             }
         }

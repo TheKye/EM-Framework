@@ -1,0 +1,430 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ApiCheckValid" xml:space="preserve">
+    <value>We Are Working Chief! API System is enabled</value>
+    <comment>Tells the user the api is active and can be used</comment>
+  </data>
+  <data name="ChatBaseErrorMessage" xml:space="preserve">
+    <value>There was an error, Error was: {0}</value>
+    <comment>Error Message will be in english, but translation process should be much easier</comment>
+  </data>
+  <data name="CommandPermissions" xml:space="preserve">
+    <value>Permissions Command For the Permissions System</value>
+    <comment>parent command</comment>
+  </data>
+  <data name="GrantCommand" xml:space="preserve">
+    <value>Used to Grant Permissions to a Group</value>
+    <comment>Grant access to a command to a group</comment>
+  </data>
+  <data name="GrantSubCommands" xml:space="preserve">
+    <value>Used To Grant all Sub Commands to a group using the Parent Command</value>
+    <comment>grant all sub commands of a parent command to a group</comment>
+  </data>
+  <data name="RemoveCommand" xml:space="preserve">
+    <value>Used to Remove Permissions from a Group</value>
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value>Used to set the default Admin and User behaviour. Use /Commandpermissions setbehaviour {admin/user},{true/false}</value>
+  </data>
+  <data name="String10" xml:space="preserve">
+    <value>Command {0} was removed from Group {1} permissions</value>
+  </data>
+  <data name="String11" xml:space="preserve">
+    <value>{0} is not a valid toggle option</value>
+  </data>
+  <data name="String12" xml:space="preserve">
+    <value>{0} custom behaviour was set to {1}</value>
+  </data>
+  <data name="String13" xml:space="preserve">
+    <value>Command {0} was Blacklisted for Group {1}</value>
+  </data>
+  <data name="String14" xml:space="preserve">
+    <value>Chat Command Permissions Active</value>
+  </data>
+  <data name="String15" xml:space="preserve">
+    <value>Command {0} not found</value>
+  </data>
+  <data name="String16" xml:space="preserve">
+    <value>You are not authorized to use the command {0}</value>
+  </data>
+  <data name="String17" xml:space="preserve">
+    <value>Reloads the Unity Data Files without needing to reboot the server</value>
+  </data>
+  <data name="String18" xml:space="preserve">
+    <value>Unity Files Refreshed, Please Re-log to get the new changes.</value>
+  </data>
+  <data name="String19" xml:space="preserve">
+    <value>The Ecopedia Has been Rebuilt and should be automatically update. Please check the console for any logged issues with rebuilding the ecopedia</value>
+  </data>
+  <data name="String2" xml:space="preserve">
+    <value>Used to Blacklist a command for a group</value>
+  </data>
+  <data name="String20" xml:space="preserve">
+    <value>The Server GUI Should be available on the Server PC.</value>
+  </data>
+  <data name="String21" xml:space="preserve">
+    <value>Failed to open server GUI, it may not be supported on your OS.\r\nThe exception encountered was: {0}</value>
+    <comment>\r\n are used for new lines and spaces</comment>
+  </data>
+  <data name="String22" xml:space="preserve">
+    <value>Unable to clear and set trap, please make room in your inventory</value>
+  </data>
+  <data name="String23" xml:space="preserve">
+    <value>You require the correct bait in your hand to reset this trap</value>
+  </data>
+  <data name="String24" xml:space="preserve">
+    <value>Trap set</value>
+  </data>
+  <data name="String25" xml:space="preserve">
+    <value>Trap is currently not operational.</value>
+  </data>
+  <data name="String26" xml:space="preserve">
+    <value>Currently trapping animals.</value>
+  </data>
+  <data name="String27" xml:space="preserve">
+    <value>This Trap is already Set.</value>
+  </data>
+  <data name="String28" xml:space="preserve">
+    <value>Automatic Doors</value>
+  </data>
+  <data name="String29" xml:space="preserve">
+    <value>Status Component Is Required in order to use the Auto Door Component.</value>
+  </data>
+  <data name="String3" xml:space="preserve">
+    <value>Remove a blacklisted command from a group</value>
+  </data>
+  <data name="String30" xml:space="preserve">
+    <value>Automatic Door Module Installed, Automatic Doors Enabled and are {0}</value>
+  </data>
+  <data name="String31" xml:space="preserve">
+    <value>Working!</value>
+  </data>
+  <data name="String32" xml:space="preserve">
+    <value>Idle.</value>
+  </data>
+  <data name="String33" xml:space="preserve">
+    <value>There are not enough plants in the active area ({0} blocks). You require at least {1}.</value>
+  </data>
+  <data name="String34" xml:space="preserve">
+    <value>There are not enough {0} in the active area ({1} blocks). You require at least {2}.</value>
+  </data>
+  <data name="String35" xml:space="preserve">
+    <value>This station is unowned and unable to passively produce</value>
+  </data>
+  <data name="String36" xml:space="preserve">
+    <value>Passively Crafting</value>
+  </data>
+  <data name="String37" xml:space="preserve">
+    <value>Unable to craft while inventory is full</value>
+  </data>
+  <data name="String38" xml:space="preserve">
+    <value>Whether or not to check EM pack versions and display them.</value>
+  </data>
+  <data name="String39" xml:space="preserve">
+    <value>Used to Auto Skip Tutorial For all Players (Not Recommended for new player Friendly servers)</value>
+  </data>
+  <data name="String4" xml:space="preserve">
+    <value>Command {0} was unable to be found in the commands set</value>
+    <comment>0 is the command name used</comment>
+  </data>
+  <data name="String40" xml:space="preserve">
+    <value>Wipe Groups Data file on New World</value>
+  </data>
+  <data name="String41" xml:space="preserve">
+    <value>Determine if the Groups File should be wiped on each world reset or not (You will lose all groups and assigned commands in those groups)</value>
+  </data>
+  <data name="String42" xml:space="preserve">
+    <value>Enabel or disable the Web API Extenstions for your server</value>
+  </data>
+  <data name="String43" xml:space="preserve">
+    <value>By enabling this, members can use your servers connection info to access the Web API methods added by the framework (Which are rate limited) to get information from your server for 3rd party tools like cost calculators etc.</value>
+  </data>
+  <data name="String44" xml:space="preserve">
+    <value>Check for updates will send a query every so often to check if mods that use the versioning system, need an update</value>
+  </data>
+  <data name="String45" xml:space="preserve">
+    <value>This is a toggle option to post notifications to discord if mods need an update</value>
+  </data>
+  <data name="String46" xml:space="preserve">
+    <value>The Webhook URL used to post to discord when mod updates are available</value>
+  </data>
+  <data name="String47" xml:space="preserve">
+    <value>You Are Not Authorized To Do That</value>
+  </data>
+  <data name="String48" xml:space="preserve">
+    <value>Your {0} broke!  It will be much less efficient until repaired.</value>
+  </data>
+  <data name="String49" xml:space="preserve">
+    <value>There Was an Error Writing to: {0}. Do you have Read Write Access for the server?</value>
+  </data>
+  <data name="String5" xml:space="preserve">
+    <value>Command {0} was unable to be added to Group {1} permissions, its identifier already exists</value>
+    <comment>0 is the command name used, 1 is the group name</comment>
+  </data>
+  <data name="String50" xml:space="preserve">
+    <value>Group {0} was created</value>
+  </data>
+  <data name="String51" xml:space="preserve">
+    <value>Groups System Commands</value>
+  </data>
+  <data name="String52" xml:space="preserve">
+    <value>Used to Create a New Group</value>
+  </data>
+  <data name="String53" xml:space="preserve">
+    <value>Used to Delete an Existing Group</value>
+  </data>
+  <data name="String54" xml:space="preserve">
+    <value>Group {0} can not be deleted, it is a core group</value>
+  </data>
+  <data name="String55" xml:space="preserve">
+    <value>Group {0} was unable to be found</value>
+  </data>
+  <data name="String56" xml:space="preserve">
+    <value>Group {0} was deleted</value>
+  </data>
+  <data name="String57" xml:space="preserve">
+    <value>Used to print a list of groups to the chat window</value>
+  </data>
+  <data name="String58" xml:space="preserve">
+    <value>Used to print a list permissions assigned to a group</value>
+  </data>
+  <data name="String59" xml:space="preserve">
+    <value>Permissions for Group: {0}</value>
+  </data>
+  <data name="String6" xml:space="preserve">
+    <value>Command {0} was added to Group {1} permissions</value>
+    <comment>0 is the command name used, 1 is the group name</comment>
+  </data>
+  <data name="String60" xml:space="preserve">
+    <value>Group {0}:\nPermissions: {1}</value>
+  </data>
+  <data name="String61" xml:space="preserve">
+    <value>Used to add a user to a group</value>
+  </data>
+  <data name="String62" xml:space="preserve">
+    <value>User {0} was added to Group {1}</value>
+  </data>
+  <data name="String63" xml:space="preserve">
+    <value>User {0} was unable to be found</value>
+  </data>
+  <data name="String64" xml:space="preserve">
+    <value>User {0} already exists in Group {1}</value>
+  </data>
+  <data name="String65" xml:space="preserve">
+    <value>User {0} was removed from Group {1}</value>
+  </data>
+  <data name="String66" xml:space="preserve">
+    <value>Used to force save the groups just incase it didn't auto save.</value>
+  </data>
+  <data name="String67" xml:space="preserve">
+    <value>There was an issue loading from the backup file. generating new files.</value>
+  </data>
+  <data name="String68" xml:space="preserve">
+    <value>The Main Groups file was found to be corrupted, Loading from backup</value>
+  </data>
+  <data name="String69" xml:space="preserve">
+    <value>New World Detected - Deleting Old Groups Data</value>
+  </data>
+  <data name="String7" xml:space="preserve">
+    <value>Command {0} was unable to be added to Group {1}, please create the group first</value>
+    <comment> 0 is the command name used, 1 is the group name, this also means the group doesn't exist</comment>
+  </data>
+  <data name="String70" xml:space="preserve">
+    <value>[EM Framework]: Mod Error: Duplicate Key Entry: Logger Already Registered: Loggers can only be registered once per assembly, please use the logger you already register (This can be ignored)</value>
+  </data>
+  <data name="String71" xml:space="preserve">
+    <value>Basic Echo command for testing the chatbase</value>
+  </data>
+  <data name="String72" xml:space="preserve">
+    <value>Elixr Mods Testing Group</value>
+  </data>
+  <data name="String73" xml:space="preserve">
+    <value>Retrieve all objects from the same namespace as an object spawn them in world.</value>
+  </data>
+  <data name="String74" xml:space="preserve">
+    <value>Unable to place {0}. Skipped placement, make report.</value>
+  </data>
+  <data name="String75" xml:space="preserve">
+    <value>Unable to place {0}. Skipped placement, make report.</value>
+  </data>
+  <data name="String76" xml:space="preserve">
+    <value>Loaded and using Version: {0}, All Systems Active</value>
+  </data>
+  <data name="String77" xml:space="preserve">
+    <value>EM Base Takes a little while to load. this is completely natural as it runs a bunch of checks on its systems, Mod Versions and more. We promise your server is still Responding</value>
+  </data>
+  <data name="String78" xml:space="preserve">
+    <value>Can't Post Update Information without a webhook url.</value>
+  </data>
+  <data name="String79" xml:space="preserve">
+    <value>Default Max Stack Size</value>
+  </data>
+  <data name="String8" xml:space="preserve">
+    <value>Was unable to find Group {0}, please create the group first</value>
+  </data>
+  <data name="String80" xml:space="preserve">
+    <value>Set the default max stack size of those that don't have the max stack size attribute (Default is 100)</value>
+  </data>
+  <data name="String81" xml:space="preserve">
+    <value>Force All Items to have the same Stack Size</value>
+  </data>
+  <data name="String82" xml:space="preserve">
+    <value>Force all items to share the same stack size, this should work for almost any mod and all vanilla items as well</value>
+  </data>
+  <data name="String83" xml:space="preserve">
+    <value>Forced Stack Size Amount</value>
+  </data>
+  <data name="String84" xml:space="preserve">
+    <value>Set the stack size amount</value>
+  </data>
+  <data name="String85" xml:space="preserve">
+    <value>Change Carried Items Stack Size Amount</value>
+  </data>
+  <data name="String86" xml:space="preserve">
+    <value>Enable the setting of Carried Items Stack Sizes only - Not to be used with forced as it will override forced stack sizes and use the below value instead.</value>
+  </data>
+  <data name="String87" xml:space="preserve">
+    <value>Forced Stack Size Amount for carried items</value>
+  </data>
+  <data name="String88" xml:space="preserve">
+    <value>Carried Items Stack size amount, Forced Same Stack amount will override this value</value>
+  </data>
+  <data name="String89" xml:space="preserve">
+    <value>Use Config Overrides</value>
+  </data>
+  <data name="String9" xml:space="preserve">
+    <value>Command {0} was unable to be added to Group {1}, potential issue with the commands?</value>
+  </data>
+  <data name="String90" xml:space="preserve">
+    <value>Enable the Use of Config overrides for Recipes, only enable this if you wish to configure the recipes yourself</value>
+  </data>
+  <data name="String91" xml:space="preserve">
+    <value>Remove Stockpile Stack Restriction</value>
+  </data>
+  <data name="String92" xml:space="preserve">
+    <value>Removes the Stack Limit Restriction in Stockpiles. Requires Manual Removal after Disable. Requires a Server Restart.</value>
+  </data>
+  <data name="String93" xml:space="preserve">
+    <value>Enable Lucky Strike For All</value>
+  </data>
+  <data name="String94" xml:space="preserve">
+    <value>Enables Lucky Strike as a Default Thing, which means the talent is no longer needed, Requires Manual Removal after Disable. Requires Server Restart.</value>
+  </data>
+</root>

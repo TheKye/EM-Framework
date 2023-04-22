@@ -98,7 +98,7 @@ namespace Eco.EM.Framework.ModTools.Testing
                 }
                 catch
                 {
-                    user.MsgLocStr($"Unable to place {itemList[i].Name}. Skipped placement, make report.");
+                    user.MsgLocStr(string.Format($"Unable to place {0}. Skipped placement, make report.", itemList[i].Name));
                     i++;
                 }
             }
@@ -120,7 +120,7 @@ namespace Eco.EM.Framework.ModTools.Testing
                 }
                 catch
                 {
-                    user.MsgLocStr($"Unable to place {obj.Name}. Skipped placement, make report.");
+                    user.MsgLocStr(string.Format($"Unable to place {0}. Skipped placement, make report.", obj.Name));
                 }
             }
         }

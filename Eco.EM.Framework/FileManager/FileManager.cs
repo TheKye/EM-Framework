@@ -198,7 +198,7 @@ namespace Eco.EM.Framework.FileManager
             }
             catch
             {
-                Log.WriteErrorLineLocStr($"There Was an Error Writing to: {SavePath}. Do you have Read Write Access for the server?");
+                Log.WriteErrorLineLocStr(string.Format($"There Was an Error Writing to: {0}. Do you have Read Write Access for the server?", SavePath));
             }
         }
 
@@ -210,7 +210,7 @@ namespace Eco.EM.Framework.FileManager
             }
             catch
             {
-                Log.WriteErrorLineLocStr($"There Was an Error Writing to: {SavePath}. Do you have Read Write Access for the server?");
+                Log.WriteErrorLineLocStr(string.Format($"There Was an Error Writing to: {0}. Do you have Read Write Access for the server?", SavePath));
             }
         }
 

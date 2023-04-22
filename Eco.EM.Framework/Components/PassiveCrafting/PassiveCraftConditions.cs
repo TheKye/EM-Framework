@@ -80,7 +80,7 @@ namespace Eco.EM.Framework.Components
         readonly int requiredNumber;
         readonly List<Type> plantTypes;
         readonly WorldObject parent;
-        public string FailString => $"There are not enough plants in the active area ({radius} blocks). You require at least {requiredNumber}.";
+        public string FailString => string.Format($"There are not enough plants in the active area ({0} blocks). You require at least {1}.", radius, requiredNumber);
 
         public PlantAreaCraftCondition(WorldObject parent, int checkRadius, int requiredNumber, Type[] plantTypes = null)
         {
@@ -118,7 +118,7 @@ namespace Eco.EM.Framework.Components
         private readonly int radius;
         private readonly int requiredNumber;
 
-        public string FailString => $"There are not enough {RequiredObjectName()} in the active area ({radius} blocks). You require at least {requiredNumber}.";
+        public string FailString => string.Format($"There are not enough {0} in the active area ({1} blocks). You require at least {2}.", RequiredObjectName(), radius, requiredNumber);
 
         public RequiredObjectInAreaCraftCondition(WorldObject parent, int checkRadius, int requiredNumber, Type worldObjectType)
         {
@@ -144,7 +144,7 @@ namespace Eco.EM.Framework.Components
         private readonly int radius;
         private readonly int maxTotal;
 
-        public string FailString => $"There are too many {RequiredObjectName()} in the active area ({radius} blocks). You require no more than {maxTotal}.";
+        public string FailString => string.Format($"There are too many {0} in the active area ({1} blocks). You require no more than {2}.", RequiredObjectName(), radius, maxTotal);
 
         public SaturatedObjectInAreaCraftCondition(WorldObject parent, int checkRadius, int requiredNumber, Type worldObjectType)
         {
