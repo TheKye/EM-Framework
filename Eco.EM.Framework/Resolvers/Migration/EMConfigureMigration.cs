@@ -14,7 +14,7 @@ namespace Eco.EM.Framework.Resolvers
 {
     [ChatCommandHandler]
     [Priority(-200)]
-    public class EMConfigureMigrationPlugin : Singleton<EMConfigureMigrationPlugin>, IModKitPlugin, IModInit
+    public class EMConfigureMigrationPlugin : Singleton<EMConfigureMigrationPlugin>
     {
         private static PluginConfig<EMConfigureConfig> config;
         public IPluginConfig PluginConfig => config;
@@ -26,14 +26,15 @@ namespace Eco.EM.Framework.Resolvers
 
         static EMConfigureMigrationPlugin()
         {
-            if (!Migrated)
-                config = new PluginConfig<EMConfigureConfig>("EMConfigure");
-            else
-                config = new PluginConfig<EMConfigureConfig>("EMConfigureOld");
+                
         }
 
-        public static void Initialize()
+        public void Initialize()
         {
+            config = new PluginConfig<EMConfigureConfig>("EMConfigureOld");
+
+            if (Config.MigrationPerformed)
+                Migrated = true;
             if (!Config.MigrationPerformed)
             {
                 RunMigration();

@@ -18,7 +18,7 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<OutputPath>..\bin\9.6\Framework\</OutputPath>
+		<OutputPath>..\bin\9.7.12\Framework\</OutputPath>
 		<Description>The EM Framework is a bundle of Tools and utilities for Modders of the Game Eco in order to improve their modding experience</Description>
 		<PackageIcon>EMICON-text.png</PackageIcon>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
