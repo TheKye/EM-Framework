@@ -95,7 +95,7 @@ namespace Eco.EM.Framework.Resolvers
     public class RecipeDefaultModel : RecipeModel
     {
         [JsonIgnore, ReadOnly(true)] public string HiddenName { get; set; }
-        [JsonIgnore, ReadOnly(true)] public LocString LocalizableName { get; set; }
+        [LocDisplayName("Recipe Name")] public LocString LocalizableName { get; set; }
         [JsonIgnore, ReadOnly(true)] public Type RequiredSkillType { get; set; }
         [JsonIgnore, ReadOnly(true)] public int RequiredSkillLevel { get; set; }
         [JsonIgnore, ReadOnly(true)] public Type IngredientImprovementTalents { get; set; }
