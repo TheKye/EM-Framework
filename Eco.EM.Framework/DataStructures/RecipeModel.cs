@@ -74,6 +74,7 @@ namespace Eco.EM.Framework.Resolvers
     public class RecipeModel : ModelBase
     {
         [LocDisplayName("Crafting Experience - Baseline Value")] public float BaseExperienceOnCraft { get; set; }
+        [LocDisplayName("Recipe Name")] public string LocalizableName { get; set; }
         [LocDisplayName("Labor - Baseline Value")] public float BaseLabor { get; set; }
         [LocDisplayName("Labor - Is Static")] public bool LaborIsStatic { get; set; }
         [LocDisplayName("Craft Time - Baseline Value")] public float BaseCraftTime { get; set; }
@@ -95,7 +96,6 @@ namespace Eco.EM.Framework.Resolvers
     public class RecipeDefaultModel : RecipeModel
     {
         [JsonIgnore, ReadOnly(true)] public string HiddenName { get; set; }
-        [LocDisplayName("Recipe Name")] public LocString LocalizableName { get; set; }
         [JsonIgnore, ReadOnly(true)] public Type RequiredSkillType { get; set; }
         [JsonIgnore, ReadOnly(true)] public int RequiredSkillLevel { get; set; }
         [JsonIgnore, ReadOnly(true)] public Type IngredientImprovementTalents { get; set; }

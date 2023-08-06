@@ -4,23 +4,27 @@ using Eco.Gameplay.Housing.PropertyValues;
 using Eco.Shared.Localization;
 using Eco.Shared.Utils;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Eco.EM.Framework.Resolvers
 {
     public interface IConfigurableHousing { }
 
-    public class EMHousingResolver : AutoSingleton<EMHousingResolver>
+    public class EMHousingResolver : Singleton<EMHousingResolver>
     {
-        public Dictionary<string, HousingModel> DefaultHomeOverrides { get; private set; } = new();
-        public Dictionary<string, HousingModel> LoadedHomeOverrides { get; private set; } = new();
+        public ConcurrentDictionary<string, HousingModel> DefaultHomeOverrides { get; private set; } = new();
+        public ConcurrentDictionary<string, HousingModel> LoadedHomeOverrides { get; private set; } = new();
 
         public HomeFurnishingValue ResolveHomeValue(Type housing) => GetHomeValue(housing);
 
         public static void AddDefaults(HousingModel defaults)
         {
-            Obj.DefaultHomeOverrides.Add(defaults.ModelType, defaults);
+            var yes = Obj.DefaultHomeOverrides.TryAdd(defaults.ModelType, defaults);
+            if (yes)
+                System.Console.WriteLine($"{defaults.DisplayName} added");
         }
 
         private HomeFurnishingValue GetHomeValue(Type housingItem)
@@ -66,7 +70,7 @@ namespace Eco.EM.Framework.Resolvers
             return HomeValue;
         }
 
-        public void Initialize()
+        public async void Initialize()
         {
             SerializedSynchronizedCollection<HousingModel> newModels = new();
             var previousModels = newModels;
@@ -76,51 +80,55 @@ namespace Eco.EM.Framework.Resolvers
             }
             catch
             {
-                previousModels = new();
+                previousModels = newModels;
             }
             foreach (var type in typeof(IConfigurableHousing).ConcreteTypes())
             {
                 System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(type.TypeHandle);
             }
 
-            var loadtypes = DefaultHomeOverrides.Values.ToList();
-
-            // for each type that exists that we are trying to load
-            foreach (var lModel in loadtypes)
-            {
-                var m = previousModels.SingleOrDefault(x => x.ModelType == lModel.ModelType);
-
-                if (lModel.RoomType.Equals("LivingRoom"))
-                    lModel.RoomType = "Living Room";
-                if (m.RoomType.Equals("LivingRoom"))
-                    m.RoomType = "Living Room";
-
-                if (m != null)
+           await Task.Run(() => {
+                var loadtypes = DefaultHomeOverrides.Values.ToList();
+                // for each type that exists that we are trying to load
+                foreach (var lModel in loadtypes)
                 {
-                    if (HousingConfig.GetRoomCategory(m.RoomType) == null || m.RoomType == "General")
+                    var m = previousModels.SingleOrDefault(x => x.ModelType == lModel.ModelType);
+
+                    if (lModel.RoomType.Equals("LivingRoom"))
+                        lModel.RoomType = "Living Room";
+                    if (m.RoomType.Equals("LivingRoom"))
+                        m.RoomType = "Living Room";
+
+                    if (m != null)
                     {
-                        ConsoleColors.PrintConsoleMultiColored("[EM Framework] (EM Configure) ", ConsoleColor.Magenta, Localizer.DoStr($"Old Data Found In Housing Data, Performing Migration on {m.DisplayName}"), ConsoleColor.Yellow);
-                        m.RoomType = HousingConfig.GetRoomCategory("Decoration").Name;
+                        if (HousingConfig.GetRoomCategory(m.RoomType) == null || m.RoomType == "General")
+                        {
+                            ConsoleColors.PrintConsoleMultiColored("[EM Framework] (EM Configure) ", ConsoleColor.Magenta, Localizer.DoStr($"Old Data Found In Housing Data, Performing Migration on {m.DisplayName}"), ConsoleColor.Yellow);
+                            m.RoomType = HousingConfig.GetRoomCategory("Decoration").Name;
 
+                        }
+
+                        newModels.Add(m);
                     }
+                    else
+                    {
+                        if (HousingConfig.GetRoomCategory(lModel.RoomType) == null || lModel.RoomType == "General")
+                            lModel.RoomType = HousingConfig.GetRoomCategory("Decoration").Name;
 
-                    newModels.Add(m);
+                        newModels.Add(lModel);
+                    }
                 }
-                else
-                {
-                    if (HousingConfig.GetRoomCategory(lModel.RoomType) == null || lModel.RoomType == "General")
-                        lModel.RoomType = HousingConfig.GetRoomCategory("Decoration").Name;
+            });
 
-                    newModels.Add(lModel);
-                }
-            }
+
+
 
             EMHousingValuePlugin.Config.EMHousingValue = newModels;
 
             foreach (var model in newModels)
             {
                 if (!LoadedHomeOverrides.ContainsKey(model.ModelType))
-                    LoadedHomeOverrides.Add(model.ModelType, model);
+                    LoadedHomeOverrides.TryAdd(model.ModelType, model);
             }
         }
     }

@@ -2,6 +2,7 @@
 using Eco.Gameplay.Players;
 using Eco.Shared.Utils;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -11,8 +12,8 @@ namespace Eco.EM.Framework.Resolvers
 
     public class EMFoodItemResolver : AutoSingleton<EMFoodItemResolver>
     {
-        public Dictionary<string, FoodItemModel> DefaultFoodOverrides { get; private set; } = new();
-        public Dictionary<string, FoodItemModel> LoadedFoodOverrides { get; private set; } = new();
+        public ConcurrentDictionary<string, FoodItemModel> DefaultFoodOverrides { get; private set; } = new();
+        public ConcurrentDictionary<string, FoodItemModel> LoadedFoodOverrides { get; private set; } = new();
 
         public Nutrients ResolveNutrients(IConfigurableFoodItem nutrients) => GetNutrients(nutrients);
         public float ResolveCalories(IConfigurableFoodItem calories) => GetCalories(calories);
@@ -36,7 +37,7 @@ namespace Eco.EM.Framework.Resolvers
 
         public static void AddDefaults(FoodItemModel defaults)
         {
-            Obj.DefaultFoodOverrides.Add(defaults.ModelType, defaults);
+            Obj.DefaultFoodOverrides.TryAdd(defaults.ModelType, defaults);
         }
 
         private Nutrients GetNutrients(IConfigurableFoodItem nutrient)
@@ -123,7 +124,7 @@ namespace Eco.EM.Framework.Resolvers
             foreach (var model in newModels)
             {
                 if (!LoadedFoodOverrides.ContainsKey(model.ModelType))
-                    LoadedFoodOverrides.Add(model.ModelType, model);
+                    LoadedFoodOverrides.TryAdd(model.ModelType, model);
             }
         }
     }

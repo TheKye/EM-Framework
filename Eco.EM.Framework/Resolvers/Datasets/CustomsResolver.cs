@@ -1,6 +1,7 @@
 ﻿using Eco.Core.Utils;
 using Eco.Shared.Utils;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -11,13 +12,13 @@ namespace Eco.EM.Framework.Resolvers
     /// <summary>Uses CustomsModels to make a configurable section in the EMConfigure.eco file</summary>
     public class EMCustomsResolver : AutoSingleton<EMCustomsResolver>
     {
-        public Dictionary<string, CustomsModel> DefaultCustomsOverrides { get; private set; } = new();
-        public Dictionary<string, CustomsModel> LoadedCustomsOverrides { get; private set; } = new();
+        public ConcurrentDictionary<string, CustomsModel> DefaultCustomsOverrides { get; private set; } = new();
+        public ConcurrentDictionary<string, CustomsModel> LoadedCustomsOverrides { get; private set; } = new();
         /// <summary>Adds a Model to the DefaultCustomsOverrides that can be configured and accesed later on</summary>
         /// <param name="defaults">the default Model to use</param>
         public static void AddDefaults(CustomsModel defaults)
         {
-            Obj.DefaultCustomsOverrides.Add(defaults.ModelType, defaults);
+            Obj.DefaultCustomsOverrides.TryAdd(defaults.ModelType, defaults);
         }
         /// <summary>Uses a key to filter the object's data and returns the value that its set to</summary>
         /// <param name="objectType">the type of the object holding the data used to filter though the LoadedCustomsOverrides to get that objects data</param>
@@ -65,7 +66,7 @@ namespace Eco.EM.Framework.Resolvers
             foreach (var model in newModels)
             {
                 if (!LoadedCustomsOverrides.ContainsKey(model.ModelType))
-                    LoadedCustomsOverrides.Add(model.ModelType, model);
+                    LoadedCustomsOverrides.TryAdd(model.ModelType, model);
             }
         }
     }

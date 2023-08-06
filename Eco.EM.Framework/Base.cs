@@ -30,6 +30,16 @@ namespace Eco.EM.Framework
             return saveLocation;
         }
 
+        public static string GetRelevantDirectory(string path)
+        {
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                return Path.Combine(AssemblyLocation, "Undefined");
+            }
+
+            return Path.Combine(AssemblyLocation, path);
+        }
+
         static void CreateDirectoryIfNotExist() => CreateDirectoryIfNotExist(SaveLocation);
         public static void CreateDirectoryIfNotExist(string Path)
         {

@@ -30,6 +30,7 @@ namespace Eco.EM.Framework.Resolvers
         public static void Initialize()
         {
             EMRecipeResolver.Obj.Initialize();
+
             config.SaveAsync();
         }
 

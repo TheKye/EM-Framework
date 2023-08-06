@@ -63,7 +63,7 @@ namespace Eco.EM.Framework.Resolvers
             EMHousingValuePlugin.Config.EMHousingValue = Config.EMHousingValue;
             EMItemWeightPlugin.Config.EMItemWeight = Config.EMItemWeight;
             EMLinkDistancesPlugin.Config.EMLinkDistances = Config.EMLinkDistances;
-            EMRecipesPlugin.Config.EMRecipes = Config.EMRecipes;
+            //EMRecipesPlugin.Config.EMRecipes = Config.EMRecipes;
             EMStackSizesPlugin.Config.EMStackSizes = Config.EMStackSizes;
             EMStorageSlotsPlugin.Config.EMStorageSlots = Config.EMStorageSlots;
             EMVehiclesPlugin.Config.EMVehicles = Config.EMVehicles;

@@ -2,6 +2,7 @@
 using Eco.Shared.Localization;
 using Eco.Shared.Utils;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,12 +20,12 @@ namespace Eco.EM.Framework.Resolvers
     // If using the Fuel Consumption Component : Set Fuel Consumption Rate
     public class EMVehicleResolver : AutoSingleton<EMVehicleResolver>
     {
-        public Dictionary<string, VehicleModel> DefaultVehicleOverrides { get; private set; } = new();
-        public Dictionary<string, VehicleModel> LoadedVehicleOverrides { get; private set; } = new();
+        public ConcurrentDictionary<string, VehicleModel> DefaultVehicleOverrides { get; private set; } = new();
+        public ConcurrentDictionary<string, VehicleModel> LoadedVehicleOverrides { get; private set; } = new();
 
         public static void AddDefaults(VehicleModel defaults)
         {
-            Obj.DefaultVehicleOverrides.Add(defaults.ModelType, defaults);
+            Obj.DefaultVehicleOverrides.TryAdd(defaults.ModelType, defaults);
         }
 
         public string[] ResolveFuelTagList(IConfigurableVehicle obj) => GetFuelTagList(obj);
@@ -192,7 +193,7 @@ namespace Eco.EM.Framework.Resolvers
             foreach (var model in newModels)
             {
                 if (!LoadedVehicleOverrides.ContainsKey(model.ModelType))
-                    LoadedVehicleOverrides.Add(model.ModelType, model);
+                    LoadedVehicleOverrides.TryAdd(model.ModelType, model);
             }
         }
     }

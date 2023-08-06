@@ -155,7 +155,7 @@ namespace Eco.EM.Framework
                             PrintSinglePackConsole(p.Key, p.Value, p.Value);
                         else
                         {
-                            chat += string.Format("<color=red>{0}</color>", "An error occured while attempting to check versions.Please contact the EM Development Team");
+                         //   chat += string.Format("<color=red>{0}</color>", "An error occured while attempting to check versions.Please contact the EM Development Team");
                             chat += PrintSingleStringChat(p.Key, p.Value, p.Value);
                         }
                     }
