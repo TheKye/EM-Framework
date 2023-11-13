@@ -72,7 +72,6 @@ namespace Eco.EM.Framework.Components
         public virtual void EnableAutoDoor(Player player)
         {
             enabled = true;
-            Tick();
         }
 
         [RPC, Autogen]
@@ -86,7 +85,7 @@ namespace Eco.EM.Framework.Components
             if (enabled)
                 OperateAutoDoor();
             base.Tick();
-            status.SetStatusMessage(true, Localizer.DoStr(string.Format("Automatic Door Module Installed, Automatic Doors Enabled and are {0}", enabled ? "Working!" : "Idle.")));
+            status.SetStatusMessage(true, Localizer.DoStr(string.Format("Automatic Door Module Installed, Automatic Doors Enabled and are {0}. Guests are {1}", enabled ? "Working!" : "Idle.", allowGuests ? "Allowed" : "Not Allowed")));
         }
 
         protected virtual void OperateAutoDoor()
@@ -99,32 +98,23 @@ namespace Eco.EM.Framework.Components
                     switch (obj)
                     {
                         case DoorObject wo when Parent is WorldObject:
-                            if (wo.Open && PlayerSensor.AuthorizedPersonnelNear(wo, (int)DetectionRange) || wo.Open && PlayerSensor.AnyoneNear(wo, (int)DetectionRange) && AllowGuests)
+                            if (wo.GetComponent<DoorComponent>().IsOpen && (PlayerSensor.AuthorizedPersonnelNear(wo, (int)DetectionRange) || wo.GetComponent<DoorComponent>().IsOpen && PlayerSensor.AnyoneNear(wo, (int)DetectionRange) && AllowGuests))
                                 return;
-
-                            wo.SetOpen(PlayerSensor.AuthorizedPersonnelNear(wo, (int)DetectionRange) || PlayerSensor.AnyoneNear(wo, (int)DetectionRange) && AllowGuests);
+                            else if (PlayerSensor.AnyoneNear(wo, (int)DetectionRange) && AllowGuests)
+                                wo.GetComponent<DoorComponent>().SetOpen(PlayerSensor.AnyoneNear(wo, (int)DetectionRange));
+                            else
+                                wo.GetComponent<DoorComponent>().SetOpen(PlayerSensor.AuthorizedPersonnelNear(wo, (int)DetectionRange));
                             break;
 
                         case EmDoor woe when Parent is WorldObject:
-                            if (woe.Open && PlayerSensor.AuthorizedPersonnelNear(woe, (int)DetectionRange) || woe.Open && PlayerSensor.AnyoneNear(woe, (int)DetectionRange) && AllowGuests)
+                            if (woe.Open && (PlayerSensor.AuthorizedPersonnelNear(woe, (int)DetectionRange) || woe.Open && PlayerSensor.AnyoneNear(woe, (int)DetectionRange) && AllowGuests))
                                 return;
 
-                            woe.SetOpen(PlayerSensor.AuthorizedPersonnelNear(woe, (int)DetectionRange) || PlayerSensor.AnyoneNear(woe, (int)DetectionRange) && AllowGuests);
+                            else if (PlayerSensor.AnyoneNear(woe, (int)DetectionRange) && AllowGuests)
+                                woe.SetOpen(PlayerSensor.AnyoneNear(woe, (int)DetectionRange));
+                            else
+                                woe.SetOpen(PlayerSensor.AuthorizedPersonnelNear(woe, (int)DetectionRange));
                             break;
-
-                        case WorldObject wod when Parent is WorldObject && wod.HasComponent<OnOffComponent>():
-                            {
-                                var on = wod.GetComponent<OnOffComponent>();
-                                if (!on.On && PlayerSensor.AuthorizedPersonnelNear(wod, (int)DetectionRange) || !on.On && PlayerSensor.AnyoneNear(wod, (int)DetectionRange) && AllowGuests)
-                                    return;
-                                bool open = false;
-                                if (PlayerSensor.AuthorizedPersonnelNear(wod, (int)DetectionRange) || PlayerSensor.AnyoneNear(wod, (int)DetectionRange) && AllowGuests)
-                                    open = false;
-                                else
-                                    open = true;
-                                on.SetOnOff(null, open);
-                                break;
-                            }
                     }
                 });
         }

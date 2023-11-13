@@ -1,6 +1,7 @@
 ﻿using Eco.Core.Plugins.Interfaces;
 using Eco.Core.Utils;
 using Eco.Gameplay.Items;
+using Eco.Gameplay.Items.Recipes;
 using Eco.Shared.Localization;
 using System;
 using System.Collections.Generic;
@@ -34,7 +35,7 @@ namespace Eco.EM.Framework.Utils
 
         private static void BuildRecipeLists()
         {
-            var all = RecipeFamily.AllRecipes;
+            var all = RecipeManager.AllRecipeFamilies;
             foreach (var family in all)
             {
                 family.Recipes.ForEach(r => { if (!VanillaRecipe.Contains(r)) VanillaRecipe.Add(r); });
@@ -82,7 +83,7 @@ namespace Eco.EM.Framework.Utils
 
 
                 }
-                foreach (var e in r.Items)
+                foreach (var e in r.Products)
                 {
                     _dtrow["Result"] = e.Item.DisplayName;
                     _dtrow["ResultAmount"] = e.Quantity.GetBaseValue.ToString();

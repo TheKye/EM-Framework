@@ -9,6 +9,11 @@ using Eco.Shared.IoC;
 using System;
 using Eco.Gameplay.Items;
 using Eco.Mods.TechTree;
+using Eco.Gameplay.Interactions.Interactors;
+using Eco.Gameplay.Players;
+using Eco.Shared.SharedTypes;
+using Eco.Core.Controller;
+using Eco.Gameplay.Systems.EnvVars;
 
 /// <summary>
 /// This is out basic component to add to all our doors for their functionality, This is just so 
@@ -23,30 +28,13 @@ namespace Eco.EM.Framework.Extentsions
     public abstract class EmDoor : WorldObject
     {
         [Serialized] public  bool OpensOut { get; set; }
-        [Serialized] public bool Open { get; set; }
+        [Serialized, Notify, EnvVar] public bool Open { get; set; }
         [Serialized] public bool HasModule { get; set; }
         [Serialized] public float Range { get; set; }
 
-        public override InteractResult OnActRight(InteractionContext context)
-        {
-            if (context != null)
-            {
-                var isAuthorized = ServiceHolder<IAuthManager>.Obj.IsAuthorized(context);
-                if (isAuthorized)
-                {
-                    ToggleOpen();
-                    return InteractResult.Success;
-                }
-                else
-                {
-                    context.Player.ErrorLocStr("You Are Not Authorized To Do That");
-                    return InteractResult.Fail;
-                }
-            }
-            else
-                return InteractResult.Success;
-
-        }
+        [Interaction(InteractionTrigger.RightClick, "Open", DisallowedEnvVars = new[] { nameof(Open) })]
+        [Interaction(InteractionTrigger.RightClick, "Close", RequiredEnvVars = new[] { nameof(Open) })]
+        public void Toggle(Player player, InteractionTriggerInfo trigger, InteractionTarget target) => this.ToggleOpen();
 
         protected override void Initialize()
         {

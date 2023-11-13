@@ -22,14 +22,14 @@ namespace Eco.EM.Framework.Utils
             try
             {
                 tag = TagManager.GetTagOrFail(itemType);
-                tagItem = Item.AllItems.Where(x => x.Tags().Contains(tag)).ToList();
+                tagItem = Item.AllItemsExceptHidden.Where(x => x.Tags().Contains(tag)).ToList();
             }
             catch (ArgumentException)
             {
                 tag = null;
             }
             if (tag == null)
-                item = CommandsUtil.ClosestMatchingEntity(null, itemType, Item.AllItems, x => x.GetType().Name, x => x.DisplayName);
+                item = CommandsUtil.ClosestMatchingEntity(null, itemType, Item.AllItemsExceptHidden, x => x.GetType().Name, x => x.DisplayName);
 
             if (item == null && tag == null)
             {
@@ -117,7 +117,7 @@ namespace Eco.EM.Framework.Utils
                 var sellOffers = new List<OfferedItem>();
                 var buyOffers = new List<OfferedItem>();
                 List<OfferedItem> Items = new();
-                foreach (var item in Item.AllItems)
+                foreach (var item in Item.AllItemsExceptHidden)
                 {
 
                     sellOffers = Informatics.GetSellingByItemType(item);

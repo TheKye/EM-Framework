@@ -1,18 +1,22 @@
 ﻿using Eco.Core.Utils;
+using Eco.EM.Framework.Text;
 using Eco.Gameplay.Components;
 using Eco.Gameplay.Interactions;
+using Eco.Gameplay.Interactions.Interactors;
 using Eco.Gameplay.Items;
 using Eco.Gameplay.Objects;
+using Eco.Gameplay.Players;
 using Eco.Shared.Localization;
 using Eco.Shared.Math;
 using Eco.Shared.Serialization;
+using Eco.Shared.SharedTypes;
 using Eco.Shared.Utils;
 
 namespace Eco.EM.Framework.Components
 {
     // Animal Trap that requires no bait for operation but needs to be cleared on each catch.
     [Serialized]
-    public class SettableAnimalTrapComponent : BaseAnimalTrapComponent, IInteractable
+    public class SettableAnimalTrapComponent : BaseAnimalTrapComponent
     {
         protected bool enabled;
         public override bool Enabled => enabled;
@@ -55,23 +59,26 @@ namespace Eco.EM.Framework.Components
             }
         }
 
-        public virtual InteractResult OnActInteract(InteractionContext context) => InteractResult.NoOp;
-        public virtual InteractResult OnActLeft(InteractionContext context) => InteractResult.NoOp;
-        public virtual InteractResult OnActRight(InteractionContext context)
+        [Interaction(InteractionTrigger.RightClick, "Set Trap")]
+        public void SetTrap(Player context, InteractionTarget target, InteractionTriggerInfo info)
         {
-            if (Enabled) return InteractResult.FailureLoc($"This Trap is already Set.");
-            
+            if (Enabled) return;
+
             if (!storage.Inventory.IsEmpty)
             {
-                var result = storage.Inventory.MoveAsManyItemsAsPossible(context.Player.User.Inventory,null,null);
-                if (result.Val < 1) return InteractResult.FailureLoc($"Unable to clear and set trap, please make room in your inventory"); 
+                var result = storage.Inventory.MoveAsManyItemsAsPossible(context.User.Inventory, null, null);
+                if (result.Val < 1)
+                {
+
+                    context.ErrorLocStr($"Unable to clear and set trap, please make room in your inventory");
+                    return;
+                }
             }
 
+            context.User.Inventory.RemoveItem(context.User.ToolbarSelected.Item.Type);
             TrapSet = true;
             UpdateTrap();
-            return InteractResult.SuccessLoc($"Trap set");
+            context.MsgLocStr($"Trap set".Green());
         }
-
-        public virtual InteractResult OnPreInteractionPass(InteractionContext context) => InteractResult.NoOp;
     }
 }

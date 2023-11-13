@@ -13,7 +13,7 @@ namespace Eco.EM.Framework.Resolvers
         {
             IEnumerable<Item> locals;
 
-            locals = Item.AllItems.Where(x => x.Category != "Hidden" && ItemAttribute.Has<MaxStackSizeAttribute>(x.Type) && !ItemAttribute.Has<IgnoreStackSizeAttribute>(x.Type) && x.DisplayName != "Hands");
+            locals = Item.AllItemsExceptHidden.Where(x => x.Category != "Hidden" && ItemAttribute.Has<MaxStackSizeAttribute>(x.Type) && !ItemAttribute.Has<IgnoreStackSizeAttribute>(x.Type) && x.DisplayName != "Hands");
             locals = locals.OrderBy(x => x.DisplayName);
             MaxStackSizeAttribute.Default = EMConfigurePlugin.Config.ForceSameStackSizes ? EMConfigurePlugin.Config.ForcedSameStackAmount : EMConfigurePlugin.Config.DefaultMaxStackSize;
             BuildStackSizeList(locals);

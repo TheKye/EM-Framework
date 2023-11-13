@@ -9,6 +9,8 @@ using Eco.Core.Utils;
 using Eco.EM.Framework.Utils;
 using Eco.Gameplay.Skills;
 using System.Threading.Tasks;
+using System.Collections.Concurrent;
+using Eco.Gameplay.Items.Recipes;
 
 // This mod is created by Elixr Mods for Eco under the SLG TOS. 
 // Please feel free to join our community Discord which aims to brings together modders of Eco to share knowledge, 
@@ -42,7 +44,7 @@ namespace Eco.EM.Framework.Resolvers
 
         public static void AddDefaults(RecipeDefaultModel defaults)
         {
-            Obj.LoadedDefaultRecipes.Add(defaults.ModelType, defaults);
+            Obj.LoadedDefaultRecipes.TryAdd(defaults.ModelType, defaults);
         }
 
         // Individual RecipeFamily part resolvers.
@@ -52,6 +54,25 @@ namespace Eco.EM.Framework.Resolvers
         public Type ResolveStation(IConfigurableRecipe recipe) => GetConfigStation(recipe);
 
         public float ResolveExperience(IConfigurableRecipe recipe) => GetExperience(recipe);
+
+        public LocString ResolveRecipeName(IConfigurableRecipe recipe) => GetRecipeName(recipe);
+
+        private LocString GetRecipeName(IConfigurableRecipe recipe)
+        {
+            var dModel = LoadedDefaultRecipes[recipe.GetType().Name];
+            // check if config override
+            var loaded = LoadedConfigRecipes.TryGetValue(recipe.GetType().Name, out RecipeModel model);
+            if (loaded && model.LocalizableName.Equals(dModel.LocalizableName))
+                return Localizer.DoStr(model.LocalizableName);
+
+            // check if mod override
+            loaded = ModRecipeOverrides.TryGetValue(recipe.GetType().Name, out model);
+            if (loaded)
+                return Localizer.DoStr(model.LocalizableName);
+
+            // return default
+            return Localizer.DoStr(dModel.LocalizableName);
+        }
 
         private float GetExperience(IConfigurableRecipe recipe)
         {
@@ -102,7 +123,7 @@ namespace Eco.EM.Framework.Resolvers
             var recipe = new Recipe();
             recipe.Init(
             def.HiddenName,
-            def.LocalizableName,
+            Localizer.DoStr(model.LocalizableName),
             CreateIngredientList(model, def.RequiredSkillType, def.IngredientImprovementTalents),
             CreateProductList(model));
             return recipe;
@@ -113,7 +134,7 @@ namespace Eco.EM.Framework.Resolvers
             var recipe = new Recipe();
             recipe.Init(
             def.HiddenName,
-            def.LocalizableName,
+            Localizer.DoStr(def.LocalizableName),
             CreateIngredientList(def, def.RequiredSkillType, def.IngredientImprovementTalents),
             CreateProductList(def));
             return recipe;
@@ -296,10 +317,10 @@ namespace Eco.EM.Framework.Resolvers
 
 
         // SLG code for creating IDynamicValues of RecipeFamilies
-        private static IDynamicValue CreateCraftTimeValue(float start) => new ConstantValue(start * RecipeFamily.CraftTimeModifier);
+        private static IDynamicValue CreateCraftTimeValue(float start) => new ConstantValue(start * RecipeManager.CraftTimeModifier);
         private static IDynamicValue CreateCraftTimeValue(Type beneficiary, float start, Type skillType, params Type[] talents)
         {
-            var smv = new ModuleModifiedValue(start * RecipeFamily.CraftTimeModifier, skillType, DynamicValueType.Speed);
+            var smv = new ModuleModifiedValue(start * RecipeManager.CraftTimeModifier, skillType, DynamicValueType.Speed);
             return talents != null
                 ? new MultiDynamicValue(MultiDynamicOps.Multiply, talents.Select(x => new TalentModifiedValue(beneficiary, x) as IDynamicValue).Concat(new[] { smv }).ToArray())
                 : smv;
@@ -323,7 +344,7 @@ namespace Eco.EM.Framework.Resolvers
         }
 
         // Load overrides from config changes.
-        private async void LoadConfigOverrides()
+        private void LoadConfigOverrides()
         {
             SerializedSynchronizedCollection<RecipeModel> newModels = new();
             var previousModels = EMRecipesPlugin.Config.EMRecipes;
@@ -336,16 +357,16 @@ namespace Eco.EM.Framework.Resolvers
                 // for each type that exists that we are trying to load
                 foreach (var dModel in loadtypes)
                 {
-                    var m = previousModels.SingleOrDefault(x => x.ModelType == dModel.ModelType);
+                    var m = previousModels.FirstOrDefault(x => x.ModelType == dModel.ModelType);
                     if (m != null && EMConfigurePlugin.Config.useConfigOverrides && !m.Equals(dModel))
                     {
-                        newModels.Add(m);
+                            newModels.Add(m);
 #if DEBUG
                     ConsoleColors.PrintConsoleMultiColored("[EM Framework] ", ConsoleColor.Magenta, Localizer.DoStr($"Loaded Config Override For: {m.ModelType}"), ConsoleColor.Yellow);
 #endif
                     }
                     else
-                        newModels.Add(dModel);
+                            newModels.Add(dModel);
                 }
             }
             EMRecipesPlugin.Config.EMRecipes = newModels;
@@ -354,10 +375,7 @@ namespace Eco.EM.Framework.Resolvers
             {
                 if (!LoadedConfigRecipes.ContainsKey(model.ModelType))
                 {
-                    if (!LoadedConfigRecipes.ContainsKey(model.ModelType))
-                    {
-                        LoadedConfigRecipes.Add(model.ModelType, model);
-                    }
+                    LoadedConfigRecipes.TryAdd(model.ModelType, model);
                 }
             }
         }
@@ -401,7 +419,7 @@ namespace Eco.EM.Framework.Resolvers
         {
             if (!ModRecipeOverrides.ContainsKey(recipeType))
             {
-                ModRecipeOverrides.Add(recipeType, r);
+                ModRecipeOverrides.TryAdd(recipeType, r);
             }
         }
     }

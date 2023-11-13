@@ -9,6 +9,8 @@ using System;
 using System.Collections.Generic;
 using Eco.Shared.Localization;
 using Eco.Shared.Utils;
+using Eco.Gameplay.Components.Storage;
+using Eco.Gameplay.Items.Recipes;
 
 // This mod is created by Elixr Mods for Eco under the SLG TOS. 
 // Please feel free to join our community Discord which aims to brings together modders of Eco to share knowledge, 
@@ -49,7 +51,7 @@ namespace Eco.EM.Framework.Components
         public void Initialize(double passiveCraftTime, Recipe recipe)
         {
             List<(Item, float)> prods = new();
-            foreach (var e in recipe.Items) { prods.Add((e.Item, e.Quantity.GetBaseValue)); };
+            foreach (var e in recipe.Products) { prods.Add((e.Item, e.Quantity.GetBaseValue)); };
 
             List<(Item, float)> ings = new();
             foreach (var e in recipe.Ingredients) { ings.Add((e.Item, e.Quantity.GetBaseValue)); };

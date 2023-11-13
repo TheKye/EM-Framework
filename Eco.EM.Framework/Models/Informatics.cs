@@ -1,4 +1,5 @@
 ﻿using Eco.Gameplay.Components;
+using Eco.Gameplay.Components.Store;
 using Eco.Gameplay.Items;
 using Eco.Gameplay.Players;
 using Eco.Mods.TechTree;
@@ -13,7 +14,7 @@ namespace Eco.EM.Framework.Models
 {
     internal class Informatics
     {
-        static List<StoreObject> EnabledShops => NetObjectManager.Default.GetObjectsOfType<StoreObject>().Where(s => s.Operating).ToList();
+        static List<StoreObject> EnabledShops => NetObjectManager.Default.GetNetObjectsOfType<StoreObject>().Where(s => s.Operating).ToList();
 
         public static List<OfferedItem> GetSellingByItemType(Item ItemType)
         {
@@ -100,6 +101,6 @@ namespace Eco.EM.Framework.Models
 
         public static List<StoreObject> GetShopsOf(Player player) => GetShopsOf(player.User);
         public static List<StoreObject> GetShopsOf(User user)
-            => NetObjectManager.Default.GetObjectsOfType<StoreObject>().Where(s => s.Owners == user).ToList();
+            => NetObjectManager.Default.GetNetObjectsOfType<StoreObject>().Where(s => s.Owners == user).ToList();
     }
 }

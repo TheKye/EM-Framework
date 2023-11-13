@@ -45,9 +45,9 @@ namespace Eco.EM.Framework.Resolvers
             var HomeValue = new HomeFurnishingValue()
             {
                 Category = string.IsNullOrEmpty(HousingConfig.GetRoomCategory(model.RoomType).Name) ? HousingConfig.GetRoomCategory("Decoration") : HousingConfig.GetRoomCategory(model.RoomType),
-                HouseValue = model.SkillValue,
+                BaseValue = model.SkillValue,
                 TypeForRoomLimit = Localizer.DoStr(model.TypeForRoomLimit),
-                DiminishingReturnPercent = model.DiminishingReturn
+                DiminishingReturnMultiplier = model.DiminishingReturn
             };
 
             return HomeValue;
@@ -58,9 +58,9 @@ namespace Eco.EM.Framework.Resolvers
             var HomeValue = new HomeFurnishingValue()
             {
                 Category = string.IsNullOrEmpty(HousingConfig.GetRoomCategory(def.RoomType).Name) ? HousingConfig.GetRoomCategory("Decoration") : HousingConfig.GetRoomCategory(def.RoomType),
-                HouseValue = def.SkillValue,
+                BaseValue = def.SkillValue,
                 TypeForRoomLimit = Localizer.DoStr(def.TypeForRoomLimit),
-                DiminishingReturnPercent = def.DiminishingReturn
+                DiminishingReturnMultiplier = def.DiminishingReturn
             };
 
             return HomeValue;

@@ -118,6 +118,8 @@ namespace Eco.EM.Framework.Utils
         /// <summary>
         /// Get a list of top Block that match the type T. Usefull for getting tree debris or plants
         /// </summary>
+        ///
+        /*
         public static List<T> GetTopBlockAroundPoint<T>(User user, Vector3i position, int range) where T : Block
         {
             try
@@ -137,9 +139,8 @@ namespace Eco.EM.Framework.Utils
                                 InteractionInfo info = new();
                                 info.Method = InteractionMethod.Right;
                                 info.BlockPosition = positionAbove;
-                                InteractionContext context = info.MakeContext(user.Player);
-                                var authResult = ServiceHolder<IAuthManager>.Obj.IsAuthorized(PlotUtil.ToPlotPos(context.Player.User.Position.XZi()), context.Player.User, (AccessType.ConsumerAccess | AccessType.FullAccess | AccessType.OwnerAccess), null);
-                                var blockAuthResult = ServiceHolder<IAuthManager>.Obj.IsAuthorized(PlotUtil.ToPlotPos(context.TargetPosition.XZ), context.Player.User, (AccessType.ConsumerAccess | AccessType.FullAccess | AccessType.OwnerAccess), null);
+                                var authResult = ServiceHolder<IAuthManager>.Obj.IsAuthorized(PlotUtil.ToPlotPos(user.Position.XZi()), user, (AccessType.ConsumerAccess | AccessType.FullAccess | AccessType.OwnerAccess), null);
+                                var blockAuthResult = ServiceHolder<IAuthManager>.Obj.IsAuthorized(PlotUtil.ToPlotPos(user.TargetPosition.XZ), context.Player.User, (AccessType.ConsumerAccess | AccessType.FullAccess | AccessType.OwnerAccess), null);
                                 if (!authResult.Success && !blockAuthResult.Success || !authResult.Success || !blockAuthResult.Success)
                                 {
                                     blockLists.Add(blockAbove as T);
@@ -155,7 +156,7 @@ namespace Eco.EM.Framework.Utils
                 return null;
             }
         }
-
+        */
         public static List<Block> GetTopBlocksInRadius(Vector3i position, int radius)
         {
             List<Block> blocks = new();
@@ -194,7 +195,7 @@ namespace Eco.EM.Framework.Utils
             }
             return objects;
         }
-
+        /*
         /// <summary>
         /// Get a list of position of top Block that match the type T. Usefull when wanted to destroy plants or tree debris
         /// </summary>
@@ -235,7 +236,7 @@ namespace Eco.EM.Framework.Utils
                 return null;
             }
         }
-
+        */
         /// <summary>
         /// Get the position of all block in a sphere radius
         /// </summary>

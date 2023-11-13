@@ -3,7 +3,6 @@ using Eco.Gameplay.Items;
 using Eco.Gameplay.Objects;
 using Eco.Gameplay.Skills;
 using Eco.Gameplay.Systems.TextLinks;
-using Eco.Gameplay.Systems.Tooltip;
 using Eco.Shared.Serialization;
 using Eco.Mods.TechTree;
 using Eco.Shared.Networking;

@@ -5,6 +5,7 @@ using Eco.EM.Framework.FileManager;
 using Eco.Gameplay.Components;
 using Eco.Gameplay.DynamicValues;
 using Eco.Gameplay.Items;
+using Eco.Gameplay.Items.Recipes;
 using Eco.Gameplay.Skills;
 using Eco.Shared.Localization;
 using Eco.Shared.Utils;
@@ -181,7 +182,7 @@ namespace Eco.EM.Framework.Utils
 
                 UpdateErrorPosition(recipe, "Products");
                 // Products recieved
-                foreach (var e in r.Items)
+                foreach (var e in r.Products)
                 {
                     var product = new ProductData()
                     {
@@ -201,7 +202,7 @@ namespace Eco.EM.Framework.Utils
 
         private static void BuildRecipeList()
         {
-            var all = RecipeFamily.AllRecipes;
+            var all = RecipeManager.AllRecipeFamilies;
             foreach (var family in all)
             {
                 family.Recipes.ForEach(r => { if (!VanillaRecipes.Contains(r)) VanillaRecipes.Add(r); });

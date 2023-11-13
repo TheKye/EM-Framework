@@ -12,7 +12,7 @@ namespace Eco.EM.Framework.Resolvers
         {
             IEnumerable<Item> locals;
 
-            locals = Item.AllItems.Where(x => x.Category != "Hidden" && ItemAttribute.Has<WeightAttribute>(x.Type) && x.DisplayName != "Hands");
+            locals = Item.AllItemsExceptHidden.Where(x => ItemAttribute.Has<WeightAttribute>(x.Type) && x.DisplayName != "Hands");
             locals = locals.OrderBy(x => x.DisplayName);
 
             BuildStackSizeList(locals);

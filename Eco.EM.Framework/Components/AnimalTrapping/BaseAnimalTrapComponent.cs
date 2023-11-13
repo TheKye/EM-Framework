@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Eco.Shared.Localization;
 using Eco.Gameplay.Items;
+using Eco.Gameplay.Components.Storage;
 
 namespace Eco.EM.Framework.Components
 {
