@@ -28,6 +28,18 @@
             return false;
         }
 
+        public static User UserNear(WorldObject obj, int MaxSensorDistance = 20)
+        {
+            foreach (var user in PlayerUtils.OnlineUsers)
+            {
+
+                float dist = Vector3.Distance(obj.Position, user.Position);
+                if (dist <= MaxSensorDistance)
+                    return user;
+            }
+            return null;
+        }
+
         public static bool AuthorizedPersonnelNear(WorldObject obj, int MaxSensorDistance = 20)
         {
             if (obj.HasComponent<AuthComponent>())

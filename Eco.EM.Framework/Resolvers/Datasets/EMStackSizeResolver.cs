@@ -1,5 +1,6 @@
 ﻿using Eco.Core.Utils;
 using Eco.Gameplay.Items;
+using Eco.Gameplay.Objects;
 using Eco.Shared.Utils;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,25 +8,29 @@ using System.Reflection;
 
 namespace Eco.EM.Framework.Resolvers
 {
-    public class EMStackSizeResolver : AutoSingleton<EMStackSizeResolver>
+    public class EMStackSizeResolver
     {
         public static void Initialize()
         {
             IEnumerable<Item> locals;
-
             locals = Item.AllItemsExceptHidden.Where(x => x.Category != "Hidden" && ItemAttribute.Has<MaxStackSizeAttribute>(x.Type) && !ItemAttribute.Has<IgnoreStackSizeAttribute>(x.Type) && x.DisplayName != "Hands");
             locals = locals.OrderBy(x => x.DisplayName);
-            MaxStackSizeAttribute.Default = EMConfigurePlugin.Config.ForceSameStackSizes ? EMConfigurePlugin.Config.ForcedSameStackAmount : EMConfigurePlugin.Config.DefaultMaxStackSize;
+
+            MaxStackSizeAttribute.Default = EMStackSizesPlugin.Config.ForceSameStackSizes ? EMStackSizesPlugin.Config.ForcedSameStackAmount : EMStackSizesPlugin.Config.DefaultMaxStackSize;
+
             BuildStackSizeList(locals);
             OverrideStackSizes(locals);
+
+
         }
 
         // Goes through and loads new items for stack sizes into the dictionary.
         private static void BuildStackSizeList(IEnumerable<Item> locals)
         {
             var config = EMStackSizesPlugin.Config.EMStackSizes;
+
             // Go through and keep items that are still referenced in the namespace
-            SerializedSynchronizedCollection<StackSizeModel> cleanList = new SerializedSynchronizedCollection<StackSizeModel>();
+            SerializedSynchronizedCollection<StackSizeModel> cleanList = new();
             for (int i = 0; i < config.Count; i++)
             {
                 if (locals.Any(x => x.DisplayName == config[i].DisplayName))
@@ -51,11 +56,11 @@ namespace Eco.EM.Framework.Resolvers
             foreach (var i in locals)
             {
                 // Check for the items in the stack size list
-                var element = EMStackSizesPlugin.Config.EMStackSizes.SingleOrDefault(x => x.DisplayName == i.DisplayName);
+                var element = EMStackSizesPlugin.Config.EMStackSizes.FirstOrDefault(x => x.DisplayName == i.DisplayName);
                 if (element == null) continue;
                 var orThis = element.OverrideThis;
-                var forced = EMConfigurePlugin.Config.ForceSameStackSizes;
-                var bforced = EMConfigurePlugin.Config.CarriedItemsOverride;
+                var forced = EMStackSizesPlugin.Config.ForceSameStackSizes;
+                var bforced = EMStackSizesPlugin.Config.CarriedItemsOverride;
                 // Get the stacksize attribute and override it.
                 var mss = ItemAttribute.Get<MaxStackSizeAttribute>(i.Type);
 
@@ -69,13 +74,13 @@ namespace Eco.EM.Framework.Resolvers
                         if (mss != null && orThis)
                             mss.GetType().GetProperty("MaxStackSize", BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic).SetValue(mss, element.StackSize);
                         else if (mss != null && bmss != null && bforced)
-                            mss.GetType().GetProperty("MaxStackSize", BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic).SetValue(mss, EMConfigurePlugin.Config.CarriedItemsAmount);
+                            mss.GetType().GetProperty("MaxStackSize", BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic).SetValue(mss, EMStackSizesPlugin.Config.CarriedItemsAmount);
                         break;
 
                     case true:
                         if (mss != null && bmss != null && bforced)
-                            mss.GetType().GetProperty("MaxStackSize", BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic).SetValue(mss, EMConfigurePlugin.Config.CarriedItemsAmount);
-                        else mss?.GetType().GetProperty("MaxStackSize", BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic).SetValue(mss, EMConfigurePlugin.Config.ForcedSameStackAmount);
+                            mss.GetType().GetProperty("MaxStackSize", BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic).SetValue(mss, EMStackSizesPlugin.Config.CarriedItemsAmount);
+                        else mss?.GetType().GetProperty("MaxStackSize", BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic).SetValue(mss, EMStackSizesPlugin.Config.ForcedSameStackAmount);
                         break;
                 }
             }

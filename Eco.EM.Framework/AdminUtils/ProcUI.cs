@@ -16,7 +16,7 @@ namespace Eco.EM.Framework.AdminUtils
         [ChatCommand("")]
         public static void ProcNewUI(User user)
         {
-            ConfigUI.PrepConfigUI(user, null, "EM Framework", EMConfigurePlugin.Obj, null);
+            //ConfigUI.PrepConfigUI(user, null, "EM Framework", EMConfigurePlugin.Obj, null);
         }
     }
 }

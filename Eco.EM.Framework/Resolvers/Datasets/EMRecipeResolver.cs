@@ -62,7 +62,7 @@ namespace Eco.EM.Framework.Resolvers
             var dModel = LoadedDefaultRecipes[recipe.GetType().Name];
             // check if config override
             var loaded = LoadedConfigRecipes.TryGetValue(recipe.GetType().Name, out RecipeModel model);
-            if (loaded && model.LocalizableName.Equals(dModel.LocalizableName))
+            if (loaded && model.LocalizableName != dModel.LocalizableName)
                 return Localizer.DoStr(model.LocalizableName);
 
             // check if mod override
@@ -358,7 +358,7 @@ namespace Eco.EM.Framework.Resolvers
                 foreach (var dModel in loadtypes)
                 {
                     var m = previousModels.FirstOrDefault(x => x.ModelType == dModel.ModelType);
-                    if (m != null && EMConfigurePlugin.Config.useConfigOverrides && !m.Equals(dModel))
+                    if (m != null && !m.Equals(dModel))
                     {
                             newModels.Add(m);
 #if DEBUG

@@ -32,8 +32,8 @@ namespace Eco.EM.Framework.Extentsions
         [Serialized] public bool HasModule { get; set; }
         [Serialized] public float Range { get; set; }
 
-        [Interaction(InteractionTrigger.RightClick, "Open", DisallowedEnvVars = new[] { nameof(Open) })]
-        [Interaction(InteractionTrigger.RightClick, "Close", RequiredEnvVars = new[] { nameof(Open) })]
+        [Interaction(InteractionTrigger.RightClick, "Open", MinCaloriesRequired = 0, DisallowedEnvVars = new[] { nameof(Open) })]
+        [Interaction(InteractionTrigger.RightClick, "Close", MinCaloriesRequired = 0, RequiredEnvVars = new[] { nameof(Open) })]
         public void Toggle(Player player, InteractionTriggerInfo trigger, InteractionTarget target) => this.ToggleOpen();
 
         protected override void Initialize()

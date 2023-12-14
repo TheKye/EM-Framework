@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<TargetFramework>net7.0</TargetFramework>
 		<RootNamespace>Eco.EM.Framework</RootNamespace>
-		<Version>3.5.0-Staging.1582</Version>
+		<Version>3.5.0</Version>
 		<PackageId>ElixrMods.Framework</PackageId>
 		<Authors>Elixr Solutions</Authors>
 		<Product>EM Framework</Product>
@@ -37,16 +37,19 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Remove="AdminUtils\AdminUiUtil.cs" />
-	  <Compile Remove="AdminUtils\TestingBlock.cs" />
+		<Compile Remove="AdminUtils\AdminUiUtil.cs" />
+		<Compile Remove="AdminUtils\TestingBlock.cs" />
+		<Compile Remove="Components\AnimalTrapping\BaitableAnimalTrapComponent.cs" />
+		<Compile Remove="Components\AnimalTrapping\BaseAnimalTrapComponent.cs" />
+		<Compile Remove="Components\AnimalTrapping\SettableAnimalTrapComponent.cs" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Remove="SpecialItems\largelumberStockpile.txt" />
-	  <None Remove="SpecialItems\lumberStockpile.txt" />
-	  <None Remove="SpecialItems\pickaxe.txt" />
-	  <None Remove="SpecialItems\smallStockpile.txt" />
-	  <None Remove="SpecialItems\Stockpile.txt" />
+		<None Remove="SpecialItems\largelumberStockpile.txt" />
+		<None Remove="SpecialItems\lumberStockpile.txt" />
+		<None Remove="SpecialItems\pickaxe.txt" />
+		<None Remove="SpecialItems\smallStockpile.txt" />
+		<None Remove="SpecialItems\Stockpile.txt" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -60,7 +63,7 @@
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="ConcurrentHashSet" Version="1.3.0" />
-		<!--<PackageReference Include="Eco.ReferenceAssemblies" Version="0.9.7.13-beta-release-506" />-->
+
 		<PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="NLog" Version="5.2.2" />
@@ -68,82 +71,95 @@
 
 	<ItemGroup>
 		<Folder Include="DiscordHandling\Framework\" />
+		<Folder Include="Resolvers\Migration\" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Include="..\EMICON-text.png">
-	    <Pack>True</Pack>
-	    <PackagePath>\</PackagePath>
-	  </None>
-	  <None Include="..\README.md">
-	    <Pack>True</Pack>
-	    <PackagePath>\</PackagePath>
-	  </None>
-	  <None Include="AdminUtils\AdminUiUtil.cs" />
-	  <None Include="AdminUtils\TestingBlock.cs" />
+		<None Include="..\EMICON-text.png">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+		<None Include="..\README.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+		<None Include="AdminUtils\AdminUiUtil.cs" />
+		<None Include="AdminUtils\TestingBlock.cs" />
+		<None Include="Components\AnimalTrapping\BaitableAnimalTrapComponent.cs" />
+		<None Include="Components\AnimalTrapping\BaseAnimalTrapComponent.cs" />
+		<None Include="Components\AnimalTrapping\SettableAnimalTrapComponent.cs" />
+	</ItemGroup>
+
+	<Choose>
+		<When Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' AND '$(Configuration)|$(Platform)' != 'Release|AnyCPU'">
+			<ItemGroup>
+				<Reference Include="Eco.Core">
+					<HintPath>..\dlls\Eco.Core.dll</HintPath>
+				</Reference>
+				<Reference Include="Eco.Gameplay">
+					<HintPath>..\dlls\Eco.Gameplay.dll</HintPath>
+				</Reference>
+				<Reference Include="Eco.ModKit">
+					<HintPath>..\dlls\Eco.ModKit.dll</HintPath>
+				</Reference>
+				<Reference Include="Eco.Mods">
+					<HintPath>..\dlls\Eco.Mods.dll</HintPath>
+				</Reference>
+				<Reference Include="Eco.Networking.ENet">
+					<HintPath>..\dlls\Eco.Networking.ENet.dll</HintPath>
+				</Reference>
+				<Reference Include="Eco.Plugins">
+					<HintPath>..\dlls\Eco.Plugins.dll</HintPath>
+				</Reference>
+				<Reference Include="Eco.Shared">
+					<HintPath>..\dlls\Eco.Shared.dll</HintPath>
+				</Reference>
+				<Reference Include="Eco.Simulation">
+					<HintPath>..\dlls\Eco.Simulation.dll</HintPath>
+				</Reference>
+				<Reference Include="Eco.Stats">
+					<HintPath>..\dlls\Eco.Stats.dll</HintPath>
+				</Reference>
+				<Reference Include="Eco.WebServer">
+					<HintPath>..\dlls\Eco.WebServer.dll</HintPath>
+				</Reference>
+				<Reference Include="Eco.WindowsForms">
+					<HintPath>..\dlls\Eco.WindowsForms.dll</HintPath>
+				</Reference>
+				<Reference Include="Eco.World">
+					<HintPath>..\dlls\Eco.World.dll</HintPath>
+				</Reference>
+				<Reference Include="Eco.WorldGenerator">
+					<HintPath>..\dlls\Eco.WorldGenerator.dll</HintPath>
+				</Reference>
+				<Reference Include="EcoServer">
+					<HintPath>..\dlls\EcoServer.dll</HintPath>
+				</Reference>
+				<Reference Include="NodeGraphControl">
+					<HintPath>..\dlls\NodeGraphControl.dll</HintPath>
+				</Reference>
+			</ItemGroup>
+		</When>
+		<When Condition=" '$(Configuration)|$(Platform)' != 'Debug|AnyCPU' AND '$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+			<ItemGroup>
+				<PackageReference Include="Eco.ReferenceAssemblies" Version="0.10.0-beta-release-532" />
+			</ItemGroup>
+		</When>
+	</Choose>
+
+	<ItemGroup>
+		<Compile Update="Translations.Designer.cs">
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>Translations.resx</DependentUpon>
+		</Compile>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Reference Include="Eco.Core">
-	    <HintPath>..\dlls\Eco.Core.dll</HintPath>
-	  </Reference>
-	  <Reference Include="Eco.Gameplay">
-	    <HintPath>..\dlls\Eco.Gameplay.dll</HintPath>
-	  </Reference>
-	  <Reference Include="Eco.ModKit">
-	    <HintPath>..\dlls\Eco.ModKit.dll</HintPath>
-	  </Reference>
-	  <Reference Include="Eco.Mods">
-	    <HintPath>..\dlls\Eco.Mods.dll</HintPath>
-	  </Reference>
-	  <Reference Include="Eco.Networking.ENet">
-	    <HintPath>..\dlls\Eco.Networking.ENet.dll</HintPath>
-	  </Reference>
-	  <Reference Include="Eco.Plugins">
-	    <HintPath>..\dlls\Eco.Plugins.dll</HintPath>
-	  </Reference>
-	  <Reference Include="Eco.Shared">
-	    <HintPath>..\dlls\Eco.Shared.dll</HintPath>
-	  </Reference>
-	  <Reference Include="Eco.Simulation">
-	    <HintPath>..\dlls\Eco.Simulation.dll</HintPath>
-	  </Reference>
-	  <Reference Include="Eco.Stats">
-	    <HintPath>..\dlls\Eco.Stats.dll</HintPath>
-	  </Reference>
-	  <Reference Include="Eco.WebServer">
-	    <HintPath>..\dlls\Eco.WebServer.dll</HintPath>
-	  </Reference>
-	  <Reference Include="Eco.WindowsForms">
-	    <HintPath>..\dlls\Eco.WindowsForms.dll</HintPath>
-	  </Reference>
-	  <Reference Include="Eco.World">
-	    <HintPath>..\dlls\Eco.World.dll</HintPath>
-	  </Reference>
-	  <Reference Include="Eco.WorldGenerator">
-	    <HintPath>..\dlls\Eco.WorldGenerator.dll</HintPath>
-	  </Reference>
-	  <Reference Include="EcoServer">
-	    <HintPath>..\dlls\EcoServer.dll</HintPath>
-	  </Reference>
-	  <Reference Include="NodeGraphControl">
-	    <HintPath>..\dlls\NodeGraphControl.dll</HintPath>
-	  </Reference>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Compile Update="Translations.Designer.cs">
-	    <DesignTime>True</DesignTime>
-	    <AutoGen>True</AutoGen>
-	    <DependentUpon>Translations.resx</DependentUpon>
-	  </Compile>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <EmbeddedResource Update="Translations.resx">
-	    <Generator>ResXFileCodeGenerator</Generator>
-	    <LastGenOutput>Translations.Designer.cs</LastGenOutput>
-	  </EmbeddedResource>
+		<EmbeddedResource Update="Translations.resx">
+			<Generator>ResXFileCodeGenerator</Generator>
+			<LastGenOutput>Translations.Designer.cs</LastGenOutput>
+		</EmbeddedResource>
 	</ItemGroup>
 
 </Project>

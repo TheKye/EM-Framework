@@ -1,8 +1,12 @@
-﻿namespace Eco.Mods.TechTree
+﻿// Copyright (c) Strange Loop Games. All rights reserved.
+// See LICENSE file in the project root for full license information.
+
+namespace Eco.Mods.TechTree
 {
-    using Eco.Gameplay.Components;
+    using Eco.Gameplay.Components.Storage;
     using Eco.Gameplay.Objects;
     using Eco.Shared.Math;
+    using Eco.Shared.SharedTypes;
 
     [RequireComponent(typeof(PublicStorageComponent))]
     [RequireComponent(typeof(StockpileComponent))]
@@ -10,6 +14,7 @@
     public partial class SmallStockpileObject : WorldObject
     {
         public static readonly Vector3i DefaultDim = new Vector3i(3, 3, 3);
+        public override InteractionTargetPriority TargetPriority => InteractionTargetPriority.Medium;
 
         protected override void OnCreatePostInitialize()
         {

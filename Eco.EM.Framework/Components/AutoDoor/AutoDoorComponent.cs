@@ -101,9 +101,9 @@ namespace Eco.EM.Framework.Components
                             if (wo.GetComponent<DoorComponent>().IsOpen && (PlayerSensor.AuthorizedPersonnelNear(wo, (int)DetectionRange) || wo.GetComponent<DoorComponent>().IsOpen && PlayerSensor.AnyoneNear(wo, (int)DetectionRange) && AllowGuests))
                                 return;
                             else if (PlayerSensor.AnyoneNear(wo, (int)DetectionRange) && AllowGuests)
-                                wo.GetComponent<DoorComponent>().SetOpen(PlayerSensor.AnyoneNear(wo, (int)DetectionRange));
+                                wo.GetComponent<DoorComponent>().SetOpen(PlayerSensor.UserNear(wo, (int)DetectionRange), PlayerSensor.AnyoneNear(wo, (int)DetectionRange));
                             else
-                                wo.GetComponent<DoorComponent>().SetOpen(PlayerSensor.AuthorizedPersonnelNear(wo, (int)DetectionRange));
+                                wo.GetComponent<DoorComponent>().SetOpen(PlayerSensor.UserNear(wo, (int)DetectionRange), PlayerSensor.AuthorizedPersonnelNear(wo, (int)DetectionRange));
                             break;
 
                         case EmDoor woe when Parent is WorldObject:
