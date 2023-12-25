@@ -44,7 +44,7 @@ namespace Eco.EM.Framework.Resolvers
 
         public static void AddDefaults(RecipeDefaultModel defaults)
         {
-            Obj.LoadedDefaultRecipes.TryAdd(defaults.ModelType, defaults);
+            Obj.LoadedDefaultRecipes.AddUnique(defaults.ModelType, defaults);
         }
 
         // Individual RecipeFamily part resolvers.
@@ -358,17 +358,24 @@ namespace Eco.EM.Framework.Resolvers
                 foreach (var dModel in loadtypes)
                 {
                     var m = previousModels.FirstOrDefault(x => x.ModelType == dModel.ModelType);
-                    if (m != null && !m.Equals(dModel))
+                    if (m != null && !m.ModelType.EqualsCaseInsensitive(dModel.ModelType))
                     {
+                        if (!newModels.Contains(m))
+                        {
                             newModels.Add(m);
+                        }
 #if DEBUG
                     ConsoleColors.PrintConsoleMultiColored("[EM Framework] ", ConsoleColor.Magenta, Localizer.DoStr($"Loaded Config Override For: {m.ModelType}"), ConsoleColor.Yellow);
 #endif
                     }
                     else
-                            newModels.Add(dModel);
+                    {
+                        if(!newModels.Contains(dModel))
+                        newModels.Add(dModel);
+                    }
                 }
             }
+            newModels.OrderBy(x => x.ModelType);
             EMRecipesPlugin.Config.EMRecipes = newModels;
 
             foreach (var model in EMRecipesPlugin.Config.EMRecipes)

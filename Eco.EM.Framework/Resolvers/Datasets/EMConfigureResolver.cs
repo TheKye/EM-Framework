@@ -23,7 +23,7 @@ namespace Eco.EM.Framework.Resolvers
         private static void RunLuckyStrikeResolver()
         {
 
-            var alsdir = Path.DirectorySeparatorChar + "Mods" + Path.DirectorySeparatorChar + "UserCode" + Path.DirectorySeparatorChar + "Tools";
+            var alsdir = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "Mods" + Path.DirectorySeparatorChar + "UserCode" + Path.DirectorySeparatorChar + "Tools";
 
             if (!Directory.Exists(alsdir))
             {
@@ -35,7 +35,7 @@ namespace Eco.EM.Framework.Resolvers
 
         private static void RunStockpileResolver()
         {
-            var agdir = Path.DirectorySeparatorChar + "Mods" + Path.DirectorySeparatorChar + "UserCode" + Path.DirectorySeparatorChar + "Objects";
+            var agdir = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "Mods" + Path.DirectorySeparatorChar + "UserCode" + Path.DirectorySeparatorChar + "Objects";
 
             if (!Directory.Exists(agdir))
             {

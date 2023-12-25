@@ -187,6 +187,7 @@ namespace Eco.EM.Framework.Resolvers
                     newModels.Add(lModel);
             }
 
+            newModels.OrderBy(x => x.ModelType);
             EMVehiclesPlugin.Config.EMVehicles = newModels;
 
             foreach (var model in newModels)

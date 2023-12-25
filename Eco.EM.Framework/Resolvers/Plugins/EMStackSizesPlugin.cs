@@ -21,7 +21,7 @@ namespace Eco.EM.Framework.Resolvers
 
         public object GetEditObject() => config.Config;
         public void OnEditObjectChanged(object o, string param) => this.SaveConfig();
-        public string GetStatus() => "Loaded EM Stack Sizes";
+        public string GetStatus() => $"Loaded EM Stack Sizes: {EMStackSizeResolver.Overriden}";
 
         static EMStackSizesPlugin()
         {

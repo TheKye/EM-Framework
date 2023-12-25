@@ -70,6 +70,7 @@ namespace Eco.EM.Framework.Resolvers
                     newModels.Add(lModel);
             }
 
+            newModels.OrderBy(x => x.ModelType);
             EMStorageSlotsPlugin.Config.EMStorageSlots = newModels;
 
             foreach (var model in newModels)

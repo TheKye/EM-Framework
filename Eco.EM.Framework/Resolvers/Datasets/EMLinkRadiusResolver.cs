@@ -54,6 +54,7 @@ namespace Eco.EM.Framework.Resolvers
                 else
                     newModels.Add(lModel);
             }
+            newModels.OrderBy(x => x.ModelType);
 
             EMLinkDistancesPlugin.Config.EMLinkDistances = newModels;
 

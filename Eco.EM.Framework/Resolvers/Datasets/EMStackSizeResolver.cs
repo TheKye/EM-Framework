@@ -10,6 +10,7 @@ namespace Eco.EM.Framework.Resolvers
 {
     public class EMStackSizeResolver
     {
+        internal static int Overriden { get; set; }
         public static void Initialize()
         {
             IEnumerable<Item> locals;
@@ -66,7 +67,7 @@ namespace Eco.EM.Framework.Resolvers
 
                 // If using Carried Items Override get the attribute
                 var bmss = ItemAttribute.Get<CarriedAttribute>(i.Type);
-
+                Overriden++;
                 // currently we only change items that have a MaxStackSizeAttribute
                 switch (forced)
                 {
@@ -78,9 +79,8 @@ namespace Eco.EM.Framework.Resolvers
                         break;
 
                     case true:
-                        if (mss != null && bmss != null && bforced)
-                            mss.GetType().GetProperty("MaxStackSize", BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic).SetValue(mss, EMStackSizesPlugin.Config.CarriedItemsAmount);
-                        else mss?.GetType().GetProperty("MaxStackSize", BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic).SetValue(mss, EMStackSizesPlugin.Config.ForcedSameStackAmount);
+                        if (mss != null)
+                            mss?.GetType().GetProperty("MaxStackSize", BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic).SetValue(mss, EMStackSizesPlugin.Config.ForcedSameStackAmount);
                         break;
                 }
             }

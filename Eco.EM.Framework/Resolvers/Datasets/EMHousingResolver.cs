@@ -20,7 +20,7 @@ namespace Eco.EM.Framework.Resolvers
 
         public static void AddDefaults(HousingModel defaults)
         {
-            Obj.DefaultHomeOverrides.Add(defaults.ModelType, defaults);
+            Obj.DefaultHomeOverrides.TryAdd(defaults.ModelType, defaults);
         }
 
         private HomeFurnishingValue GetHomeValue(Type housingItem)
@@ -66,7 +66,7 @@ namespace Eco.EM.Framework.Resolvers
             return HomeValue;
         }
 
-        public void Initialize()
+        public static void Initialize()
         {
             SerializedSynchronizedCollection<HousingModel> newModels = new();
             var previousModels = newModels;
@@ -83,7 +83,7 @@ namespace Eco.EM.Framework.Resolvers
                 System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(type.TypeHandle);
             }
 
-            var loadtypes = DefaultHomeOverrides.Values.ToList();
+            var loadtypes = Obj.DefaultHomeOverrides.Values.ToList();
 
             // for each type that exists that we are trying to load
             foreach (var lModel in loadtypes)
@@ -119,8 +119,8 @@ namespace Eco.EM.Framework.Resolvers
 
             foreach (var model in newModels)
             {
-                if (!LoadedHomeOverrides.ContainsKey(model.ModelType))
-                    LoadedHomeOverrides.Add(model.ModelType, model);
+                if (!Obj.LoadedHomeOverrides.ContainsKey(model.ModelType))
+                    Obj.LoadedHomeOverrides.Add(model.ModelType, model);
             }
         }
     }

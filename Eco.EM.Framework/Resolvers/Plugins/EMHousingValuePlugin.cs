@@ -1,6 +1,7 @@
 ﻿using Eco.Core.Plugins;
 using Eco.Core.Plugins.Interfaces;
 using Eco.Core.Utils;
+using Eco.Gameplay.Housing;
 using Eco.Gameplay.Players;
 using Eco.Gameplay.Systems.Messaging.Chat.Commands;
 using Eco.Shared.Localization;
@@ -29,10 +30,8 @@ namespace Eco.EM.Framework.Resolvers
 
         public static void PostInitialize()
         {
-            Task.Run(() => {
-                EMHousingResolver.Obj.Initialize();
+                EMHousingResolver.Initialize();
                 config.SaveAsync();
-            });
         }
 
         public override string ToString() => Localizer.DoStr("EM Housing Value");

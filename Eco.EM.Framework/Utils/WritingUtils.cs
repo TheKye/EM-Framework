@@ -93,7 +93,6 @@ namespace Eco.EM.Framework.Utils
         public static void WriteFromEmbeddedResource(string usingNamespace, string fileName, string locationToWriteTo, string fileExtension, bool debug = false, string specificFileName = "")
         {
             string resource = "";
-            locationToWriteTo = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + locationToWriteTo;
             var cleanName = fileName.Split(".")[0];
             try
             {
