@@ -159,7 +159,7 @@ namespace Eco.EM.Framework.Utils
                         });
                     }
 
-                    if (!includeOutOfStock && buyOffers.Count > 0)
+                    if (buyOffers.Count > 0)
                     {
                         buyOffers.OrderBy(o => o.Price).ForEach(o =>
                         {

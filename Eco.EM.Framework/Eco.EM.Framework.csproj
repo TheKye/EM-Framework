@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<TargetFramework>net7.0</TargetFramework>
 		<RootNamespace>Eco.EM.Framework</RootNamespace>
-		<Version>3.5.1</Version>
+		<Version>3.5.2</Version>
 		<PackageId>ElixrMods.Framework</PackageId>
 		<Authors>Elixr Solutions</Authors>
 		<Product>EM Framework</Product>
@@ -142,7 +142,7 @@
 		</When>
 		<When Condition=" '$(Configuration)|$(Platform)' != 'Debug|AnyCPU' AND '$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
 			<ItemGroup>
-				<PackageReference Include="Eco.ReferenceAssemblies" Version="0.10.0-beta-release-532" />
+				<PackageReference Include="Eco.ReferenceAssemblies" Version="0.10.1.1-beta-release-579" />
 			</ItemGroup>
 		</When>
 	</Choose>

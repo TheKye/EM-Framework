@@ -38,11 +38,12 @@ namespace Eco.EM.Framework.API
         [ResponseCache(VaryByHeader = "User-Agent", Duration = 300)]
         public IActionResult GetPrices(bool includeOutOfStock = false)
         {
+            string noresult = "error No items found";
             if (BasePlugin.Obj.Config.EnableWebAPI)
             {
                 var result = ShopUtils.GetAllItems(includeOutOfStock);
                 if (result is null)
-                    return StatusCode(500);
+                    return Ok(noresult);
                 else
                 return Ok(result);
             }
