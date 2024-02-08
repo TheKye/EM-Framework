@@ -64,5 +64,6 @@ namespace Eco.EM.Framework.Resolvers
         }
 
         public string GetCategory() => "EM Configure";
+        
     }
 }

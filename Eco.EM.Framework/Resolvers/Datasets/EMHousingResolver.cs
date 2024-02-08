@@ -1,6 +1,7 @@
 ﻿using Eco.Core.Utils;
 using Eco.EM.Framework.Utils;
 using Eco.Gameplay.Housing.PropertyValues;
+using Eco.Mods.TechTree;
 using Eco.Shared.Localization;
 using Eco.Shared.Utils;
 using System;
@@ -44,7 +45,7 @@ namespace Eco.EM.Framework.Resolvers
         {
             var HomeValue = new HomeFurnishingValue()
             {
-                Category = string.IsNullOrEmpty(HousingConfig.GetRoomCategory(model.RoomType).Name) ? HousingConfig.GetRoomCategory("Decoration") : HousingConfig.GetRoomCategory(model.RoomType),
+                Category = HousingConfig.GetRoomCategory(model.RoomType.Name),
                 BaseValue = model.SkillValue,
                 TypeForRoomLimit = Localizer.DoStr(model.TypeForRoomLimit),
                 DiminishingReturnMultiplier = model.DiminishingReturn
@@ -57,7 +58,7 @@ namespace Eco.EM.Framework.Resolvers
         {
             var HomeValue = new HomeFurnishingValue()
             {
-                Category = string.IsNullOrEmpty(HousingConfig.GetRoomCategory(def.RoomType).Name) ? HousingConfig.GetRoomCategory("Decoration") : HousingConfig.GetRoomCategory(def.RoomType),
+                Category = HousingConfig.GetRoomCategory(def.RoomType.Name),
                 BaseValue = def.SkillValue,
                 TypeForRoomLimit = Localizer.DoStr(def.TypeForRoomLimit),
                 DiminishingReturnMultiplier = def.DiminishingReturn
@@ -90,27 +91,12 @@ namespace Eco.EM.Framework.Resolvers
             {
                 var m = previousModels.SingleOrDefault(x => x.ModelType == lModel.ModelType);
 
-                if (lModel.RoomType.Equals("LivingRoom"))
-                    lModel.RoomType = "Living Room";
-                if (m.RoomType.Equals("LivingRoom"))
-                    m.RoomType = "Living Room";
-
                 if (m != null)
                 {
-                    if (HousingConfig.GetRoomCategory(m.RoomType) == null || m.RoomType == "General")
-                    {
-                        ConsoleColors.PrintConsoleMultiColored("[EM Framework] (EM Configure) ", ConsoleColor.Magenta, Localizer.DoStr($"Old Data Found In Housing Data, Performing Migration on {m.DisplayName}"), ConsoleColor.Yellow);
-                        m.RoomType = HousingConfig.GetRoomCategory("Decoration").Name;
-
-                    }
-
                     newModels.Add(m);
                 }
                 else
                 {
-                    if (HousingConfig.GetRoomCategory(lModel.RoomType) == null || lModel.RoomType == "General")
-                        lModel.RoomType = HousingConfig.GetRoomCategory("Decoration").Name;
-
                     newModels.Add(lModel);
                 }
             }
