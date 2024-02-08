@@ -102,19 +102,5 @@ namespace Eco.EM.Framework.API
             else
                 return BadRequest(403);
         }
-
-        private static JsonSerializerSettings CreateSerializerSettings()
-        {
-            return new JsonSerializerSettings
-            {
-                ReferenceLoopHandling = ReferenceLoopHandling.Error,
-                NullValueHandling = NullValueHandling.Include,
-                TypeNameHandling = TypeNameHandling.Auto,
-                TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Simple,
-                Converters = { new StringEnumConverter(), new JavaScriptDateTimeConverter(), new GuidConverter() },
-                PreserveReferencesHandling = PreserveReferencesHandling.None,
-                ContractResolver = new EMJsonResolver(),
-            };
-        }
     }
 }
