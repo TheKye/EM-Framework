@@ -5,14 +5,18 @@ using Eco.Core.Utils;
 using Eco.EM.Framework.Utils;
 using Eco.Gameplay.Aliases;
 using Eco.Gameplay.GameActions;
+using Eco.Gameplay.Items;
 using Eco.Gameplay.Players;
 using Eco.Gameplay.Property;
 using Eco.Gameplay.Systems.Messaging.Chat.Commands;
+using Eco.Mods.TechTree;
 using Eco.Shared.Localization;
 using Eco.Shared.Utils;
+using Newtonsoft.Json.Schema;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Eco.EM.Framework.Resolvers
@@ -41,10 +45,38 @@ namespace Eco.EM.Framework.Resolvers
             config = new PluginConfig<EMBigShovelConfig>("EMBigShovel");
         }
 
+        public static void Initialize()
+        {
+            if (Config.EnableBigShovel)
+            {
+                var bindings = BindingFlags.Instance | BindingFlags.Public | BindingFlags.Static | BindingFlags.NonPublic;
+                if (!Config.BigShovelNonUniqueValues)
+                {
+                    var ws = Item.Get<WoodenShovelItem>();
+                    var woodShovel = typeof(WoodenShovelItem).GetField("MaxTake", bindings);
+                    woodShovel.SetValue(ws, Config.WoodShovelStackSize);
+
+                    var irs = Item.Get<IronShovelItem>();
+                    var ironShovel = typeof(IronShovelItem).GetField("MaxTake", bindings);
+                    ironShovel.SetValue(irs, Config.IronShovelStackSize);
+
+                    var ss = Item.Get<IronShovelItem>();
+                    var steelShovel = typeof(SteelShovelItem).GetField("MaxTake", bindings);
+                    steelShovel.SetValue(ss, Config.SteelShovelStackSize);
+
+                    var ms = Item.Get<ModernShovelItem>();
+                    var modernShovel = typeof(ModernShovelItem).GetField("MaxTake", bindings);
+                    modernShovel.SetValue(ms, Config.ModernShovelStackSize);
+                }
+                var sh = Item.Get<ShovelItem>();
+                var shovel = typeof(WoodenShovelItem).GetField("MaxTake", bindings);
+                shovel.SetValue(sh, Config.GlobalShovelStackSize);
+            }
+        }
+
 
         public static void PostInitialize()
         {
-            EMBigShovelResolver.Initialize();
             config.SaveAsync();
         }
 

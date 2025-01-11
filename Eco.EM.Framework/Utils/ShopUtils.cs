@@ -138,6 +138,7 @@ namespace Eco.EM.Framework.Utils
                                         Currency = o.Currency,
                                         StoreName = o.StoreName,
                                         StoreOwner = o.StoreOwner,
+                                        StoreLocation = o.StoreLocation,
                                         ForSale = true
                                     });
                                     break;
@@ -152,6 +153,7 @@ namespace Eco.EM.Framework.Utils
                                             Currency = o.Currency,
                                             StoreName = o.StoreName,
                                             StoreOwner = o.StoreOwner,
+                                            StoreLocation = o.StoreLocation,
                                             ForSale = true
                                         });
                                     break;
@@ -175,6 +177,7 @@ namespace Eco.EM.Framework.Utils
                                         Currency = o.Currency,
                                         StoreName = o.StoreName,
                                         StoreOwner = o.StoreOwner,
+                                        StoreLocation = o.StoreLocation,
                                         ForSale = false
                                     });
                                     break;
@@ -189,6 +192,7 @@ namespace Eco.EM.Framework.Utils
                                             Currency = o.Currency,
                                             StoreName = o.StoreName,
                                             StoreOwner = o.StoreOwner,
+                                            StoreLocation = o.StoreLocation,
                                             ForSale = false
                                         });
                                     break;

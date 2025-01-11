@@ -96,6 +96,7 @@ namespace Eco.EM.Framework.Models
                 tagItemName = tradeOffer.Stack.Item.DisplayName,
                 Currency = store.GetComponent<CreditComponent>().CreditData.Currency.Name,
                 StoreName = System.Text.RegularExpressions.Regex.Replace(store.Name, "<color[^>]*>", ""),
+                StoreLocation = new() { x = store.Position3i.X, y = store.Position3i.Y, z = store.Position3i.Z},
                 StoreOwner = store.Owners.Name
             };
 

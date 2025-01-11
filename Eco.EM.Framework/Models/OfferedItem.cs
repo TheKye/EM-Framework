@@ -15,6 +15,14 @@ namespace Eco.EM.Framework.Models
         public string Currency;
         public string StoreName;
         public string StoreOwner;
+        public Coordinates StoreLocation;
         public bool ForSale;
+    }
+
+    public class Coordinates
+    {
+        public float x;
+        public float y;
+        public float z;
     }
 }
