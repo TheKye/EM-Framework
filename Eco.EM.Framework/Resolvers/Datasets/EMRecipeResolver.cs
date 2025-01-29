@@ -50,6 +50,7 @@ namespace Eco.EM.Framework.Resolvers
 
         // Individual RecipeFamily part resolvers.
         public List<Recipe> ResolveRecipe(IConfigurableRecipe recipe) => GetRecipe(recipe);
+        public Recipe ResolveSingleRecipe(IConfigurableRecipe recipe) => GetSingleRecipe(recipe);
         public IDynamicValue ResolveLabor(IConfigurableRecipe recipe) => GetLaborValue(recipe);
         public IDynamicValue ResolveCraftMinutes(IConfigurableRecipe recipe) => GetCraftTime(recipe);
         public Type ResolveStation(IConfigurableRecipe recipe) => GetConfigStation(recipe);
@@ -117,6 +118,31 @@ namespace Eco.EM.Framework.Resolvers
 
             // return default
             return new List<Recipe>() { dRecipe };
+        }
+
+        private Recipe GetSingleRecipe(IConfigurableRecipe recipe)
+        {
+            var dModel = LoadedDefaultRecipes[recipe.GetType().Name];
+            var dRecipe = CreateDefaultRecipeFromModel(dModel);
+
+            // check if config override
+            var loaded = LoadedConfigRecipes.TryGetValue(recipe.GetType().Name, out RecipeModel model);
+            if (loaded && !RecipeModel.Compare(dModel, model) || loaded && !model.EnableRecipe)
+            {
+                ConsoleColors.PrintConsoleMultiColored("[EM Framework] ", ConsoleColor.Magenta, Localizer.DoStr(string.Format("Loaded Server Override - {0}", dModel.HiddenName)), ConsoleColor.Yellow);
+                return CreateRecipeFromModel(model, dModel);
+            }
+
+            // check if mod override
+            loaded = ModRecipeOverrides.TryGetValue(recipe.GetType().Name, out model);
+            if (loaded)
+            {
+                ConsoleColors.PrintConsoleMultiColored("[EM Framework] ", ConsoleColor.Magenta, Localizer.DoStr(string.Format("Loaded Mod Override - {0}", dModel.HiddenName)), ConsoleColor.Yellow);
+                return CreateRecipeFromModel(model, dModel);
+            }
+
+            // return default
+            return dRecipe;
         }
 
         private static Recipe CreateRecipeFromModel(RecipeModel model, RecipeDefaultModel def)
@@ -364,10 +390,8 @@ namespace Eco.EM.Framework.Resolvers
                         if (!newModels.Contains(m))
                         {
                             newModels.Add(m);
+                            ConsoleColors.PrintConsoleMultiColored("[EM Framework] ", ConsoleColor.Magenta, Localizer.DoStr($"Loaded Config Override For: {m.ModelType}"), ConsoleColor.Yellow);
                         }
-#if DEBUG
-                    ConsoleColors.PrintConsoleMultiColored("[EM Framework] ", ConsoleColor.Magenta, Localizer.DoStr($"Loaded Config Override For: {m.ModelType}"), ConsoleColor.Yellow);
-#endif
                     }
                     else
                     {
