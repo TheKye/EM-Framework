@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
 		<RootNamespace>Eco.EM.Framework</RootNamespace>
-		<Version>4.0.0.2</Version>
+		<Version>4.1.0.0</Version>
 		<PackageId>ElixrMods.Framework</PackageId>
 		<Authors>Elixr Solutions</Authors>
 		<Product>EM Framework</Product>
@@ -99,7 +99,7 @@
 		<When Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' AND '$(Configuration)|$(Platform)' != 'Release|AnyCPU'" />
 		<When Condition=" '$(Configuration)|$(Platform)' != 'Debug|AnyCPU' AND '$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
 			<ItemGroup>
-				<PackageReference Include="Eco.ReferenceAssemblies" Version="0.11.1.7-beta-release-821" />
+				<PackageReference Include="Eco.ReferenceAssemblies" Version="0.11.1.11-beta-release-866" />
 			</ItemGroup>
 		</When>
 	</Choose>
